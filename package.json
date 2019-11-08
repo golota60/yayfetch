@@ -1,0 +1,28 @@
+{
+  "name": "yayfetch",
+  "version": "1.0.4",
+  "description": "A Multi-platform screenfetch",
+  "main": "yayfetch.js",
+  "author": "Szymon Wiszczuk",
+  "license": "MIT",
+  "keywords": [
+    "screenfetch",
+    "neofetch",
+    "environment",
+    "info",
+    "system",
+    "sysinf"
+  ],
+  "bin": {
+    "yayfetch": "./src/yayfetch.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "inquirer": "^7.0.0",
+    "systeminformation": "^4.14.17",
+    "yargs": "^14.2.0"
+  }
+}
