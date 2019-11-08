@@ -10,6 +10,9 @@ More features to come!
 
 ## Changelog
 
+### 1.1.2
+Added github homepage, so everybody can help improve this project: https://github.com/golota60/yayfetch
+
 ### 1.1.1
 Added '-p' flag, updated readme and implemented yargs.
 
