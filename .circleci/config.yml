@@ -1,0 +1,16 @@
+ version: 2
+ 
+ defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:8.9.1
+    
+ jobs:
+   build:
+     docker:
+       - image: circleci/node:8.9.1
+     steps:
+       - checkout
+       - run: yarn install
+       - run: node ./src/yayfetch.js
+       - run: echo "Build Successful"
