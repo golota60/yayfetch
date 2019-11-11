@@ -5,6 +5,11 @@ const sysinf = require('systeminformation');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
+const errorMessage = 'Error - check https://www.npmjs.com/package/yayfetch for more';
+function bitstoMegabytes(numberToConvert) {
+    return numberToConvert * 9.537 * Math.pow(10, -7);
+}
+
 //TODO:investigate why the uptime is always so high and why free memory seems to be unreasonably high
 let systemInfo = {
     graphicsInfo: {
@@ -47,36 +52,58 @@ const uptimeInMinutes = () => {
 }
 
 async function getSystemInformation() {
-    const GPU = await sysinf.graphics();
-    let displays = '';
-    let graphicsCards = '';
-    GPU.controllers.forEach((elem) => {
-        graphicsCards += `${elem.model} `;
-    })
-    GPU.displays.forEach((elem) => {
-        displays += `${elem.resolutionx}x${elem.resolutiony} `
-    })
-    systemInfo.graphicsInfo = {
-        gpuInfo: graphicsCards,
-        displays: displays
+    try {
+        const GPU = await sysinf.graphics();
+        let displays = '';
+        let graphicsCards = '';
+        GPU.controllers.forEach((elem) => {
+            graphicsCards += `${elem.model} `;
+        })
+        GPU.displays.forEach((elem) => {
+            displays += `${elem.resolutionx}x${elem.resolutiony} `
+        })
+        systemInfo.graphicsInfo = {
+            gpuInfo: graphicsCards,
+            displays: displays
+        }
+    } catch{
+        systemInfo.graphicsInfo = {
+            gpuInfo: errorMessage,
+            displays: errorMessage,
+        }
     }
 
-    const memory = await sysinf.mem();
-    const total = memory ? memory.total * 9.537 * Math.pow(10, -7) : null; //conversion to Mb
-    const used = memory ? memory.used * 9.537 * Math.pow(10, -7) : null;
-    const free = memory ? memory.free * 9.537 * Math.pow(10, -7) : null;
-    systemInfo.memoryInfo = {
-        free: free.toFixed(0),
-        used: used.toFixed(0),
-        total: total.toFixed(0),
+    try {
+        const memory = await sysinf.mem();
+        const total = memory ? bitstoMegabytes(memory.total) : null; //conversion to Mb
+        const used = memory ? bitstoMegabytes(memory.used) : null;
+        const free = memory ? bitstoMegabytes(memory.free) : null;
+        systemInfo.memoryInfo = {
+            free: free.toFixed(0),
+            used: used.toFixed(0),
+            total: total.toFixed(0),
+        }
+    } catch{
+        systemInfo.memoryInfo = {
+            free: errorMessage,
+            used: '',
+            total: ''
+        }
     }
 
-    const osInfo = await sysinf.users()
-    const username = osInfo ? osInfo[0].user : null;
-    const shell = osInfo ? osInfo[0].tty : null;
-    systemInfo.osInfo = {
-        username: username,
-        shell: shell
+    try {
+        const osInfo = await sysinf.users()
+        const username = osInfo ? osInfo[0].user : null;
+        const shell = osInfo ? osInfo[0].tty : null;
+        systemInfo.osInfo = {
+            username: username,
+            shell: shell
+        }
+    } catch{
+        systemInfo.osInfo = {
+            username: errorMessage,
+            shell: errorMessage
+        }
     }
 
     return systemInfo;
@@ -91,40 +118,40 @@ const args =
                     .then((data) => {
                         async function displayPersonalizedData() {
                             const allData = await getSystemInformation();
-                                console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
-                                if (data.displayedValues.includes('Platform')) {
-                                    console.log(`Platform: ${os.platform().toLocaleUpperCase()}`);
-                                }
-                                if (data.displayedValues.includes('Type')) {
-                                    console.log(`Type: ${os.type()}`);
-                                }
-                                if (data.displayedValues.includes('Release')) {
-                                    console.log(`Release: ${os.release()}`);
-                                }
-                                if (data.displayedValues.includes('Architecture')) {
-                                    console.log(`Architecture: ${os.arch()}`);
-                                }
-                                if (data.displayedValues.includes('Uptime')) {
-                                    console.log(`Uptime: ${uptimeInMinutes().toFixed(0)} min`);
-                                }
-                                if (data.displayedValues.includes('CPUs')) {
-                                    console.log(`CPU: ${os.cpus()[0].model}`);
-                                }
-                                if (data.displayedValues.includes('GPUs')) {
-                                    console.log(`GPU(s): ${allData.graphicsInfo.gpuInfo}`);
-                                }
-                                if (data.displayedValues.includes('Displays')) {
-                                    console.log(`Display(s): ${allData.graphicsInfo.displays}`);
-                                }
-                                if (data.displayedValues.includes('Endianness')) {
-                                    console.log(`Endianness: ${endianness()}`);
-                                }
-                                if (data.displayedValues.includes('Memory')) {
-                                    console.log(`Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)`);
-                                }
-                                if (data.displayedValues.includes('Shell')) {
-                                    console.log(`Shell: ${allData.osInfo.shell}`);
-                                }
+                            console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
+                            if (data.displayedValues.includes('Platform')) {
+                                console.log(`Platform: ${os.platform().toLocaleUpperCase()}`);
+                            }
+                            if (data.displayedValues.includes('Type')) {
+                                console.log(`Type: ${os.type()}`);
+                            }
+                            if (data.displayedValues.includes('Release')) {
+                                console.log(`Release: ${os.release()}`);
+                            }
+                            if (data.displayedValues.includes('Architecture')) {
+                                console.log(`Architecture: ${os.arch()}`);
+                            }
+                            if (data.displayedValues.includes('Uptime')) {
+                                console.log(`Uptime: ${uptimeInMinutes().toFixed(0)} min`);
+                            }
+                            if (data.displayedValues.includes('CPUs')) {
+                                console.log(`CPU: ${os.cpus()[0].model}`);
+                            }
+                            if (data.displayedValues.includes('GPUs')) {
+                                console.log(`GPU(s): ${allData.graphicsInfo.gpuInfo}`);
+                            }
+                            if (data.displayedValues.includes('Displays')) {
+                                console.log(`Display(s): ${allData.graphicsInfo.displays}`);
+                            }
+                            if (data.displayedValues.includes('Endianness')) {
+                                console.log(`Endianness: ${endianness()}`);
+                            }
+                            if (data.displayedValues.includes('Memory')) {
+                                console.log(`Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)`);
+                            }
+                            if (data.displayedValues.includes('Shell')) {
+                                console.log(`Shell: ${allData.osInfo.shell}`);
+                            }
                         }
                         displayPersonalizedData();
                     })
