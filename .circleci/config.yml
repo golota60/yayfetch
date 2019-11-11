@@ -1,14 +1,15 @@
  version: 2
  
  defaults: &defaults
+ 
   working_directory: ~/repo
   docker:
-    - image: circleci/node:8.9.1
+    - image: circleci/node:12.13.0
     
  jobs:
    build:
      docker:
-       - image: circleci/node:8.9.1
+       - image: circleci/node:12.13.0
      steps:
        - checkout
        - run: yarn install
