@@ -10,6 +10,9 @@ More features to come!
 
 ## Changelog
 
+### 1.1.5
+Added handling of rejected promises - now, even if software can't detect your system information, it will at least display what it could get. Also code refactor.
+
 ### 1.1.2
 Added github homepage, so everybody can help improve this project: https://github.com/golota60/yayfetch
 
