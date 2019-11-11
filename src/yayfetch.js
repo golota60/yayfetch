@@ -53,15 +53,17 @@ const uptimeInMinutes = () => {
 
 async function getSystemInformation() {
     try {
-        const GPU = await sysinf.graphics();
+        const gpu = await sysinf.graphics();
+
         let displays = '';
         let graphicsCards = '';
-        GPU.controllers.forEach((elem) => {
+        gpu.controllers.forEach((elem) => {
             graphicsCards += `${elem.model} `;
         })
-        GPU.displays.forEach((elem) => {
+        gpu.displays.forEach((elem) => {
             displays += `${elem.resolutionx}x${elem.resolutiony} `
         })
+        
         systemInfo.graphicsInfo = {
             gpuInfo: graphicsCards,
             displays: displays
@@ -75,9 +77,17 @@ async function getSystemInformation() {
 
     try {
         const memory = await sysinf.mem();
-        const total = memory ? bitstoMegabytes(memory.total) : null; //conversion to Mb
-        const used = memory ? bitstoMegabytes(memory.used) : null;
-        const free = memory ? bitstoMegabytes(memory.free) : null;
+
+        const total = memory
+        ? bitstoMegabytes(memory.total)
+        : null;
+        const used = memory
+        ? bitstoMegabytes(memory.used)
+        : null;
+        const free = memory
+        ? bitstoMegabytes(memory.free)
+        : null;
+
         systemInfo.memoryInfo = {
             free: free.toFixed(0),
             used: used.toFixed(0),
@@ -93,8 +103,14 @@ async function getSystemInformation() {
 
     try {
         const osInfo = await sysinf.users()
-        const username = osInfo ? osInfo[0].user : null;
-        const shell = osInfo ? osInfo[0].tty : null;
+
+        const username = osInfo
+        ? osInfo[0].user
+        : null;
+        const shell = osInfo ?
+        osInfo[0].tty
+        : null;
+
         systemInfo.osInfo = {
             username: username,
             shell: shell
@@ -111,50 +127,45 @@ async function getSystemInformation() {
 
 const args =
     yargs
-        .command('$0', '', () => {
+        .command('$0', '', async() => {
             if (yargs.argv.p || yargs.argv.pick) {
-                inquirer
-                    .prompt([promptQuestions])
-                    .then((data) => {
-                        async function displayPersonalizedData() {
-                            const allData = await getSystemInformation();
-                            console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
-                            if (data.displayedValues.includes('Platform')) {
-                                console.log(`Platform: ${os.platform().toLocaleUpperCase()}`);
-                            }
-                            if (data.displayedValues.includes('Type')) {
-                                console.log(`Type: ${os.type()}`);
-                            }
-                            if (data.displayedValues.includes('Release')) {
-                                console.log(`Release: ${os.release()}`);
-                            }
-                            if (data.displayedValues.includes('Architecture')) {
-                                console.log(`Architecture: ${os.arch()}`);
-                            }
-                            if (data.displayedValues.includes('Uptime')) {
-                                console.log(`Uptime: ${uptimeInMinutes().toFixed(0)} min`);
-                            }
-                            if (data.displayedValues.includes('CPUs')) {
-                                console.log(`CPU: ${os.cpus()[0].model}`);
-                            }
-                            if (data.displayedValues.includes('GPUs')) {
-                                console.log(`GPU(s): ${allData.graphicsInfo.gpuInfo}`);
-                            }
-                            if (data.displayedValues.includes('Displays')) {
-                                console.log(`Display(s): ${allData.graphicsInfo.displays}`);
-                            }
-                            if (data.displayedValues.includes('Endianness')) {
-                                console.log(`Endianness: ${endianness()}`);
-                            }
-                            if (data.displayedValues.includes('Memory')) {
-                                console.log(`Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)`);
-                            }
-                            if (data.displayedValues.includes('Shell')) {
-                                console.log(`Shell: ${allData.osInfo.shell}`);
-                            }
-                        }
-                        displayPersonalizedData();
-                    })
+                const inquirerPrompt = await inquirer.prompt([promptQuestions])
+                const allData = await getSystemInformation();
+                console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
+                if (inquirerPrompt.displayedValues.includes('Platform')) {
+                    console.log(`Platform: ${os.platform().toLocaleUpperCase()}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Type')) {
+                    console.log(`Type: ${os.type()}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Release')) {
+                    console.log(`Release: ${os.release()}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Architecture')) {
+                    console.log(`Architecture: ${os.arch()}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Uptime')) {
+                    console.log(`Uptime: ${uptimeInMinutes().toFixed(0)} min`);
+                }
+                if (inquirerPrompt.displayedValues.includes('CPUs')) {
+                    console.log(`CPU: ${os.cpus()[0].model}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('GPUs')) {
+                    console.log(`GPU(s): ${allData.graphicsInfo.gpuInfo}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Displays')) {
+                    console.log(`Display(s): ${allData.graphicsInfo.displays}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Endianness')) {
+                    console.log(`Endianness: ${endianness()}`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Memory')) {
+                    console.log(`Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)`);
+                }
+                if (inquirerPrompt.displayedValues.includes('Shell')) {
+                    console.log(`Shell: ${allData.osInfo.shell}`);
+                }
+
             } else {
                 async function displayData() {
                     const allData = await getSystemInformation()
