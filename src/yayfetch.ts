@@ -1,16 +1,19 @@
 #!/usr/bin/env node
+
+import { systemInformation, gpuControllers, gpuDisplays } from "./interfaces/interfaces";
+
 const os = require('os');
 const yargs = require('yargs');
 const sysinf = require('systeminformation');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
-const errorMessage = 'Error - check https://www.npmjs.com/package/yayfetch for more';
-function bitstoMegabytes(numberToConvert) {
+const errorMessage: string = 'Error - check https://www.npmjs.com/package/yayfetch for more';
+function bitstoMegabytes(numberToConvert: number): number {
     return numberToConvert * 9.537 * Math.pow(10, -7);
 }
 
-let systemInfo = {
+let systemInfo: systemInformation = {
     graphicsInfo: {
         gpuInfo: '',
         displays: ''
@@ -24,7 +27,7 @@ let systemInfo = {
         username: ''
     },
     shellInfo: ''
-}
+};
 
 let promptQuestions = {
     type: 'checkbox',
@@ -46,20 +49,20 @@ const endianness = () => {
     }
 }
 
-const uptimeInMinutes = () => {
+const uptimeInMinutes = (): number => {
     return os.uptime() / 60;
 }
 
-async function getSystemInformation() {
+async function getSystemInformation(): Promise<systemInformation> {
     try {
         const gpu = await sysinf.graphics();
 
         let displays = '';
         let graphicsCards = '';
-        gpu.controllers.forEach((elem) => {
+        gpu.controllers.forEach((elem: gpuControllers) => {
             graphicsCards += `${elem.model} `;
         })
-        gpu.displays.forEach((elem) => {
+        gpu.displays.forEach((elem: gpuDisplays) => {
             displays += `${elem.resolutionx}x${elem.resolutiony} `
         })
 
@@ -77,15 +80,15 @@ async function getSystemInformation() {
     try {
         const memory = await sysinf.mem();
 
-        const total = memory
+        const total: number = memory
             ? bitstoMegabytes(memory.total)
-            : null;
-        const used = memory
+            : 0;
+        const used: number = memory
             ? bitstoMegabytes(memory.used)
-            : null;
-        const free = memory
+            : 0;
+        const free: number = memory
             ? bitstoMegabytes(memory.free)
-            : null;
+            : 0;
 
         systemInfo.memoryInfo = {
             free: free.toFixed(0),
@@ -103,13 +106,12 @@ async function getSystemInformation() {
     try {
         const osInfo = await sysinf.users()
 
-        const username = osInfo
+        const username: string = osInfo
             ? osInfo[0].user
             : null;
 
         systemInfo.osInfo = {
             username: username,
-            shell: shell
         }
     } catch{
         systemInfo.osInfo = {
@@ -136,12 +138,30 @@ async function getSystemInformation() {
     return systemInfo;
 }
 
+async function displayData(): Promise<void> {
+    const allData: systemInformation = await getSystemInformation()
+    allData ? console.log(
+        ` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------\n`,
+        `Platform: ${os.platform().toLocaleUpperCase()}\n`,
+        `Type: ${os.type()}\n`,
+        `Release: ${os.release()}\n`,
+        `Architecture: ${os.arch()}\n`,
+        `Uptime: ${uptimeInMinutes().toFixed(0)} min\n`,
+        `CPU: ${os.cpus()[0].model}\n`, //supports only one cpu
+        `GPU(s): ${allData.graphicsInfo.gpuInfo}\n`, //support only one GPU and display
+        `Display(s): ${allData.graphicsInfo.displays}\n`,
+        `Endianness: ${endianness()}\n`,
+        `Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)\n`,
+        `Shell: ${allData.shellInfo}`
+    ) : null;
+}
+
 const args =
     yargs
         .command('$0', '', async () => {
             if (yargs.argv.p || yargs.argv.pick) {
                 const inquirerPrompt = await inquirer.prompt([promptQuestions])
-                const allData = await getSystemInformation();
+                const allData: systemInformation = await getSystemInformation();
                 console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
                 if (inquirerPrompt.displayedValues.includes('Platform')) {
                     console.log(`Platform: ${os.platform().toLocaleUpperCase()}`);
@@ -176,28 +196,7 @@ const args =
                 if (inquirerPrompt.displayedValues.includes('Shell')) {
                     console.log(`Shell: ${allData.shellInfo}`);
                 }
-
             } else {
-                async function displayData() {
-                    const allData = await getSystemInformation()
-                    const yayfetch = (res) => {
-                        res ? console.log(
-                            ` ${chalk.blue(res.osInfo.username + '@' + os.platform())} \n -----------------------------\n`,
-                            `Platform: ${os.platform().toLocaleUpperCase()}\n`,
-                            `Type: ${os.type()}\n`,
-                            `Release: ${os.release()}\n`,
-                            `Architecture: ${os.arch()}\n`,
-                            `Uptime: ${uptimeInMinutes().toFixed(0)} min\n`,
-                            `CPU: ${os.cpus()[0].model}\n`, //supports only one cpu
-                            `GPU(s): ${res.graphicsInfo.gpuInfo}\n`, //support only one GPU and display
-                            `Display(s): ${res.graphicsInfo.displays}\n`,
-                            `Endianness: ${endianness()}\n`,
-                            `Memory: ${res.memoryInfo.free}/${res.memoryInfo.used}/${res.memoryInfo.total} MiB (Free/Used/Total)\n`,
-                            `Shell: ${res.shellInfo}`
-                        ) : null;
-                    }
-                    yayfetch(systemInfo);
-                }
                 displayData();
             }
         })
