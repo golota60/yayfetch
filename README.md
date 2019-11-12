@@ -19,9 +19,9 @@ If you came here because of the ```'Error - check https://www.npmjs.com/package/
 
 ## Changelog
 
-### 1.1.7
+### 1.1.10 
 
-Added TypeScript to code
+Introduced TypeScript!
 
 ### 1.1.6
 
