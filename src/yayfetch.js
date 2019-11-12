@@ -10,7 +10,6 @@ function bitstoMegabytes(numberToConvert) {
     return numberToConvert * 9.537 * Math.pow(10, -7);
 }
 
-//TODO:investigate why the uptime is always so high and why free memory seems to be unreasonably high
 let systemInfo = {
     graphicsInfo: {
         gpuInfo: '',
@@ -22,9 +21,9 @@ let systemInfo = {
         total: '',
     },
     osInfo: {
-        username: '',
-        shell: ''
-    }
+        username: ''
+    },
+    shellInfo: ''
 }
 
 let promptQuestions = {
@@ -63,7 +62,7 @@ async function getSystemInformation() {
         gpu.displays.forEach((elem) => {
             displays += `${elem.resolutionx}x${elem.resolutiony} `
         })
-        
+
         systemInfo.graphicsInfo = {
             gpuInfo: graphicsCards,
             displays: displays
@@ -79,14 +78,14 @@ async function getSystemInformation() {
         const memory = await sysinf.mem();
 
         const total = memory
-        ? bitstoMegabytes(memory.total)
-        : null;
+            ? bitstoMegabytes(memory.total)
+            : null;
         const used = memory
-        ? bitstoMegabytes(memory.used)
-        : null;
+            ? bitstoMegabytes(memory.used)
+            : null;
         const free = memory
-        ? bitstoMegabytes(memory.free)
-        : null;
+            ? bitstoMegabytes(memory.free)
+            : null;
 
         systemInfo.memoryInfo = {
             free: free.toFixed(0),
@@ -105,11 +104,8 @@ async function getSystemInformation() {
         const osInfo = await sysinf.users()
 
         const username = osInfo
-        ? osInfo[0].user
-        : null;
-        const shell = osInfo ?
-        osInfo[0].tty
-        : null;
+            ? osInfo[0].user
+            : null;
 
         systemInfo.osInfo = {
             username: username,
@@ -117,8 +113,23 @@ async function getSystemInformation() {
         }
     } catch{
         systemInfo.osInfo = {
-            username: errorMessage,
-            shell: errorMessage
+            username: errorMessage
+        }
+    }
+
+    try {
+        const shellInfo = await sysinf.shell()
+        systemInfo.shellInfo = shellInfo;
+    } catch{
+        if (os.platform() === 'win32') { //windows doesn't support .shell() feature - it's an edge case
+            try {
+                const osInfo = await sysinf.users()
+                systemInfo.shellInfo = osInfo[0].tty;
+            } catch{
+                systemInfo.shellInfo = errorMessage;
+            }
+        } else {
+            systemInfo.shellInfo = errorMessage;
         }
     }
 
@@ -127,7 +138,7 @@ async function getSystemInformation() {
 
 const args =
     yargs
-        .command('$0', '', async() => {
+        .command('$0', '', async () => {
             if (yargs.argv.p || yargs.argv.pick) {
                 const inquirerPrompt = await inquirer.prompt([promptQuestions])
                 const allData = await getSystemInformation();
@@ -163,7 +174,7 @@ const args =
                     console.log(`Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)`);
                 }
                 if (inquirerPrompt.displayedValues.includes('Shell')) {
-                    console.log(`Shell: ${allData.osInfo.shell}`);
+                    console.log(`Shell: ${allData.shellInfo}`);
                 }
 
             } else {
@@ -182,7 +193,7 @@ const args =
                             `Display(s): ${res.graphicsInfo.displays}\n`,
                             `Endianness: ${endianness()}\n`,
                             `Memory: ${res.memoryInfo.free}/${res.memoryInfo.used}/${res.memoryInfo.total} MiB (Free/Used/Total)\n`,
-                            `Shell: ${res.osInfo.shell}`
+                            `Shell: ${res.shellInfo}`
                         ) : null;
                     }
                     yayfetch(systemInfo);
