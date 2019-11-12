@@ -19,8 +19,8 @@
     "url": "https://github.com/golota60/yayfetch"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "tsc && node ./build/yayfetch.js"
+    "build": "./node_modules/typescript/bin/tsc",
+    "start": "./node_modules/typescript/bin/tsc && node ./build/yayfetch.js"
   },
   "bin": {
     "yayfetch": "./build/yayfetch.js"
@@ -34,5 +34,8 @@
     "inquirer": "^7.0.0",
     "systeminformation": "^4.14.17",
     "yargs": "^14.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.2"
   }
 }
