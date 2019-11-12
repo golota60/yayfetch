@@ -13,5 +13,5 @@
      steps:
        - checkout
        - run: yarn install
-       - run: node ./src/yayfetch.js
+       - run: yarn run start
        - run: echo "Build Successful"
