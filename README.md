@@ -19,6 +19,10 @@ If you came here because of the ```'Error - check https://www.npmjs.com/package/
 
 ## Changelog
 
+### 1.1.6
+
+Fixed shell display bug. It does not support Windows.
+
 ### 1.1.5
 Added handling of rejected promises - now, even if software can't detect your system information, it will at least display what it could get. Also code refactor.
 
