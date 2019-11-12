@@ -19,6 +19,10 @@ If you came here because of the ```'Error - check https://www.npmjs.com/package/
 
 ## Changelog
 
+### 1.1.7
+
+Added TypeScript to code
+
 ### 1.1.6
 
 Fixed shell display bug. It does not support Windows.
