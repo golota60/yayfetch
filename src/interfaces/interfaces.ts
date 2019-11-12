@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 export interface systemInformation {
     graphicsInfo: {
         gpuInfo: string,
