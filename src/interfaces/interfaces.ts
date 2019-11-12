@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-export interface systemInformation {
+export interface SystemInformation {
     graphicsInfo: {
         gpuInfo: string,
         displays: string
@@ -15,7 +15,7 @@ export interface systemInformation {
     shellInfo: string
 }
 
-export interface gpuControllers {
+export interface GpuControllers {
     vendor: string,
     model: string,
     bus: string,
@@ -23,7 +23,7 @@ export interface gpuControllers {
     vramDynamic: boolean
 }
 
-export interface gpuDisplays {
+export interface GpuDisplays {
     vendor: string,
     model: string,
     main: boolean,
@@ -41,12 +41,12 @@ export interface gpuDisplays {
     currentRefreshRate: number
 }
 
-export interface gpuInterface {
-    controllers: gpuControllers[],
-    displays: gpuDisplays[]
+export interface GpuInterface {
+    controllers: GpuControllers[],
+    displays: GpuDisplays[]
 }
 
-export interface memoryInterface {
+export interface MemoryInterface {
     total: number,
     free: number,
     used: number,
@@ -58,7 +58,7 @@ export interface memoryInterface {
     swapfree: number
 }
 
-export interface osInfoObjectInterface {
+export interface OsInfoObjectInterface {
         user: string,
         tty: string,
         date: string,

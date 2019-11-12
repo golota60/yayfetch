@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { systemInformation, gpuControllers, gpuDisplays, gpuInterface, memoryInterface, osInfoObjectInterface } from "./interfaces/interfaces";
+import { SystemInformation, GpuControllers, GpuDisplays, GpuInterface, MemoryInterface, OsInfoObjectInterface } from "./interfaces/interfaces";
 
 const os = require('os');
 const yargs = require('yargs');
@@ -8,12 +8,12 @@ const sysinf = require('systeminformation');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 
-const errorMessage: string = 'Error - check https://www.npmjs.com/package/yayfetch for more';
+const errorMessage = 'Error - check https://www.npmjs.com/package/yayfetch for more';
 function bitstoMegabytes(numberToConvert: number): number {
     return numberToConvert * 9.537 * Math.pow(10, -7);
 }
 
-let systemInfo: systemInformation = {
+let systemInfo: SystemInformation = {
     graphicsInfo: {
         gpuInfo: '',
         displays: ''
@@ -51,16 +51,16 @@ const uptimeInMinutes = (): number => {
     return os.uptime() / 60;
 }
 
-async function getSystemInformation(): Promise<systemInformation> {
+async function getSystemInformation(): Promise<SystemInformation> {
     try {
-        const gpu: gpuInterface = await sysinf.graphics();
+        const gpu: GpuInterface = await sysinf.graphics();
 
         let displays = '';
         let graphicsCards = '';
-        gpu.controllers.forEach((elem: gpuControllers) => {
+        gpu.controllers.forEach((elem: GpuControllers) => {
             graphicsCards += `${elem.model} `;
         })
-        gpu.displays.forEach((elem: gpuDisplays) => {
+        gpu.displays.forEach((elem: GpuDisplays) => {
             displays += `${elem.resolutionx}x${elem.resolutiony} `
         })
 
@@ -76,7 +76,7 @@ async function getSystemInformation(): Promise<systemInformation> {
     }
 
     try {
-        const memory: memoryInterface = await sysinf.mem();
+        const memory: MemoryInterface = await sysinf.mem();
 
         const total: number = memory
             ? bitstoMegabytes(memory.total)
@@ -102,7 +102,7 @@ async function getSystemInformation(): Promise<systemInformation> {
     }
 
     try {
-        const osInfo: osInfoObjectInterface[] = await sysinf.users()
+        const osInfo: OsInfoObjectInterface[] = await sysinf.users()
 
         const username: string = osInfo
             ? osInfo[0].user
@@ -123,7 +123,7 @@ async function getSystemInformation(): Promise<systemInformation> {
     } catch{
         if (os.platform() === 'win32') { //windows doesn't support .shell() feature - it's an edge case
             try {
-                const osInfo: osInfoObjectInterface[] = await sysinf.users()
+                const osInfo: OsInfoObjectInterface[] = await sysinf.users()
                 systemInfo.shellInfo = osInfo
                     ? osInfo[0].tty
                     : '';
@@ -139,7 +139,7 @@ async function getSystemInformation(): Promise<systemInformation> {
 }
 
 async function displayData(): Promise<void> {
-    const allData: systemInformation = await getSystemInformation()
+    const allData: SystemInformation = await getSystemInformation()
     allData ? console.log(
         ` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------\n`,
         `Platform: ${os.platform().toLocaleUpperCase()}\n`,
@@ -161,7 +161,7 @@ const args =
         .command('$0', '', async () => {
             if (yargs.argv.p || yargs.argv.pick) {
                 const inquirerPrompt = await inquirer.prompt([promptQuestions])
-                const allData: systemInformation = await getSystemInformation();
+                const allData: SystemInformation = await getSystemInformation();
                 console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
                 if (inquirerPrompt.displayedValues.includes('Platform')) {
                     console.log(`Platform: ${os.platform().toLocaleUpperCase()}`);
