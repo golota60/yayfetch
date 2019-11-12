@@ -39,3 +39,29 @@ export interface gpuDisplays {
     positionY: number,
     currentRefreshRate: number
 }
+
+export interface gpuInterface {
+    controllers: gpuControllers[],
+    displays: gpuDisplays[]
+}
+
+export interface memoryInterface {
+    total: number,
+    free: number,
+    used: number,
+    active: number,
+    available: number,
+    buffcache: number,
+    swaptotal: number,
+    swapused: number,
+    swapfree: number
+}
+
+export interface osInfoObjectInterface {
+        user: string,
+        tty: string,
+        date: string,
+        time: string,
+        ip: string,
+        command: string
+}

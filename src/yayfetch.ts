@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { systemInformation, gpuControllers, gpuDisplays } from "./interfaces/interfaces";
+import { systemInformation, gpuControllers, gpuDisplays, gpuInterface, memoryInterface, osInfoObjectInterface } from "./interfaces/interfaces";
 
 const os = require('os');
 const yargs = require('yargs');
@@ -40,10 +40,8 @@ const endianness = () => {
     switch (os.endianness()) {
         case 'LE':
             return 'Little Endian'
-            break;
         case 'BE':
             return 'Big Endian'
-            break;
         default:
             return os.endianness();
     }
@@ -55,7 +53,7 @@ const uptimeInMinutes = (): number => {
 
 async function getSystemInformation(): Promise<systemInformation> {
     try {
-        const gpu = await sysinf.graphics();
+        const gpu: gpuInterface = await sysinf.graphics();
 
         let displays = '';
         let graphicsCards = '';
@@ -78,7 +76,7 @@ async function getSystemInformation(): Promise<systemInformation> {
     }
 
     try {
-        const memory = await sysinf.mem();
+        const memory: memoryInterface = await sysinf.mem();
 
         const total: number = memory
             ? bitstoMegabytes(memory.total)
@@ -104,11 +102,11 @@ async function getSystemInformation(): Promise<systemInformation> {
     }
 
     try {
-        const osInfo = await sysinf.users()
+        const osInfo: osInfoObjectInterface[] = await sysinf.users()
 
         const username: string = osInfo
             ? osInfo[0].user
-            : null;
+            : '';
 
         systemInfo.osInfo = {
             username: username,
@@ -125,8 +123,10 @@ async function getSystemInformation(): Promise<systemInformation> {
     } catch{
         if (os.platform() === 'win32') { //windows doesn't support .shell() feature - it's an edge case
             try {
-                const osInfo = await sysinf.users()
-                systemInfo.shellInfo = osInfo[0].tty;
+                const osInfo: osInfoObjectInterface[] = await sysinf.users()
+                systemInfo.shellInfo = osInfo
+                    ? osInfo[0].tty
+                    : '';
             } catch{
                 systemInfo.shellInfo = errorMessage;
             }
