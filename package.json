@@ -21,8 +21,9 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/tsc",
     "build": "./node_modules/.bin/tsc",
-    "start": "./node_modules/.bin/tsc && node ./build/yayfetch.js",
-    "clean": "rm -rf node_modules && rm -rf ./build"
+    "start": "yarn run lint && node ./build/yayfetch.js",
+    "clean": "rm -rf node_modules && rm -rf ./build",
+    "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix"
   },
   "bin": {
     "yayfetch": "./build/yayfetch.js"
@@ -40,7 +41,13 @@
     "@types/inquirer": "^6.5.0",
     "@types/node": "^12.12.7",
     "@types/yargs": "^13.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.19.1",
     "ts-node": "^8.5.0",
-    "typescript": "^3.0.3"
+    "typescript": "^3.7.2"
   }
 }
