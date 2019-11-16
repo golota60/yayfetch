@@ -2,11 +2,11 @@
 
 import { SystemInformation, GpuControllers, GpuDisplays, GpuInterface, MemoryInterface, OsInfoObjectInterface } from "./interfaces/interfaces";
 
-const os = require('os');
-const yargs = require('yargs');
-const sysinf = require('systeminformation');
-const chalk = require('chalk');
-const inquirer = require('inquirer');
+import os from 'os';
+import yargs from 'yargs';
+import sysinf from 'systeminformation';
+import chalk from 'chalk';
+import inquirer from 'inquirer';
 
 const errorMessage = 'Error - check https://www.npmjs.com/package/yayfetch for more';
 function bitstoMegabytes(numberToConvert: number): number {
@@ -158,9 +158,9 @@ async function displayData(): Promise<void> {
 
 const args =
     yargs
-        .command('$0', '', async () => {
+        .command('$0', '', async ()=> {
             if (yargs.argv.p || yargs.argv.pick) {
-                const inquirerPrompt = await inquirer.prompt([promptQuestions])
+                const inquirerPrompt: any = await inquirer.prompt([promptQuestions])
                 const allData: SystemInformation = await getSystemInformation();
                 console.log(` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`);
                 if (inquirerPrompt.displayedValues.includes('Platform')) {
@@ -204,13 +204,12 @@ const args =
         .usage('Usage: npx yayfetch')
         .option('p', {
             alias: 'pick',
-            describe: 'Asks you which information you want displayed',
-            boolean: 'true',
+            describe: 'Asks you which information you want displayed'
         })
         .help()
         .version()
         .alias('help', 'h')
-        .example('npx yayfetch').argv
+        .example('npx yayfetch','Returns information about your system').argv
 
 
 
