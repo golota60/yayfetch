@@ -1,6 +1,6 @@
 {
   "name": "yayfetch",
-  "version": "1.1.18",
+  "version": "1.1.19",
   "description": "A Multi-platform screenfetch",
   "main": "yayfetch.js",
   "author": "Szymon Wiszczuk",
@@ -25,7 +25,7 @@
     "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix"
   },
   "bin": {
-    "yayfetch": "./build/yayfetch.js"
+    "yayfetch": "./yayfetch.js"
   },
   "publishConfig": {
     "access": "public"
