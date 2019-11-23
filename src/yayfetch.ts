@@ -16,8 +16,13 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 
 const errorMessage = 'Error - check https://www.npmjs.com/package/yayfetch for more';
+
 function bitstoMegabytes(numberToConvert: number): number {
     return numberToConvert * 9.537 * Math.pow(10, -7);
+}
+
+function printInOrange(textToPrint: string): string {
+    return chalk.rgb(255, 117, 26)(textToPrint);
 }
 
 const systemInfo: SystemInformation = {
@@ -152,18 +157,19 @@ async function displayData(): Promise<void> {
     const allData: SystemInformation = await getSystemInformation();
     allData
         ? console.log(
-              ` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------\n`,
-              `Platform: ${os.platform().toLocaleUpperCase()}\n`,
-              `Type: ${os.type()}\n`,
-              `Release: ${os.release()}\n`,
-              `Architecture: ${os.arch()}\n`,
-              `Uptime: ${uptimeInMinutes().toFixed(0)} min\n`,
-              `CPU: ${os.cpus()[0].model}\n`, //supports only one cpu
-              `GPU(s): ${allData.graphicsInfo.gpuInfo}\n`, //support only one GPU and display
-              `Display(s): ${allData.graphicsInfo.displays}\n`,
-              `Endianness: ${endianness()}\n`,
-              `Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)\n`,
-              `Shell: ${allData.shellInfo}`,
+              ` ${printInOrange(allData.osInfo.username + '@' + os.platform())} \n -----------------------------\n`,
+              `${printInOrange(`Platform:`)} ${os.platform().toLocaleUpperCase()}\n`,
+              `${printInOrange(`Type:`)} ${os.type()}\n`,
+              `${printInOrange(`Release:`)} ${os.release()}\n`,
+              `${printInOrange(`Architecture:`)} ${os.arch()}\n`,
+              `${printInOrange(`Uptime:`)} ${uptimeInMinutes().toFixed(0)} min\n`,
+              `${printInOrange(`CPU:`)} ${os.cpus()[0].model}\n`, //supports only one cpu
+              `${printInOrange(`GPU(s):`)} ${allData.graphicsInfo.gpuInfo}\n`,
+              `${printInOrange(`Display(s):`)} ${allData.graphicsInfo.displays}\n`,
+              `${printInOrange(`Endianness:`)} ${endianness()}\n`,
+              // eslint-disable-next-line prettier/prettier
+              `${printInOrange(`Memory:`)} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)\n`,
+              `${printInOrange(`Shell:`)} ${allData.shellInfo}`,
           )
         : null;
 }
@@ -172,7 +178,7 @@ async function displayData(): Promise<void> {
 const args = yargs
     .command('$0', '', async () => {
         if (yargs.argv.p || yargs.argv.pick) {
-            const inquirerPrompt: any = await inquirer.prompt([promptQuestions]);
+            const inquirerPrompt = await inquirer.prompt<{ displayedValues: string }>([promptQuestions]);
             const allData: SystemInformation = await getSystemInformation();
             console.log(
                 ` ${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`,
