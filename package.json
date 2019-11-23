@@ -1,6 +1,6 @@
 {
   "name": "yayfetch",
-  "version": "1.1.19",
+  "version": "1.2.0",
   "description": "A Multi-platform screenfetch",
   "main": "yayfetch.js",
   "author": "Szymon Wiszczuk",
@@ -19,8 +19,8 @@
     "url": "https://github.com/golota60/yayfetch"
   },
   "scripts": {
-    "build": "./node_modules/.bin/tsc",
-    "start": "yarn run lint && node ./build/yayfetch.js",
+    "build": "node_modules/.bin/tsc",
+    "start": "node_modules/.bin/tsc && node ./build/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./build",
     "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix"
   },
