@@ -1,3 +1,7 @@
+  <a href="https://www.npmjs.com/package/yayfetch">
+    <img alt="downloads" src="https://img.shields.io/npm/dm/yayfetch.svg" target="_blank" />
+  </a>
+
 ## Usage
 
 **Note: It is NOT reccomended to install the package globally, because it is subject to often changes**
