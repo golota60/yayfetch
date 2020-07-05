@@ -6,7 +6,7 @@
 <img src="https://github.com/golota60/yayfetch/blob/master/assets/logo.svg" width="150">
 
 
-<img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.svg" width="150">
+<img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="500">
 
 ## What is yayfetch?
 
