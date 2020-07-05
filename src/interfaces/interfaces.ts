@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 export interface SystemInformation {
     graphicsInfo: {
-        gpuInfo: string;
-        displays: string;
+        gpuInfo: Array<string>;
+        displays: Array<string>;
     };
     memoryInfo: {
         free: string;

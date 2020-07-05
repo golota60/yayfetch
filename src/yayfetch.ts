@@ -14,32 +14,13 @@ import yargs from 'yargs';
 import sysinf from 'systeminformation';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-
-const errorMessage = 'Error - check https://www.npmjs.com/package/yayfetch for more';
-
-function bitstoMegabytes(numberToConvert: number): number {
-    return numberToConvert * 9.537 * Math.pow(10, -7);
-}
+import { errorMessage, bitstoMegabytes, uptimeInMinutes } from './helpers/helpers';
 
 function printInOrange(textToPrint: string): string {
     return chalk.rgb(255, 117, 26)(textToPrint);
 }
 
-const systemInfo: SystemInformation = {
-    graphicsInfo: {
-        gpuInfo: '',
-        displays: '',
-    },
-    memoryInfo: {
-        free: '',
-        used: '',
-        total: '',
-    },
-    osInfo: {
-        username: '',
-    },
-    shellInfo: '',
-};
+const systemInfo: SystemInformation = {} as SystemInformation;
 
 const promptQuestions = {
     type: 'checkbox',
@@ -60,7 +41,7 @@ const promptQuestions = {
     ],
 };
 
-const endianness = (): string => {
+const getEndianness = (): string => {
     switch (os.endianness()) {
         case 'LE':
             return 'Little Endian';
@@ -71,22 +52,19 @@ const endianness = (): string => {
     }
 };
 
-const uptimeInMinutes = (): number => {
-    return os.uptime() / 60;
-};
-
 async function getSystemInformation(): Promise<SystemInformation> {
     try {
         const gpu: GpuInterface = await sysinf.graphics();
 
-        let displays = '';
-        let graphicsCards = '';
-        gpu.controllers.forEach((elem: GpuControllers) => {
-            graphicsCards += `${elem.model} `;
-        });
-        gpu.displays.forEach((elem: GpuDisplays) => {
-            displays += `${elem.resolutionx}x${elem.resolutiony} `;
-        });
+        const graphicsCards = gpu.controllers.reduce(
+            (_acc: Array<string>, _gpu: GpuControllers) => (_gpu.model ? [..._acc, _gpu.model] : [..._acc]),
+            [],
+        );
+        const displays = gpu.displays.reduce(
+            (_acc: Array<string>, _gpu: GpuDisplays) =>
+                _gpu.resolutionx && _gpu.resolutiony ? [..._acc, `${_gpu.resolutionx}x${_gpu.resolutiony}`] : [..._acc],
+            [],
+        );
 
         systemInfo.graphicsInfo = {
             gpuInfo: graphicsCards,
@@ -94,8 +72,8 @@ async function getSystemInformation(): Promise<SystemInformation> {
         };
     } catch {
         systemInfo.graphicsInfo = {
-            gpuInfo: errorMessage,
-            displays: errorMessage,
+            gpuInfo: [errorMessage],
+            displays: [errorMessage],
         };
     }
 
@@ -138,7 +116,7 @@ async function getSystemInformation(): Promise<SystemInformation> {
         systemInfo.shellInfo = shellInfo;
     } catch {
         if (os.platform() === 'win32') {
-            //windows doesn't support .shell() feature - it's an edge case
+            //windows doesn't support .shell() feature
             try {
                 const osInfo: OsInfoObjectInterface[] = await sysinf.users();
                 systemInfo.shellInfo = osInfo ? osInfo[0].tty : '';
@@ -149,7 +127,6 @@ async function getSystemInformation(): Promise<SystemInformation> {
             systemInfo.shellInfo = errorMessage;
         }
     }
-
     return systemInfo;
 }
 
@@ -166,9 +143,10 @@ async function displayData(): Promise<void> {
               `${printInOrange(`CPU:`)} ${os.cpus()[0].model}\n`, //supports only one cpu
               `${printInOrange(`GPU(s):`)} ${allData.graphicsInfo.gpuInfo}\n`,
               `${printInOrange(`Display(s):`)} ${allData.graphicsInfo.displays}\n`,
-              `${printInOrange(`Endianness:`)} ${endianness()}\n`,
-              // eslint-disable-next-line prettier/prettier
-              `${printInOrange(`Memory:`)} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)\n`,
+              `${printInOrange(`Endianness:`)} ${getEndianness()}\n`,
+              `${printInOrange(`Memory:`)} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
+                  allData.memoryInfo.total
+              } MiB (Free/Used/Total)\n`,
               `${printInOrange(`Shell:`)} ${allData.shellInfo}`,
           )
         : null;
@@ -208,7 +186,7 @@ const args = yargs
                 console.log(`Display(s): ${allData.graphicsInfo.displays}`);
             }
             if (inquirerPrompt.displayedValues.includes('Endianness')) {
-                console.log(`Endianness: ${endianness()}`);
+                console.log(`Endianness: ${getEndianness()}`);
             }
             if (inquirerPrompt.displayedValues.includes('Memory')) {
                 console.log(

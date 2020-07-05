@@ -1,3 +1,7 @@
+## Local development
+
+``` yarn start <flags> ```
+
 ## Prettier
 
 Basic prettier setttings are set up, but it subject to change.
