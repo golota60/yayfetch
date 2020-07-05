@@ -1,6 +1,13 @@
   <a href="https://www.npmjs.com/package/yayfetch">
     <img alt="downloads" src="https://img.shields.io/npm/dm/yayfetch.svg" target="_blank" />
   </a>
+<br>
+
+<img src="https://github.com/golota60/yayfetch/blob/master/logo.svg" width="150">
+
+## What is yayfetch?
+
+Yayfetch is a tool similar to screenfetch - except you can use it on a non-linux machine via npx/npm
 
 ## Usage
 
@@ -21,25 +28,3 @@ If you came here because of the ```'Error - check https://www.npmjs.com/package/
 1. You're using linux subsystem for windows
 2. Your system is within virtual machine
 
-## Changelog
-
-### 1.1.16
-
-Introduced TypeScript and set up tsconfig
-
-### 1.1.6
-
-Fixed shell display bug. It does not support Windows.
-
-### 1.1.5
-Added handling of rejected promises - now, even if software can't detect your system information, it will at least display what it could get. Also code refactor.
-
-### 1.1.2
-Added github homepage, so everybody can help improve this project: https://github.com/golota60/yayfetch
-
-### 1.1.1
-Added '-p' flag, updated readme and implemented yargs.
-
-### <1.1.1
-
-Nothing really, it was just returning basic information about your system
