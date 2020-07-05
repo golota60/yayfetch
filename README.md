@@ -3,8 +3,7 @@
   </a>
 <br>
 
-<img src="https://github.com/golota60/yayfetch/blob/master/assets/logo.svg" width="150">
-
+<img src="https://github.com/golota60/yayfetch/blob/master/assets/textlogo.svg" width="500">
 
 <img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="500">
 
