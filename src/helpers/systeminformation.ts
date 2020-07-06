@@ -14,15 +14,6 @@ interface MemoryInfoInterface {
   total: string;
 }
 
-interface SystemInformation {
-  graphicsInfo: DisplayAndGraphicsCard;
-  memoryInfo: MemoryInfoInterface;
-  osInfo: {
-    username: string;
-  };
-  shellInfo: string;
-}
-
 export const getEndianness = (): string => {
   switch (os.endianness()) {
     case 'LE':

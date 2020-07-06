@@ -6,7 +6,7 @@ import os from 'os';
 import yargs from 'yargs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { uptimeInMinutes } from './helpers/helpers';
+import { uptimeInMinutes, printInOrange } from './helpers/helpers';
 import {
   getEndianness,
   getDisplaysAndGraphicsCards,
@@ -14,10 +14,6 @@ import {
   getOsInfo,
   getShellInfo,
 } from './helpers/systeminformation';
-
-function printInOrange(textToPrint: string): string {
-  return chalk.rgb(255, 117, 26)(textToPrint);
-}
 
 const promptQuestions = {
   type: 'checkbox',

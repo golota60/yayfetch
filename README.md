@@ -3,9 +3,13 @@
   </a>
 <br>
 
+<p align="center">
 <img src="https://github.com/golota60/yayfetch/blob/master/assets/textlogo.svg" width="500">
+</p>
 
+<p align="center">
 <img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="500">
+</p>
 
 ## What is yayfetch?
 
