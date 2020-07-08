@@ -7,4 +7,27 @@ export const bitstoMegabytes = (numberToConvert: number): number => numberToConv
 
 export const uptimeInMinutes = (): number => os.uptime() / 60;
 
-export const printInOrange = (textToPrint: string): string => chalk.rgb(255, 117, 26)(textToPrint);
+export const returnInPink = (textToPrint: string): string => chalk.rgb(255, 102, 147)(textToPrint);
+
+export const yayfetchASCII = `
+  ████                  ████████                 ████
+ ██████                ██████████              ███████
+  ███████             ████████████            ███████
+   ███████          ███████████████          ███████
+    ███████        █████████████████        ███████
+     ███████     █████████▒ ▒█████████     ███████
+      ███████████████████▒   ▒███████████████████
+       █████████████████▒     ▒█████████████████
+        ███████████████████████████████████████
+         █████████████████████████████████████
+          ██████████▒             ▒██████████
+           ████████▒               ▒████████
+            ███████▒               ▒███████
+             ███████▒             ▒███████
+              ███████▒           ▒███████
+               ███████▒         ▒███████
+                ███████▒       ▒███████
+                 ███████▒     ▒███████
+                  ███████▒   ▒███████
+                   █████▒     ▒█████
+                     ██▒       ▒██ `;
