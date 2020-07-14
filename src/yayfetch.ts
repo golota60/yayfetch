@@ -65,21 +65,26 @@ const allData = async (): Promise<string> => {
 async function returnPickedData(valuesToDisplay: Array<string>): Promise<string> {
   const allData: SystemInformation = await getSystemInformation();
   const pickedVals = [`${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`];
-  valuesToDisplay.includes('Platform') && pickedVals.push(`Platform: ${os.platform().toLocaleUpperCase()}`);
-  valuesToDisplay.includes('Type') && pickedVals.push(`Type: ${os.type()}`);
-  valuesToDisplay.includes('Release') && pickedVals.push(`Release: ${os.release()}`);
-  valuesToDisplay.includes('Architecture') && pickedVals.push(`Architecture: ${os.arch()}`);
-  valuesToDisplay.includes('Uptime') && pickedVals.push(`Uptime: ${uptimeInMinutes().toFixed(0)} min`);
-  valuesToDisplay.includes('CPUs') && pickedVals.push(`CPU: ${os.cpus()[0].model}`);
-  valuesToDisplay.includes('GPUs') && pickedVals.push(`GPU(s): ${allData.graphicsInfo.gpuInfo}`);
-  valuesToDisplay.includes('Displays') && pickedVals.push(`Display(s): ${allData.graphicsInfo.displays}`);
-  valuesToDisplay.includes('Endianness') && pickedVals.push(`Endianness: ${getEndianness()}`);
+  valuesToDisplay.includes('Platform') &&
+    pickedVals.push(`${returnInPink('Platform:')} ${os.platform().toLocaleUpperCase()}`);
+  valuesToDisplay.includes('Type') && pickedVals.push(`${returnInPink('Type:')} ${os.type()}`);
+  valuesToDisplay.includes('Release') && pickedVals.push(`${returnInPink('Release:')} ${os.release()}`);
+  valuesToDisplay.includes('Architecture') && pickedVals.push(`${returnInPink('Architecture:')} ${os.arch()}`);
+  valuesToDisplay.includes('Uptime') &&
+    pickedVals.push(`${returnInPink('Uptime:')} ${uptimeInMinutes().toFixed(0)} min`);
+  valuesToDisplay.includes('CPUs') && pickedVals.push(`${returnInPink('CPU:')} ${os.cpus()[0].model}`);
+  valuesToDisplay.includes('GPUs') && pickedVals.push(`${returnInPink('GPU(s):')} ${allData.graphicsInfo.gpuInfo}`);
+  valuesToDisplay.includes('Displays') &&
+    pickedVals.push(`${returnInPink('Display(s):')} ${allData.graphicsInfo.displays}`);
+  valuesToDisplay.includes('Endianness') && pickedVals.push(`${returnInPink('Endianness:')} ${getEndianness()}`);
   valuesToDisplay.includes('Memory') &&
     pickedVals.push(
-      `Memory: ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total} MiB (Free/Used/Total)`,
+      `${returnInPink('Memory:')} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
+        allData.memoryInfo.total
+      } MiB (Free/Used/Total)`,
     );
-  valuesToDisplay.includes('Shell') && pickedVals.push(`Shell: ${allData.shellInfo}`);
-  return pickedVals.join('\n');
+  valuesToDisplay.includes('Shell') && pickedVals.push(`${returnInPink('Shell:')} ${allData.shellInfo}`);
+  return pickedVals.join('\n\n');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
