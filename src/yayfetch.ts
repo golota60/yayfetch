@@ -119,7 +119,6 @@ async function returnPickedData(valuesToDisplay: Array<string>, color: string): 
 const args = yargs
   .command('$0', '', async () => {
     const customColor = String(yargs.argv.c || yargs.argv.color);
-    console.log('customcol', customColor, yargs.argv.color);
     if (yargs.argv.p || yargs.argv.pick) {
       const inquirerPrompt = await inquirer.prompt<{ displayedValues: Array<string> }>([promptQuestions]);
       const pickedData = await returnPickedData(inquirerPrompt.displayedValues, customColor);
