@@ -92,7 +92,7 @@ async function returnPickedData(valuesToDisplay: Array<string>): Promise<string>
       } MiB (Free/Used/Total)`,
     );
   valuesToDisplay.includes('Shell') && pickedVals.push(`${returnInPink('Shell:')} ${allData.shellInfo}`);
-  return pickedVals.join('\n');
+  return pickedVals.join('\n\n');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
