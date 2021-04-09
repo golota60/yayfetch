@@ -6,7 +6,13 @@ import os from 'os';
 import yargs from 'yargs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { uptimeInMinutes, returnInPink, yayfetchASCII, printInTwoColumns } from './helpers/helpers';
+import {
+  uptimeInMinutes,
+  returnInPink,
+  yayfetchASCII,
+  printInTwoColumns,
+  returnPredefinedColoredText,
+} from './helpers/helpers';
 import {
   getEndianness,
   getDisplaysAndGraphicsCards,
@@ -52,57 +58,74 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
   shellInfo: await getShellInfo(),
 });
 
-const allData = async (): Promise<string> => {
+const allData = async (color: string): Promise<string> => {
   const allData: SystemInformation = await getSystemInformation();
-  return ` ${returnInPink(allData.osInfo.username + '@' + os.platform())} \n -----------------------------\n
-  ${returnInPink(`Platform:`)} ${os.platform().toLocaleUpperCase()}\n
-  ${returnInPink(`Type:`)} ${os.type()}\n
-  ${returnInPink(`Release:`)} ${os.release()}\n
-  ${returnInPink(`Architecture:`)} ${os.arch()}\n
-  ${returnInPink(`Uptime:`)} ${uptimeInMinutes().toFixed(0)} min\n
-  ${returnInPink(`CPU:`)} ${os.cpus()[0].model}\n
-  ${returnInPink(`GPU(s):`)} ${allData.graphicsInfo.gpuInfo}\n
-  ${returnInPink(`Display(s):`)} ${allData.graphicsInfo.displays}\n
-  ${returnInPink(`Endianness:`)} ${getEndianness()}\n
-  ${returnInPink(`Memory:`)} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
+  return ` ${returnPredefinedColoredText(
+    allData.osInfo.username + '@' + os.platform(),
+    color,
+  )} \n -----------------------------\n
+  ${returnPredefinedColoredText(`Platform:`, color)} ${os.platform().toLocaleUpperCase()}\n
+  ${returnPredefinedColoredText(`Type:`, color)} ${os.type()}\n
+  ${returnPredefinedColoredText(`Release:`, color)} ${os.release()}\n
+  ${returnPredefinedColoredText(`Architecture:`, color)} ${os.arch()}\n
+  ${returnPredefinedColoredText(`Uptime:`, color)} ${uptimeInMinutes().toFixed(0)} min\n
+  ${returnPredefinedColoredText(`CPU:`, color)} ${os.cpus()[0].model}\n
+  ${returnPredefinedColoredText(`GPU(s):`, color)} ${allData.graphicsInfo.gpuInfo}\n
+  ${returnPredefinedColoredText(`Display(s):`, color)} ${allData.graphicsInfo.displays}\n
+  ${returnPredefinedColoredText(`Endianness:`, color)} ${getEndianness()}\n
+  ${returnPredefinedColoredText(`Memory:`, color)} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
     allData.memoryInfo.total
   } MiB (Free/Used/Total)\n
-  ${returnInPink(`Shell:`)} ${allData.shellInfo}`;
+  ${returnPredefinedColoredText(`Shell:`, color)} ${allData.shellInfo}`;
 };
 
-async function returnPickedData(valuesToDisplay: Array<string>): Promise<string> {
+async function returnPickedData(valuesToDisplay: Array<string>, color: string): Promise<string> {
   const allData: SystemInformation = await getSystemInformation();
-  const pickedVals = [`${chalk.blue(allData.osInfo.username + '@' + os.platform())} \n -----------------------------`];
+  const pickedVals = [
+    `${returnPredefinedColoredText(
+      allData.osInfo.username + '@' + os.platform(),
+      color,
+    )} \n -----------------------------`,
+  ];
   valuesToDisplay.includes('Platform') &&
-    pickedVals.push(`${returnInPink('Platform:')} ${os.platform().toLocaleUpperCase()}`);
-  valuesToDisplay.includes('Type') && pickedVals.push(`${returnInPink('Type:')} ${os.type()}`);
-  valuesToDisplay.includes('Release') && pickedVals.push(`${returnInPink('Release:')} ${os.release()}`);
-  valuesToDisplay.includes('Architecture') && pickedVals.push(`${returnInPink('Architecture:')} ${os.arch()}`);
+    pickedVals.push(`${returnPredefinedColoredText('Platform:', color)} ${os.platform().toLocaleUpperCase()}`);
+  valuesToDisplay.includes('Type') && pickedVals.push(`${returnPredefinedColoredText('Type:', color)} ${os.type()}`);
+  valuesToDisplay.includes('Release') &&
+    pickedVals.push(`${returnPredefinedColoredText('Release:', color)} ${os.release()}`);
+  valuesToDisplay.includes('Architecture') &&
+    pickedVals.push(`${returnPredefinedColoredText('Architecture:', color)} ${os.arch()}`);
   valuesToDisplay.includes('Uptime') &&
-    pickedVals.push(`${returnInPink('Uptime:')} ${uptimeInMinutes().toFixed(0)} min`);
-  valuesToDisplay.includes('CPUs') && pickedVals.push(`${returnInPink('CPU:')} ${os.cpus()[0].model}`);
-  valuesToDisplay.includes('GPUs') && pickedVals.push(`${returnInPink('GPU(s):')} ${allData.graphicsInfo.gpuInfo}`);
+    pickedVals.push(`${returnPredefinedColoredText('Uptime:', color)} ${uptimeInMinutes().toFixed(0)} min`);
+  valuesToDisplay.includes('CPUs') &&
+    pickedVals.push(`${returnPredefinedColoredText('CPU:', color)} ${os.cpus()[0].model}`);
+  valuesToDisplay.includes('GPUs') &&
+    pickedVals.push(`${returnPredefinedColoredText('GPU(s):', color)} ${allData.graphicsInfo.gpuInfo}`);
   valuesToDisplay.includes('Displays') &&
-    pickedVals.push(`${returnInPink('Display(s):')} ${allData.graphicsInfo.displays}`);
-  valuesToDisplay.includes('Endianness') && pickedVals.push(`${returnInPink('Endianness:')} ${getEndianness()}`);
+    pickedVals.push(`${returnPredefinedColoredText('Display(s):', color)} ${allData.graphicsInfo.displays}`);
+  valuesToDisplay.includes('Endianness') &&
+    pickedVals.push(`${returnPredefinedColoredText('Endianness:', color)} ${getEndianness()}`);
   valuesToDisplay.includes('Memory') &&
     pickedVals.push(
-      `${returnInPink('Memory:')} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
+      `${returnPredefinedColoredText('Memory:', color)} ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
         allData.memoryInfo.total
       } MiB (Free/Used/Total)`,
     );
-  valuesToDisplay.includes('Shell') && pickedVals.push(`${returnInPink('Shell:')} ${allData.shellInfo}`);
+  valuesToDisplay.includes('Shell') &&
+    pickedVals.push(`${returnPredefinedColoredText('Shell:', color)} ${allData.shellInfo}`);
   return pickedVals.join('\n\n');
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const args = yargs
   .command('$0', '', async () => {
+    const customColor = String(yargs.argv.c || yargs.argv.color);
+    console.log('customcol', customColor, yargs.argv.color);
     if (yargs.argv.p || yargs.argv.pick) {
       const inquirerPrompt = await inquirer.prompt<{ displayedValues: Array<string> }>([promptQuestions]);
-      printInTwoColumns(returnInPink(yayfetchASCII), await returnPickedData(inquirerPrompt.displayedValues));
+      const pickedData = await returnPickedData(inquirerPrompt.displayedValues, customColor);
+      printInTwoColumns(returnPredefinedColoredText(yayfetchASCII, customColor), pickedData);
     } else {
-      printInTwoColumns(returnInPink(yayfetchASCII), await allData());
+      printInTwoColumns(returnPredefinedColoredText(yayfetchASCII, customColor), await allData(customColor));
     }
   })
   .scriptName('')
@@ -110,6 +133,12 @@ const args = yargs
   .option('p', {
     alias: 'pick',
     describe: 'Asks you which information you want displayed',
+  })
+  .option('c', {
+    alias: 'color',
+    describe: 'Color in which the data will be printed',
+    default: 'pink',
+    choices: ['pink', 'orange', 'green', 'white', 'black', 'red', 'blue', 'yellow'],
   })
   .help()
   .version()
