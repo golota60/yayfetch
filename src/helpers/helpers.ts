@@ -1,11 +1,27 @@
-import os from 'os';
+import os, { type } from 'os';
 import chalk from 'chalk';
 import columnify from 'columnify';
+import { RGBColors } from '../interfaces/general';
 
 export const errorMessage =
   'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
 
 export const bitstoMegabytes = (numberToConvert: number): number => numberToConvert * 9.537 * Math.pow(10, -7);
+
+export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
+  const split = rgbString.split(',');
+  const RGBAsNumericalArray = split.map((color: string) => {
+    const colorNumber = Number(color);
+    if (isNaN(colorNumber) || colorNumber < 0 || colorNumber > 255)
+      throw new Error("One of the numbers wasn't provided in correct format(has to be a number between 0 and 255)");
+    return colorNumber;
+  });
+  if (split.length !== 3)
+    throw new Error(
+      'Specified RGB color was provided incorrectly. Please remember that there has to be exactly 3 colors, they need to be separated by comas and numbers must be between 0 and 255',
+    );
+  return { r: RGBAsNumericalArray[0], g: RGBAsNumericalArray[1], b: RGBAsNumericalArray[2] };
+};
 
 export const uptimeInMinutes = (): number => os.uptime() / 60;
 
@@ -25,7 +41,10 @@ export const returnInBlue = (text: string): string => chalk.blue(text);
 
 export const returnInYellow = (text: string): string => chalk.rgb(255, 245, 99)(text);
 
-export const returnPredefinedColoredText = (text: string, colorCode: string): string => {
+export const returnColoredText = (text: string, colorCode: string | RGBColors): string => {
+  if (typeof colorCode === 'object') {
+    return chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
+  }
   switch (colorCode) {
     case 'pink':
       return returnInPink(text);
