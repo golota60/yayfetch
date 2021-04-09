@@ -1,13 +1,6 @@
 import os from 'os';
 import { errorMessage, bitstoMegabytes } from './helpers';
-import { GpuControllers, GpuDisplays, MemoryInterface, OsInfoInterface } from '../interfaces/systeminformation';
 import sysinf from 'systeminformation';
-
-interface DisplayAndGraphicsCard {
-  displays: Array<string>;
-  gpuInfo: Array<string>;
-}
-
 interface MemoryInfoInterface {
   free: string;
   used: string;
@@ -25,20 +18,25 @@ export const getEndianness = (): string => {
   }
 };
 
-export const getDisplaysAndGraphicsCards = async (): Promise<DisplayAndGraphicsCard> => {
+interface DisplaysAndGraphicsCardsInterface {
+  gpuInfo: Array<string>;
+  displays: Array<string>;
+}
+
+export const getDisplaysAndGraphicsCards = async (): Promise<DisplaysAndGraphicsCardsInterface> => {
   try {
     const gpu = await sysinf.graphics();
 
     const gpuInfo = gpu.controllers.reduce(
-      (_acc: Array<string>, _gpu: GpuControllers) => (_gpu.model ? [..._acc, _gpu.model] : [..._acc]),
+      (_acc: Array<string>, _gpu: sysinf.Systeminformation.GraphicsControllerData) =>
+        _gpu.model ? [..._acc, _gpu.model] : [..._acc],
       [],
     );
     const displays = gpu.displays.reduce(
-      (_acc: Array<string>, _gpu: GpuDisplays) =>
-        _gpu.resolutionx && _gpu.resolutiony ? [..._acc, `${_gpu.resolutionx}x${_gpu.resolutiony}`] : [..._acc],
+      (_acc: Array<string>, _gpu: sysinf.Systeminformation.GraphicsDisplayData) =>
+        _gpu.resolutionX && _gpu.resolutionY ? [..._acc, `${_gpu.resolutionX}x${_gpu.resolutionY}`] : [..._acc],
       [],
     );
-
     return {
       gpuInfo,
       displays,
@@ -53,7 +51,7 @@ export const getDisplaysAndGraphicsCards = async (): Promise<DisplayAndGraphicsC
 
 export const getMemoryInfo = async (): Promise<MemoryInfoInterface> => {
   try {
-    const memory: MemoryInterface = await sysinf.mem();
+    const memory: sysinf.Systeminformation.MemData = await sysinf.mem();
 
     const free: number = memory ? bitstoMegabytes(memory.free) : 0;
     const used: number = memory ? bitstoMegabytes(memory.used) : 0;
@@ -75,7 +73,7 @@ export const getMemoryInfo = async (): Promise<MemoryInfoInterface> => {
 
 export const getOsInfo = async (): Promise<string> => {
   try {
-    const osInfo: Array<OsInfoInterface> = await sysinf.users();
+    const osInfo: Array<sysinf.Systeminformation.UserData> = await sysinf.users();
 
     return osInfo ? osInfo[0].user : '';
   } catch {
@@ -90,7 +88,7 @@ export const getShellInfo = async (): Promise<string> => {
     if (os.platform() === 'win32') {
       //windows doesn't support .shell() feature
       try {
-        const osInfo: OsInfoInterface[] = await sysinf.users();
+        const osInfo: Array<sysinf.Systeminformation.UserData> = await sysinf.users();
         return osInfo ? osInfo[0].tty : '';
       } catch {
         return errorMessage;
