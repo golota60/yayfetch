@@ -18,7 +18,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   });
   if (split.length !== 3)
     throw new Error(
-      'Specified RGB color was provided incorrectly. Please remember that there has to be exactly 3 colors, they need to be separated by comas and numbers must be between 0 and 255',
+      'Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, they need to be separated by comas and numbers must be between 0 and 255',
     );
   return { r: RGBAsNumericalArray[0], g: RGBAsNumericalArray[1], b: RGBAsNumericalArray[2] };
 };

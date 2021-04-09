@@ -111,15 +111,21 @@ async function returnPickedData(valuesToDisplay: Array<string>, color: string | 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const args = yargs
   .command('$0', '', async () => {
-    const predefinedColor = String(yargs.argv.c || yargs.argv.color);
-    const customColors = yargs.argv.rgb ? parseRGBStringToNumber(String(yargs.argv.rgb)) : false;
-    const colorToUse = customColors || predefinedColor;
-    if (yargs.argv.p || yargs.argv.pick) {
-      const inquirerPrompt = await inquirer.prompt<{ displayedValues: Array<string> }>([promptQuestions]);
-      const pickedData = await returnPickedData(inquirerPrompt.displayedValues, colorToUse);
-      printInTwoColumns(returnColoredText(yayfetchASCII, colorToUse), pickedData);
-    } else {
-      printInTwoColumns(returnColoredText(yayfetchASCII, colorToUse), await allData(colorToUse));
+    try {
+      if (yargs.argv.color && yargs.argv.rgb)
+        throw new Error('--rgb and --color are mutually exclusive - please specify only one');
+      const predefinedColor = String(yargs.argv.c || yargs.argv.color);
+      const customColors = yargs.argv.rgb ? parseRGBStringToNumber(String(yargs.argv.rgb)) : false;
+      const colorToUse = customColors || predefinedColor;
+      if (yargs.argv.p || yargs.argv.pick) {
+        const inquirerPrompt = await inquirer.prompt<{ displayedValues: Array<string> }>([promptQuestions]);
+        const pickedData = await returnPickedData(inquirerPrompt.displayedValues, colorToUse);
+        printInTwoColumns(returnColoredText(yayfetchASCII, colorToUse), pickedData);
+      } else {
+        printInTwoColumns(returnColoredText(yayfetchASCII, colorToUse), await allData(colorToUse));
+      }
+    } catch (err) {
+      console.error(`‼️  ${err} ‼️`);
     }
   })
   .scriptName('')
@@ -127,18 +133,18 @@ const args = yargs
   .option('p', {
     alias: 'pick',
     describe: 'Asks you which information you want displayed',
+    type: 'boolean',
+    default: false,
   })
   .option('c', {
     alias: 'color',
     describe: 'Color in which the data will be printed',
-    default: 'pink',
     choices: ['pink', 'orange', 'green', 'white', 'black', 'red', 'blue', 'yellow'],
     type: 'string',
   })
   .option('rgb', {
     describe: 'Same as color, but you provide r,g,b values ex. 128,5,67',
     type: 'string',
-    conflicts: ['color'],
   })
   .help()
   .version()
