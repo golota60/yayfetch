@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import { SystemInformation } from './interfaces/systeminformation';
+import { DisplayAndGraphicsCard, MemoryInfoInterface } from './interfaces/systeminformation';
 
 import os from 'os';
 import yargs from 'yargs';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import columnify from 'columnify';
 import { uptimeInMinutes, returnInPink, yayfetchASCII, printInTwoColumns } from './helpers/helpers';
 import {
   getEndianness,
@@ -34,6 +33,15 @@ const promptQuestions = {
     'Shell',
   ],
 };
+
+export interface SystemInformation {
+  graphicsInfo: DisplayAndGraphicsCard;
+  memoryInfo: MemoryInfoInterface;
+  osInfo: {
+    username: string;
+  };
+  shellInfo: string;
+}
 
 const getSystemInformation = async (): Promise<SystemInformation> => ({
   graphicsInfo: await getDisplaysAndGraphicsCards(),
