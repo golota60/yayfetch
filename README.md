@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="500">
+<img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="700">
 </p>
 
 ## What is yayfetch?
