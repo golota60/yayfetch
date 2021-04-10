@@ -13,6 +13,7 @@ import {
   printInTwoColumns,
   returnColoredText,
   parseRGBStringToNumber,
+  printData,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -117,13 +118,17 @@ const args = yargs
       const predefinedColor = String(yargs.argv.c || yargs.argv.color);
       const customColors = yargs.argv.rgb ? parseRGBStringToNumber(String(yargs.argv.rgb)) : false;
       const colorToUse = customColors || predefinedColor;
+      const hideLogoFlag = Boolean(yargs.argv['hide-logo']);
+
+      let infoToPrint;
       if (yargs.argv.p || yargs.argv.pick) {
         const inquirerPrompt = await inquirer.prompt<{ displayedValues: Array<string> }>([promptQuestions]);
-        const pickedData = await returnPickedData(inquirerPrompt.displayedValues, colorToUse);
-        printInTwoColumns(returnColoredText(yayfetchASCII, colorToUse), pickedData);
+        infoToPrint = await returnPickedData(inquirerPrompt.displayedValues, colorToUse);
       } else {
-        printInTwoColumns(returnColoredText(yayfetchASCII, colorToUse), await allData(colorToUse));
+        infoToPrint = await allData(colorToUse);
       }
+
+      printData({ logo: returnColoredText(yayfetchASCII, colorToUse), data: infoToPrint }, hideLogoFlag);
     } catch (err) {
       console.error(`‼️  ${err} ‼️`);
     }
@@ -141,6 +146,11 @@ const args = yargs
     describe: 'Color in which the data will be printed',
     choices: ['pink', 'orange', 'green', 'white', 'black', 'red', 'blue', 'yellow'],
     type: 'string',
+  })
+  .option('hide-logo', {
+    describe: 'Hides the ASCII logo',
+    type: 'boolean',
+    default: false,
   })
   .option('rgb', {
     describe: 'Same as color, but you provide r,g,b values ex. 128,5,67',
