@@ -84,6 +84,14 @@ export const printInTwoColumns = (col1: string, col2: string): void => {
   );
 };
 
+export const printData = ({ logo, data }: { logo: string; data: string }, hideLogo: boolean = false): void => {
+  if (hideLogo) {
+    console.log(data);
+  } else {
+    printInTwoColumns(logo, data);
+  }
+};
+
 export const yayfetchASCII = `
   ████                  ████████                 ████
  ███████               ██████████              ███████
