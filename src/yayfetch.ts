@@ -4,16 +4,14 @@ import { DisplayAndGraphicsCard, MemoryInfoInterface } from './interfaces/system
 
 import os from 'os';
 import yargs from 'yargs';
-import chalk from 'chalk';
 import inquirer from 'inquirer';
 import {
   uptimeInMinutes,
-  returnInPink,
   yayfetchASCII,
-  printInTwoColumns,
   returnColoredText,
   parseRGBStringToNumber,
   printData,
+  availableColors,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -22,7 +20,7 @@ import {
   getOsInfo,
   getShellInfo,
 } from './helpers/systeminformation';
-import { RGBColors } from './interfaces/general';
+import { PredefinedColors, RGBColors } from './interfaces/general';
 
 const promptQuestions = {
   type: 'checkbox',
@@ -61,7 +59,7 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
   shellInfo: await getShellInfo(),
 });
 
-const allData = async (color: string | RGBColors): Promise<string> => {
+const allData = async (color: PredefinedColors | RGBColors): Promise<string> => {
   const allData: SystemInformation = await getSystemInformation();
   return ` ${returnColoredText(allData.osInfo.username + '@' + os.platform(), color)} \n -----------------------------\n
   ${returnColoredText(`Platform:`, color)} ${os.platform().toLocaleUpperCase()}\n
@@ -79,7 +77,7 @@ const allData = async (color: string | RGBColors): Promise<string> => {
   ${returnColoredText(`Shell:`, color)} ${allData.shellInfo}`;
 };
 
-async function returnPickedData(valuesToDisplay: Array<string>, color: string | RGBColors): Promise<string> {
+async function returnPickedData(valuesToDisplay: Array<string>, color: PredefinedColors | RGBColors): Promise<string> {
   const allData: SystemInformation = await getSystemInformation();
   const pickedVals = [
     `${returnColoredText(allData.osInfo.username + '@' + os.platform(), color)} \n -----------------------------`,
@@ -117,10 +115,10 @@ const args = yargs
         throw new Error('--rgb and --color are mutually exclusive - please specify only one');
       const predefinedColor = String(yargs.argv.c || yargs.argv.color);
       const customColors = yargs.argv.rgb ? parseRGBStringToNumber(String(yargs.argv.rgb)) : false;
-      const colorToUse = customColors || predefinedColor;
+      const colorToUse = customColors || (predefinedColor as PredefinedColors);
       const hideLogoFlag = Boolean(yargs.argv['hide-logo']);
 
-      let infoToPrint;
+      let infoToPrint: string;
       if (yargs.argv.p || yargs.argv.pick) {
         const inquirerPrompt = await inquirer.prompt<{ displayedValues: Array<string> }>([promptQuestions]);
         infoToPrint = await returnPickedData(inquirerPrompt.displayedValues, colorToUse);
@@ -144,7 +142,7 @@ const args = yargs
   .option('c', {
     alias: 'color',
     describe: 'Color in which the data will be printed',
-    choices: ['pink', 'orange', 'green', 'white', 'black', 'red', 'blue', 'yellow'],
+    choices: availableColors,
     type: 'string',
   })
   .option('hide-logo', {

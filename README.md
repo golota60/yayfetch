@@ -26,7 +26,7 @@ Yayfetch is a tool similar to screenfetch - except you can use it on a non-linux
 ```-p``` or ```--pick``` - first asks you what information you want to display, then displays it
 
 ```-c <color>``` or ```--color <color>``` - allows to specify in which color the data will be shown in predefined colors. Cannot be used with --rgb flag. Available predefined colors:
-`pink`(default), `orange`, `green`, `white`, `black`, `red`, `blue`, `yellow`
+`pink`(default), `orange`, `green`, `white`, `black`, `red`, `blue`, `yellow`, `violet`, `rainbow`
 
 ```--rgb r,g,b``` - specify RGB values in which data will be shown. Cannot be used with -c(--color) flag. Example ```npx yayfetch --rgb 125,25,78```
 

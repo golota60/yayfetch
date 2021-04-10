@@ -1,10 +1,23 @@
-import os, { type } from 'os';
+import os from 'os';
 import chalk from 'chalk';
 import columnify from 'columnify';
-import { RGBColors } from '../interfaces/general';
+import { PredefinedColors, RGBColors } from '../interfaces/general';
 
 export const errorMessage =
   'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
+
+export const availableColors = [
+  'pink',
+  'orange',
+  'green',
+  'white',
+  'black',
+  'red',
+  'blue',
+  'yellow',
+  'violet',
+  'rainbow',
+];
 
 export const bitstoMegabytes = (numberToConvert: number): number => numberToConvert * 9.537 * Math.pow(10, -7);
 
@@ -41,7 +54,28 @@ export const returnInBlue = (text: string): string => chalk.blue(text);
 
 export const returnInYellow = (text: string): string => chalk.rgb(255, 245, 99)(text);
 
-export const returnColoredText = (text: string, colorCode: string | RGBColors): string => {
+export const returnInViolet = (text: string): string => chalk.rgb(186, 13, 255)(text);
+
+export const returnInRainbow = (text: string): string => {
+  const functionArray = [
+    returnInRed,
+    returnInOrange,
+    returnInYellow,
+    returnInGreen,
+    returnInBlue,
+    returnInViolet,
+    returnInPink,
+  ];
+  const coloredText = text
+    .split('')
+    .map((char, i) => {
+      return functionArray[i % functionArray.length](char);
+    })
+    .join('');
+  return coloredText;
+};
+
+export const returnColoredText = (text: string, colorCode: PredefinedColors | RGBColors): string => {
   if (typeof colorCode === 'object') {
     return chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
   }
@@ -60,10 +94,12 @@ export const returnColoredText = (text: string, colorCode: string | RGBColors): 
       return returnInBlack(text);
     case 'red':
       return returnInRed(text);
-    case 'blue':
-      return returnInBlue(text);
     case 'yellow':
       return returnInYellow(text);
+    case 'violet':
+      return returnInViolet(text);
+    case 'rainbow':
+      return returnInRainbow(text);
     default:
       return returnInPink(text);
   }
@@ -84,7 +120,7 @@ export const printInTwoColumns = (col1: string, col2: string): void => {
   );
 };
 
-export const printData = ({ logo, data }: { logo: string; data: string }, hideLogo: boolean = false): void => {
+export const printData = ({ logo, data }: { logo: string; data: string }, hideLogo = false): void => {
   if (hideLogo) {
     console.log(data);
   } else {
