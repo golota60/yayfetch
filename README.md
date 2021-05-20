@@ -4,16 +4,25 @@
 <br>
 
 <p align="center">
-<img src="https://github.com/golota60/yayfetch/blob/master/assets/textlogo.svg" width="500">
 </p>
+
+<div align="center">
+<img src="https://github.com/golota60/yayfetch/blob/master/assets/textlogo.svg" width="300">
+	<br>
+	<br>
+	<p>
+		<b>🧁Multi-platform customizable screenfetch tool🧁</b>�
+	</p>
+	<br>
+</div>
 
 <p align="center">
-<img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="700">
+<img src="https://github.com/golota60/yayfetch/blob/master/assets/examplegif.gif" width="600">
 </p>
 
-## What is yayfetch?
+<br>
 
-Yayfetch is a tool similar to screenfetch - except you can use it on a non-linux machine via npx/npm
+Yayfetch is a tool similar to screenfetch, it just displays info about your computer in a prettified format - except you can use it on a non-linux machine via npx, thanks to the wonders of node
 
 ## Usage
 
