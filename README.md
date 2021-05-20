@@ -7,9 +7,8 @@
 </p>
 
 <div align="center">
-<img src="https://github.com/golota60/yayfetch/blob/master/assets/textlogo.svg" width="300">
-	<br>
-	<br>
+<img src="https://github.com/golota60/yayfetch/blob/master/assets/logo.svg" width="200">
+	<h1>Yayfetch</h1>
 	<p>
 		<b>🧁Multi-platform customizable screenfetch tool🧁</b>
 	</p>
