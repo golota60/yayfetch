@@ -11,7 +11,7 @@
 	<br>
 	<br>
 	<p>
-		<b>🧁Multi-platform customizable screenfetch tool🧁</b>�
+		<b>🧁Multi-platform customizable screenfetch tool🧁</b>
 	</p>
 	<br>
 </div>
