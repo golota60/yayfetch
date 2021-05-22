@@ -60,7 +60,7 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
 
 const allData = async (color: PredefinedColors | RGBColors): Promise<string> => {
   const allData: SystemInformation = await getSystemInformation();
-  return `${returnColoredText(`${allData.osInfo.username}@${os.platform()}`, color)} \n -----------------------------\n
+  return `${returnColoredText(`${allData.osInfo.username}@${os.platform()!}`, color)} \n -----------------------------\n
   ${returnColoredText('Platform:', color)} ${os.platform().toLocaleUpperCase()}\n
   ${returnColoredText('Type:', color)} ${os.type()}\n
   ${returnColoredText('Release:', color)} ${os.release()}\n
