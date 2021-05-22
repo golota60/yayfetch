@@ -1,7 +1,9 @@
   <a href="https://www.npmjs.com/package/yayfetch">
     <img alt="downloads" src="https://img.shields.io/npm/dm/yayfetch.svg" target="_blank" />
   </a>
-    [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/xojs/xo)
+  <a href="https://github.com/xojs/xo">
+    <img alt="xojs" src="https://img.shields.io/badge/code_style-XO-5ed9c7.svg" target="_blank" />
+  </a>
 <br>
 
 <p align="center">
