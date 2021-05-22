@@ -19,10 +19,11 @@
     "url": "https://github.com/golota60/yayfetch"
   },
   "scripts": {
-    "build": "node_modules/.bin/tsc",
-    "start": "node_modules/.bin/tsc && node ./build/yayfetch.js",
+    "build": "tsc",
+    "start": "yarn build && node ./build/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./build",
-    "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix"
+    "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix",
+    "test": "jest"
   },
   "bin": {
     "yayfetch": "./yayfetch.js"
@@ -35,7 +36,8 @@
     "columnify": "^1.5.4",
     "inquirer": "^7.0.0",
     "systeminformation": "^5.6.4",
-    "yargs": "^14.2.0"
+    "yargs": "^14.2.0",
+    "execa": "^5.0.0"
   },
   "devDependencies": {
     "@types/columnify": "^1.5.0",
@@ -53,6 +55,7 @@
     "prettier": "^1.19.1",
     "ts-jest": "^26.5.6",
     "ts-node": "^8.5.0",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "xo": "^0.40.1"
   }
 }
