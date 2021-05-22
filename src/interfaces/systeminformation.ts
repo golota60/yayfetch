@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 export interface DisplayAndGraphicsCard {
-  displays: Array<string>;
-  gpuInfo: Array<string>;
+  displays: string[];
+  gpuInfo: string[];
 }
 
 export interface MemoryInfoInterface {

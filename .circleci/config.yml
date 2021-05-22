@@ -4,14 +4,16 @@
  
   working_directory: ~/repo
   docker:
-    - image: circleci/node:12.13.0
+    - image: cimg/node:14.17.0
     
  jobs:
    build:
      docker:
-       - image: circleci/node:12.13.0
+       - image: cimg/node:14.17.0
      steps:
        - checkout
-       - run: yarn install
-       - run: ./node_modules/.bin/tsc && node ./build/yayfetch.js
+       - run: yarn
+       - run: yarn start
+       - run: yarn lint
+       - run: yarn test
        - run: echo "Build Successful"
