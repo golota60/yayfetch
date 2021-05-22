@@ -159,4 +159,3 @@ const args = yargs
   .version()
   .alias('help', 'h')
   .example('npx yayfetch', 'Returns information about your system').argv;
-  
