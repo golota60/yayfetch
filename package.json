@@ -24,7 +24,7 @@
     "clean": "rm -rf node_modules && rm -rf ./build",
     "lint": "xo && tsc --noEmit && eslint ./src/**/*.ts --quiet --fix",
     "test": "yarn lint && jest",
-    "prepare": "husky install"
+    "postinstall": "husky install"
   },
   "hooks": {
     "pre-commit": "lint-staged"
