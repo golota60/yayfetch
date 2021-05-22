@@ -4,12 +4,12 @@
  
   working_directory: ~/repo
   docker:
-    - image: circleci/node:12.13.0
+    - image: circleci/node:14.17.0
     
  jobs:
    build:
      docker:
-       - image: circleci/node:12.13.0
+       - image: circleci/node:14.17.0
      steps:
        - checkout
        - run: yarn

@@ -23,8 +23,8 @@
     "start": "yarn build && node ./build/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./build",
     "lint": "xo --ignore tests/__tests__",
-    "jest": "jest",
-    "test": "yarn lint && jest",
+    "jest": "jest tests",
+    "test": "yarn lint && yarn jest",
     "prepare": "husky install"
   },
   "hooks": {
