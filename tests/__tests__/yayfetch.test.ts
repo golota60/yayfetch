@@ -13,6 +13,6 @@ describe("yayfetch", () => {
     const output = await getYayfetchOutput("--color green");
     baseFlags.forEach((val) => {
       expect(output.stdout).toContain(chalk.green(val));
-    });
+    });   
   });
 });
