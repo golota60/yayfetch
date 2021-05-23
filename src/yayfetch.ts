@@ -72,18 +72,18 @@ const allData = async (
   )} \n -----------------------------\n
   ${returnColoredText('Platform:', color)} ${os
   .platform()
-  .toLocaleUpperCase()}\n
-  ${returnColoredText('Type:', color)} ${os.type()}\n
-  ${returnColoredText('Release:', color)} ${os.release()}\n
-  ${returnColoredText('Architecture:', color)} ${os.arch()}\n
-  ${returnColoredText('Uptime:', color)} ${uptimeInMinutes().toFixed(0)} min\n
-  ${returnColoredText('CPU:', color)} ${os.cpus()[0].model}\n
-  ${returnColoredText('GPU(s):', color)} ${allData.graphicsInfo.gpuInfo}\n
-  ${returnColoredText('Display(s):', color)} ${allData.graphicsInfo.displays}\n
-  ${returnColoredText('Endianness:', color)} ${getEndianness()}\n
+  .toLocaleUpperCase()}
+  ${returnColoredText('Type:', color)} ${os.type()}
+  ${returnColoredText('Release:', color)} ${os.release()}
+  ${returnColoredText('Architecture:', color)} ${os.arch()}
+  ${returnColoredText('Uptime:', color)} ${uptimeInMinutes().toFixed(0)} min
+  ${returnColoredText('CPU:', color)} ${os.cpus()[0].model}
+  ${returnColoredText('GPU(s):', color)} ${allData.graphicsInfo.gpuInfo}
+  ${returnColoredText('Display(s):', color)} ${allData.graphicsInfo.displays}
+  ${returnColoredText('Endianness:', color)} ${getEndianness()}
   ${returnColoredText('Memory:', color)} ${allData.memoryInfo.free}/${
   allData.memoryInfo.used
-}/${allData.memoryInfo.total} MiB (Free/Used/Total)\n
+}/${allData.memoryInfo.total} MiB (Free/Used/Total)
   ${returnColoredText('Shell:', color)} ${allData.shellInfo}`;
 };
 
@@ -168,7 +168,7 @@ async function returnPickedData(
     );
   }
 
-  return pickedVals.join('\n\n');
+  return pickedVals.join('');
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-implicit-any-catch */

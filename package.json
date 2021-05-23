@@ -22,7 +22,7 @@
     "build": "tsc",
     "start": "yarn build && node ./build/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./build",
-    "lint": "xo --ignore tests/__tests__",
+    "lint": "xo --fix --ignore tests/__tests__",
     "jest": "jest tests",
     "test": "yarn lint && yarn jest",
     "prepare": "husky install"

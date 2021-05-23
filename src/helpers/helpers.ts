@@ -22,7 +22,8 @@ export const availableColors = [
 export type PredefinedColors = typeof availableColors[number];
 
 export const bitstoMegabytes = (numberToConvert: number): number =>
-  numberToConvert * 9.537 * 10 * -7;
+/* eslint-disable-next-line no-mixed-operators */
+  numberToConvert * 9.537 * 10 ** -7;
 
 export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   const split = rgbString.split(',');
