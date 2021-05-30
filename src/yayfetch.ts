@@ -3,9 +3,11 @@
 import os from 'os';
 import yargs from 'yargs';
 import inquirer from 'inquirer';
+import {Systeminformation} from 'systeminformation';
 import {
   DisplayAndGraphicsCard,
-  MemoryInfoInterface
+  MemoryInfoInterface,
+  OSInfoInterface
 } from './interfaces/systeminformation';
 import {
   uptimeInMinutes,
@@ -72,8 +74,8 @@ async function returnPickedData(
   color: PredefinedColors | RGBColors
 ): Promise<string> {
   const allData: SystemInformation = await getSystemInformation();
-  const sysinfOsInfo = await getSysInfOsInfo();
-  const hwInfo = await getHWInfo();
+  const sysinfOsInfo = (await getSysInfOsInfo()) ?? ({} as OSInfoInterface);
+  const hwInfo = (await getHWInfo()) ?? ({} as Systeminformation.SystemData);
   const pickedVals = [
     `${returnColoredText(
       `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
@@ -88,7 +90,9 @@ async function returnPickedData(
   }
 
   if (valuesToDisplay.includes('Type')) {
-    pickedVals.push(`${returnColoredText('Type:', color, true)} ${sysinfOsInfo.distro}`);
+    pickedVals.push(
+      `${returnColoredText('Type:', color, true)} ${sysinfOsInfo.distro}`
+    );
   }
 
   if (valuesToDisplay.includes('Model')) {

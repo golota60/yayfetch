@@ -102,7 +102,9 @@ export const getShellInfo = async (): Promise<string> => {
   }
 };
 
-export const getSysInfOsInfo = async (): Promise<OSInfoInterface> => {
+export const getSysInfOsInfo = async (): Promise<
+OSInfoInterface | undefined
+> => {
   try {
     const osInfo = await sysinf.osInfo();
     return {
@@ -115,12 +117,13 @@ export const getSysInfOsInfo = async (): Promise<OSInfoInterface> => {
   }
 };
 
-export const getHWInfo =
-  async (): Promise<sysinf.Systeminformation.SystemData> => {
-    try {
-      const hwInfo = await sysinf.system();
-      return hwInfo;
-    } catch (error: unknown) {
-      console.error(error);
-    }
-  };
+export const getHWInfo = async (): Promise<
+sysinf.Systeminformation.SystemData | undefined
+> => {
+  try {
+    const hwInfo = await sysinf.system();
+    return hwInfo;
+  } catch (error: unknown) {
+    console.error(error);
+  }
+};
