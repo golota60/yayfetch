@@ -6,20 +6,27 @@ interface ExecAsPromiseInterface {
   stderr: string;
 }
 
-export async function execAsPromise(command: string): Promise<ExecAsPromiseInterface> {
+export async function execAsPromise(
+  command: string
+): Promise<ExecAsPromiseInterface> {
   return new Promise(resolve => {
-    exec(command, (error: ExecException | null, stdout: string, stderr: string) => {
-      resolve({err: error, stdout, stderr});
-    });
+    exec(
+      command,
+      (error: ExecException | null, stdout: string, stderr: string) => {
+        resolve({err: error, stdout, stderr});
+      }
+    );
   });
 }
 
-export const getYayfetchOutput = async (flags = '') => execAsPromise(`node ./build/yayfetch.js ${flags}`);
+export const getYayfetchOutput = async (flags = '') =>
+  execAsPromise(`node ./build/yayfetch.js ${flags}`);
 
 export const baseFlags = [
-  'Platform:',
+  'OS:',
   'Type:',
   'Release:',
+  'Model:',
   'Architecture:',
   'Uptime:',
   'CPU:',

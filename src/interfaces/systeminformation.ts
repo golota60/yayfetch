@@ -10,3 +10,9 @@ export interface MemoryInfoInterface {
   used: string;
   total: string;
 }
+
+export interface OSInfoInterface {
+  distro: string;
+  hostname: string;
+  display: string;
+}

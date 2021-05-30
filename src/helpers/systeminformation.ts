@@ -1,5 +1,6 @@
 import os from 'os';
 import sysinf from 'systeminformation';
+import {OSInfoInterface} from '../interfaces/systeminformation';
 import {errorMessage, bitstoMegabytes} from './helpers';
 interface MemoryInfoInterface {
   free: string;
@@ -98,5 +99,31 @@ export const getShellInfo = async (): Promise<string> => {
     } else {
       return errorMessage;
     }
+  }
+};
+
+export const getSysInfOsInfo = async (): Promise<
+OSInfoInterface | undefined
+> => {
+  try {
+    const osInfo = await sysinf.osInfo();
+    return {
+      distro: osInfo.distro,
+      hostname: osInfo.hostname,
+      display: `${osInfo.codename} ${osInfo.release} ${osInfo.build} ${osInfo.arch}`
+    };
+  } catch (error: unknown) {
+    console.error(error);
+  }
+};
+
+export const getHWInfo = async (): Promise<
+sysinf.Systeminformation.SystemData | undefined
+> => {
+  try {
+    const hwInfo = await sysinf.system();
+    return hwInfo;
+  } catch (error: unknown) {
+    console.error(error);
   }
 };
