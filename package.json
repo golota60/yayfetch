@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@types/columnify": "^1.5.0",
+    "@types/getos": "^3.0.0",
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.6.0",

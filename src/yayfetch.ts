@@ -21,27 +21,32 @@ import {
   getDisplaysAndGraphicsCards,
   getMemoryInfo,
   getOsInfo,
-  getShellInfo
+  getShellInfo,
+  getSysInfOsInfo,
+  getHWInfo
 } from './helpers/systeminformation';
 import {RGBColors} from './interfaces/general';
+
+export const promptQuestionsChoices = [
+  'OS',
+  'Type',
+  'Release',
+  'Model',
+  'Architecture',
+  'Uptime',
+  'CPUs',
+  'GPUs',
+  'Displays',
+  'Endianness',
+  'Memory',
+  'Shell'
+];
 
 const promptQuestions = {
   type: 'checkbox',
   name: 'displayedValues',
   message: 'What information do you need?',
-  choices: [
-    'Platform',
-    'Type',
-    'Release',
-    'Architecture',
-    'Uptime',
-    'CPUs',
-    'GPUs',
-    'Displays',
-    'Endianness',
-    'Memory',
-    'Shell'
-  ]
+  choices: promptQuestionsChoices
 };
 
 export interface SystemInformation {
@@ -62,67 +67,51 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
   shellInfo: await getShellInfo()
 });
 
-const allData = async (
-  color: PredefinedColors | RGBColors
-): Promise<string> => {
-  const allData: SystemInformation = await getSystemInformation();
-  return `${returnColoredText(
-    `${allData.osInfo.username}@${os.platform()}`,
-    color
-  )} \n -----------------------------\n
-  ${returnColoredText('Platform:', color)} ${os
-  .platform()
-  .toLocaleUpperCase()}
-  ${returnColoredText('Type:', color)} ${os.type()}
-  ${returnColoredText('Release:', color)} ${os.release()}
-  ${returnColoredText('Architecture:', color)} ${os.arch()}
-  ${returnColoredText('Uptime:', color)} ${uptimeInMinutes().toFixed(0)} min
-  ${returnColoredText('CPU:', color)} ${os.cpus()[0].model}
-  ${returnColoredText('GPU(s):', color)} ${allData.graphicsInfo.gpuInfo}
-  ${returnColoredText('Display(s):', color)} ${allData.graphicsInfo.displays}
-  ${returnColoredText('Endianness:', color)} ${getEndianness()}
-  ${returnColoredText('Memory:', color)} ${allData.memoryInfo.free}/${
-  allData.memoryInfo.used
-}/${allData.memoryInfo.total} MiB (Free/Used/Total)
-  ${returnColoredText('Shell:', color)} ${allData.shellInfo}`;
-};
-
 async function returnPickedData(
   valuesToDisplay: string[],
   color: PredefinedColors | RGBColors
 ): Promise<string> {
   const allData: SystemInformation = await getSystemInformation();
+  const sysinfOsInfo = await getSysInfOsInfo();
+  const hwInfo = await getHWInfo();
   const pickedVals = [
     `${returnColoredText(
-      `${allData.osInfo.username}@${os.platform()}`,
-      color
+      `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
+      color,
+      true
     )} \n -----------------------------`
   ];
-  if (valuesToDisplay.includes('Platform')) {
+  if (valuesToDisplay.includes('OS')) {
     pickedVals.push(
-      `${returnColoredText('Platform:', color)} ${os
-        .platform()
-        .toLocaleUpperCase()}`
+      `${returnColoredText('OS:', color, true)} ${sysinfOsInfo.display}`
     );
   }
 
   if (valuesToDisplay.includes('Type')) {
-    pickedVals.push(`${returnColoredText('Type:', color)} ${os.type()}`);
+    pickedVals.push(`${returnColoredText('Type:', color, true)} ${sysinfOsInfo.distro}`);
+  }
+
+  if (valuesToDisplay.includes('Model')) {
+    pickedVals.push(
+      `${returnColoredText('Model:', color, true)} ${hwInfo.model}`
+    );
   }
 
   if (valuesToDisplay.includes('Release')) {
-    pickedVals.push(`${returnColoredText('Release:', color)} ${os.release()}`);
+    pickedVals.push(
+      `${returnColoredText('Release:', color, true)} ${os.release()}`
+    );
   }
 
   if (valuesToDisplay.includes('Architecture')) {
     pickedVals.push(
-      `${returnColoredText('Architecture:', color)} ${os.arch()}`
+      `${returnColoredText('Architecture:', color, true)} ${os.arch()}`
     );
   }
 
   if (valuesToDisplay.includes('Uptime')) {
     pickedVals.push(
-      `${returnColoredText('Uptime:', color)} ${uptimeInMinutes().toFixed(
+      `${returnColoredText('Uptime:', color, true)} ${uptimeInMinutes().toFixed(
         0
       )} min`
     );
@@ -130,19 +119,21 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('CPUs')) {
     pickedVals.push(
-      `${returnColoredText('CPU:', color)} ${os.cpus()[0].model}`
+      `${returnColoredText('CPU:', color, true)} ${os.cpus()[0].model}`
     );
   }
 
   if (valuesToDisplay.includes('GPUs')) {
     pickedVals.push(
-      `${returnColoredText('GPU(s):', color)} ${allData.graphicsInfo.gpuInfo}`
+      `${returnColoredText('GPU(s):', color, true)} ${
+        allData.graphicsInfo.gpuInfo
+      }`
     );
   }
 
   if (valuesToDisplay.includes('Displays')) {
     pickedVals.push(
-      `${returnColoredText('Display(s):', color)} ${
+      `${returnColoredText('Display(s):', color, true)} ${
         allData.graphicsInfo.displays
       }`
     );
@@ -150,25 +141,27 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Endianness')) {
     pickedVals.push(
-      `${returnColoredText('Endianness:', color)} ${getEndianness()}`
+      `${returnColoredText('Endianness:', color, true)} ${getEndianness()}`
     );
   }
 
   if (valuesToDisplay.includes('Memory')) {
     pickedVals.push(
-      `${returnColoredText('Memory:', color)} ${allData.memoryInfo.free}/${
-        allData.memoryInfo.used
-      }/${allData.memoryInfo.total} MiB (Free/Used/Total)`
+      `${returnColoredText('Memory:', color, true)} ${
+        allData.memoryInfo.free
+      }/${allData.memoryInfo.used}/${
+        allData.memoryInfo.total
+      } MiB (Free/Used/Total)`
     );
   }
 
   if (valuesToDisplay.includes('Shell')) {
     pickedVals.push(
-      `${returnColoredText('Shell:', color)} ${allData.shellInfo}`
+      `${returnColoredText('Shell:', color, true)} ${allData.shellInfo}`
     );
   }
 
-  return pickedVals.join('');
+  return pickedVals.join('\n');
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-implicit-any-catch */
@@ -198,7 +191,10 @@ const args = yargs
           colorToUse
         );
       } else {
-        infoToPrint = await allData(colorToUse);
+        infoToPrint = await returnPickedData(
+          promptQuestionsChoices,
+          colorToUse
+        );
       }
 
       printData(
@@ -213,7 +209,7 @@ const args = yargs
     }
   })
   .scriptName('')
-  .usage('Usage: npx yayfetch')
+  .usage('Usage: npx yayfetch <flags>')
   .option('p', {
     alias: 'pick',
     describe: 'Asks you which information you want displayed',

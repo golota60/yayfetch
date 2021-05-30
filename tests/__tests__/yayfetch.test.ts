@@ -1,6 +1,9 @@
-
 import chalk from "chalk";
-import { baseFlags, execAsPromise, getYayfetchOutput } from "../helpers/helpers";
+import {
+  baseFlags,
+  execAsPromise,
+  getYayfetchOutput,
+} from "../helpers/helpers";
 
 describe("yayfetch", () => {
   it("returns info w/o flags", async () => {
@@ -12,7 +15,7 @@ describe("yayfetch", () => {
   it("returns info in green", async () => {
     const output = await getYayfetchOutput("--color green");
     baseFlags.forEach((val) => {
-      expect(output.stdout).toContain(chalk.green(val));
+      expect(output.stdout).toContain(chalk.green.bold(val));
     });
   });
 });
