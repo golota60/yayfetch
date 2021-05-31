@@ -72,7 +72,7 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
 async function returnPickedData(
   valuesToDisplay: string[],
   color: PredefinedColors | RGBColors
-): Promise<string> {
+): Promise<string[]> {
   const allData: SystemInformation = await getSystemInformation();
   const sysinfOsInfo = (await getSysInfOsInfo()) ?? ({} as OSInfoInterface);
   const hwInfo = (await getHWInfo()) ?? ({} as Systeminformation.SystemData);
@@ -165,7 +165,7 @@ async function returnPickedData(
     );
   }
 
-  return pickedVals.join('\n');
+  return pickedVals;
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-implicit-any-catch */
@@ -184,8 +184,9 @@ const args = yargs
         false;
       const colorToUse = customColors || predefinedColor;
       const hideLogoFlag = Boolean(yargs.argv['hide-logo']);
+      const customLines = yargs.argv['custom-lines'] as string[];
 
-      let infoToPrint: string;
+      let infoToPrint: string[];
       if (yargs.argv.p || yargs.argv.pick) {
         const inquirerPrompt = await inquirer.prompt<{
           displayedValues: string[];
@@ -201,10 +202,27 @@ const args = yargs
         );
       }
 
+      if (customLines) {
+        const customLinesParsed = customLines.map(line =>
+          JSON.parse(line)
+        ) as Array<{
+          key: string;
+          value: string;
+        }>;
+        infoToPrint = [
+          ...infoToPrint,
+          ...customLinesParsed.map(customLine => {
+            return `${returnColoredText(customLine.key, colorToUse, true)} ${
+              customLine.value
+            }`;
+          })
+        ];
+      }
+
       printData(
         {
           logo: returnColoredText(yayfetchASCII, colorToUse),
-          data: infoToPrint
+          data: infoToPrint.join('\n')
         },
         hideLogoFlag
       );
@@ -234,6 +252,10 @@ const args = yargs
   .option('rgb', {
     describe: 'Same as color, but you provide r,g,b values ex. 128,5,67',
     type: 'string'
+  })
+  .option('custom-lines', {
+    describe: 'Array of lines you want to add(objects with key, value pairs)',
+    type: 'array'
   })
   .help()
   .version()

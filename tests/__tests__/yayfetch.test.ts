@@ -18,4 +18,13 @@ describe("yayfetch", () => {
       expect(output.stdout).toContain(chalk.green.bold(val));
     });
   });
+  it("prints custom lines", async () => {
+    const output = await getYayfetchOutput(
+      `--custom-lines '{"key": "Funny", "value": "joke"}'`
+    );
+    const baseFlagsEnhanced = [...baseFlags, "Funny"];
+    baseFlagsEnhanced.forEach((val) => {
+      expect(output.stdout).toContain(chalk.bold(val));
+    });
+  });
 });

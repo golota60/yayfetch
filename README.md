@@ -43,6 +43,9 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 `--hide-logo` - prints data without ASCII art
 
+`--custom-lines <{key: string; value: string;}>[]` - array of objects with {key, value} string pairs separated by spaces ex.
+`'{key: 'Funny:', value: 'joke'}' '{key: 'Even funnier:', value: 'joke'}' <...>`. This is being parsed using JSON.parse, so if you encounter any problem, make sure that string you provided can be parsed by it.
+
 `-h` or `--help` - shows available flags.
 
 More features to come!
