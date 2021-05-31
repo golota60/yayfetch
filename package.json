@@ -25,7 +25,8 @@
     "lint": "xo --fix --ignore tests/__tests__",
     "jest": "jest tests",
     "test": "yarn lint && yarn jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "yarn && yarn build && rm tests && rm src && rm assets && rm jest.config.js && rm tsconfig.json && mv build . "
   },
   "hooks": {
     "pre-commit": "lint-staged"

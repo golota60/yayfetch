@@ -24,7 +24,7 @@ describe("yayfetch", () => {
     );
     const baseFlagsEnhanced = [...baseFlags, "Funny"];
     baseFlagsEnhanced.forEach((val) => {
-      expect(output.stdout).toContain(chalk.bold(val));
+      expect(output.stdout).toContain(val);
     });
   });
 });
