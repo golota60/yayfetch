@@ -11,7 +11,8 @@
     "environment",
     "info",
     "system",
-    "sysinf"
+    "sysinf",
+    "systeminformation"
   ],
   "homepage": "https://github.com/golota60/yayfetch#readme",
   "repository": {

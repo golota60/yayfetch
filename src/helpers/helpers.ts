@@ -50,13 +50,54 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   };
 };
 
+const customColorCodes = {
+  pink: {r: 255, g: 102, b: 147},
+  orange: {r: 255, g: 170, b: 16},
+  yellow: {r: 255, g: 245, b: 99},
+  violet: {r: 186, g: 13, b: 255},
+  lightgrey: {r: 224, g: 224, b: 224},
+  darkgrey: {r: 152, g: 152, b: 152},
+  burgundy: {r: 146, g: 36, b: 36},
+  darkgreen: {r: 63, g: 163, b: 38},
+  lightgreen: {r: 95, g: 235, b: 61},
+  darkyellow: {r: 179, g: 203, b: 0},
+  deepBlue: {r: 0, g: 47, b: 255},
+  darkDeepBlue: {r: 0, g: 30, b: 161},
+  darkViolet: {r: 181, g: 47, b: 191},
+  darkCyan: {r: 0, g: 171, b: 186}
+};
+
 export const uptimeInMinutes = (): number => os.uptime() / 60;
 
 export const returnInPink = (text: string, bolded = false): string =>
-  bolded ? chalk.rgb(255, 102, 147).bold(text) : chalk.rgb(255, 102, 147)(text);
+  bolded ?
+    chalk
+      .rgb(
+        customColorCodes.pink.r,
+        customColorCodes.pink.g,
+        customColorCodes.pink.b
+      )
+      .bold(text) :
+    chalk.rgb(
+      customColorCodes.pink.r,
+      customColorCodes.pink.g,
+      customColorCodes.pink.b
+    )(text);
 
 export const returnInOrange = (text: string, bolded = false): string =>
-  bolded ? chalk.rgb(255, 170, 16).bold(text) : chalk.rgb(255, 170, 16)(text);
+  bolded ?
+    chalk
+      .rgb(
+        customColorCodes.orange.r,
+        customColorCodes.orange.g,
+        customColorCodes.orange.b
+      )
+      .bold(text) :
+    chalk.rgb(
+      customColorCodes.orange.r,
+      customColorCodes.orange.g,
+      customColorCodes.orange.b
+    )(text);
 
 export const returnInGreen = (text: string, bolded = false): string =>
   bolded ? chalk.green.bold(text) : chalk.green(text);
@@ -74,10 +115,34 @@ export const returnInBlue = (text: string, bolded = false): string =>
   bolded ? chalk.blue.bold(text) : chalk.blue(text);
 
 export const returnInYellow = (text: string, bolded = false): string =>
-  bolded ? chalk.rgb(255, 245, 99).bold(text) : chalk.rgb(255, 245, 99)(text);
+  bolded ?
+    chalk
+      .rgb(
+        customColorCodes.yellow.r,
+        customColorCodes.yellow.g,
+        customColorCodes.yellow.b
+      )
+      .bold(text) :
+    chalk.rgb(
+      customColorCodes.yellow.r,
+      customColorCodes.yellow.g,
+      customColorCodes.yellow.b
+    )(text);
 
 export const returnInViolet = (text: string, bolded = false): string =>
-  bolded ? chalk.rgb(186, 13, 255).bold(text) : chalk.rgb(186, 13, 255)(text);
+  bolded ?
+    chalk
+      .rgb(
+        customColorCodes.violet.r,
+        customColorCodes.violet.g,
+        customColorCodes.violet.b
+      )
+      .bold(text) :
+    chalk.rgb(
+      customColorCodes.violet.r,
+      customColorCodes.violet.g,
+      customColorCodes.violet.b
+    )(text);
 
 export const returnInRainbow = (text: string, bolded = false): string => {
   const functionArray = [
@@ -157,6 +222,52 @@ export const printData = (
   } else {
     printInTwoColumns(logo, data);
   }
+};
+
+export const getColoredBoxes = () => {
+  return `${chalk.bgBlack('   ')}${chalk.bgRgb(
+    customColorCodes.burgundy.r,
+    customColorCodes.burgundy.g,
+    customColorCodes.burgundy.b
+  )('   ')}${chalk.bgRgb(
+    customColorCodes.darkgreen.r,
+    customColorCodes.darkgreen.g,
+    customColorCodes.darkgreen.b
+  )('   ')}${chalk.bgRgb(
+    customColorCodes.darkyellow.r,
+    customColorCodes.darkyellow.g,
+    customColorCodes.darkyellow.b
+  )('   ')}${chalk.bgRgb(
+    customColorCodes.darkDeepBlue.r,
+    customColorCodes.darkDeepBlue.g,
+    customColorCodes.darkDeepBlue.b
+  )('   ')}${chalk.bgRgb(
+    customColorCodes.darkViolet.r,
+    customColorCodes.darkViolet.g,
+    customColorCodes.darkViolet.b
+  )('   ')}${chalk.bgRgb(
+    customColorCodes.darkCyan.r,
+    customColorCodes.darkCyan.g,
+    customColorCodes.darkCyan.b
+  )('   ')}${chalk.bgRgb(
+    customColorCodes.lightgrey.r,
+    customColorCodes.lightgrey.g,
+    customColorCodes.lightgrey.b
+  )('   ')}\n${chalk.bgRgb(
+    customColorCodes.darkgrey.r,
+    customColorCodes.darkgrey.g,
+    customColorCodes.darkgrey.b
+  )('   ')}${chalk.bgRed('   ')}${chalk.bgRgb(
+    customColorCodes.lightgreen.r,
+    customColorCodes.lightgreen.g,
+    customColorCodes.lightgreen.b
+  )('   ')}${chalk.bgYellow('   ')}${chalk.bgRgb(
+    customColorCodes.deepBlue.r,
+    customColorCodes.deepBlue.g,
+    customColorCodes.deepBlue.b
+  )('   ')}${chalk.bgMagenta('   ')}${chalk.bgCyanBright('   ')}${chalk.bgWhite(
+    '   '
+  )}`;
 };
 
 export const yayfetchASCII = `-/-\`            \`-//-\`            \`-/- 
