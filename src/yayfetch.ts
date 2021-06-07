@@ -16,7 +16,8 @@ import {
   parseRGBStringToNumber,
   printData,
   availableColors,
-  PredefinedColors
+  PredefinedColors,
+  getColoredBoxes
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -184,6 +185,7 @@ const args = yargs
         false;
       const colorToUse = customColors || predefinedColor;
       const hideLogoFlag = Boolean(yargs.argv['hide-logo']);
+      const coloredBoxes = Boolean(yargs.argv['colored-boxes']);
       const customLines = yargs.argv['custom-lines'] as string[];
 
       let infoToPrint: string[];
@@ -217,6 +219,11 @@ const args = yargs
             }`;
           })
         ];
+      }
+
+      if (coloredBoxes) {
+        /* Empty string to ensure space between boxes */
+        infoToPrint = [...infoToPrint, '', getColoredBoxes()];
       }
 
       printData(
@@ -256,6 +263,11 @@ const args = yargs
   .option('custom-lines', {
     describe: 'Array of lines you want to add(objects with key, value pairs)',
     type: 'array'
+  })
+  .option('colored-boxes', {
+    describe: 'Hides colored boxes underneath the information',
+    type: 'boolean',
+    default: true
   })
   .help()
   .version()
