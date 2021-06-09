@@ -30,7 +30,7 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 **Note: It is NOT reccomended to install the package globally, because it is subject to often changes**
 
-`npx yayfetch` - returns info about your system
+`npx yayfetch@latest` - returns info about your system(`@latest` should be added, cause sometimes npx can display a cached version)
 
 ### Flags
 
