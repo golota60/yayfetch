@@ -1,6 +1,6 @@
 {
   "name": "yayfetch",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "A Multi-platform screenfetch",
   "main": "yayfetch.js",
   "author": "Szymon Wiszczuk",
@@ -25,7 +25,7 @@
     "clean": "rm -rf node_modules && rm -rf ./build",
     "lint": "xo --fix --ignore tests/__tests__",
     "jest": "jest tests",
-    "test": "yarn lint && yarn jest",
+    "test": "yarn start && yarn lint && yarn jest",
     "prepare": "husky install",
     "prepublishOnly": "yarn && yarn build && rm -rf tests && rm -rf src && rm -rf assets && rm -rf .husky && rm -rf .circleci && rm jest.config.js && rm tsconfig.json && mv ./build/* . "
   },
