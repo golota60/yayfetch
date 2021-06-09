@@ -170,7 +170,7 @@ async function returnPickedData(
 }
 
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-implicit-any-catch */
-const args = yargs
+const _args = yargs
   .command('$0', '', async () => {
     try {
       if (yargs.argv.color && yargs.argv.rgb) {
