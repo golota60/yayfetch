@@ -44,7 +44,8 @@
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/consistent-type-assertions": "off",
-      "unicorn/prefer-node-protocol": "off"
+      "unicorn/prefer-node-protocol": "off",
+      "unicorn/no-new-array": "off"
     }
   },
   "bin": {
@@ -55,13 +56,11 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "columnify": "^1.5.4",
     "inquirer": "^7.0.0",
     "systeminformation": "^5.6.4",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "@types/columnify": "^1.5.0",
     "@types/getos": "^3.0.0",
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^26.0.23",

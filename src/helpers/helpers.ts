@@ -1,6 +1,5 @@
 import os from 'os';
 import chalk from 'chalk';
-import columnify from 'columnify';
 import {RGBColors} from '../interfaces/general';
 
 export const errorMessage =
@@ -198,20 +197,36 @@ export const returnColoredText = (
   }
 };
 
-export const printInTwoColumns = (col1: string, col2: string): void => {
-  const data = [
-    {
-      logo: col1,
-      specs: col2
-    }
-  ];
-  console.log(
-    columnify(data, {
-      preserveNewLines: true,
-      config: {logo: {showHeaders: false}, specs: {showHeaders: false}}
-    })
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-unused-expressions */
+export const printInColumns = (...cols: string[]): void => {
+  // Split every line by \n
+  const colsSplit = cols.map(element => element.split('\n'));
+  // Find the vertically longest argument
+  // Length of which is going the be the iterator on how many times we have to print a line
+  // eslint-disable-next-line unicorn/no-array-reduce
+  const verticallyLongestArg = colsSplit.reduce(
+    (acc, value) => (value.length > acc ? value.length : acc),
+    0
   );
+  const argsNumber = cols.length;
+  const mergedArgs = [] as string[];
+  for (const [i, _] of [...new Array(verticallyLongestArg)].entries()) {
+    let nextLine = '';
+    for (const [i2, _2] of [...new Array(argsNumber)].entries()) {
+      if (nextLine === '') {
+        colsSplit[i2];
+      }
+
+      nextLine += colsSplit[i2][i];
+    }
+
+    mergedArgs.push(nextLine);
+  }
+
+  // TODO: Improve the algorithm so that it auto adjusts the amount of spaces in every row
+  console.log(mergedArgs.join('\n'));
 };
+/* eslint-enable @typescript-eslint/no-unused-vars, @typescript-eslint/no-unused-expressions */
 
 export const printData = (
   {logo, data}: {logo: string; data: string},
@@ -220,7 +235,7 @@ export const printData = (
   if (hideLogo) {
     console.log(data);
   } else {
-    printInTwoColumns(logo, data);
+    printInColumns(logo, data);
   }
 };
 
@@ -270,20 +285,20 @@ export const getColoredBoxes = () => {
   )}`;
 };
 
-export const yayfetchASCII = `-/-\`            \`-//-\`            \`-/- 
--////\`          .//////.          \`////-
-\`/////\`       \`:////////:\`       \`/////\`      
- \`/////\`     ./////:://///.     \`/////\` 
-  \`/////\`   -/////.  ./////-   \`/////\`  
-   ./////--://///-    -/////:-://///.   
-    ./////////////====:////////////.    
-     ./////////:=======://///////.     
-      .///////:\`        \`:///////.      
-       .//////\`           ://///.       
-        ./////\`          \`/////.        
-         .////:\`        \`:////.         
-          .////:\`      \`:////.          
-           .////:\`     :////.           
-            .////:    :////.            
-             -////.  .////.             
-              .:/.    .:\\.`;
+export const yayfetchASCII = `-/-\`            \`-//-\`            \`-/-    
+-////\`          .//////.          \`////- 
+\`/////\`       \`:////////:\`       \`/////\`  
+ \`/////\`     ./////:://///.     \`/////\`   
+  \`/////\`   -/////.  ./////-   \`/////\`    
+   ./////--://///-    -/////:-://///.     
+    ./////////////====:////////////.      
+     ./////////:=======://///////.        
+      .///////:\`        \`:///////.        
+       .//////\`           ://///.         
+        ./////\`          \`/////.          
+         .////:\`        \`:////.           
+          .////:\`      \`:////.            
+           .////:\`     :////.             
+            .////:    :////.              
+             -////.  .////.               
+              .:/.    .:\\.                `;
