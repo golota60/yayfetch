@@ -23,7 +23,7 @@
     "build": "tsc",
     "start": "yarn build && node ./build/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./build",
-    "lint": "xo --fix --ignore tests/__tests__",
+    "lint": "yarn eslint --ext '.js,.ts' ./src --fix",
     "jest": "jest tests",
     "test": "yarn start && yarn lint && yarn jest",
     "prepare": "husky install",
@@ -34,19 +34,6 @@
   },
   "lint-staged": {
     "*": "yarn test"
-  },
-  "xo": {
-    "space": true,
-    "rules": {
-      "@typescript-eslint/restrict-template-expressions": "off",
-      "@typescript-eslint/no-unsafe-call": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-unsafe-assignment": "off",
-      "@typescript-eslint/no-unsafe-return": "off",
-      "@typescript-eslint/consistent-type-assertions": "off",
-      "unicorn/prefer-node-protocol": "off",
-      "unicorn/no-new-array": "off"
-    }
   },
   "bin": {
     "yayfetch": "./yayfetch.js"
@@ -61,6 +48,7 @@
     "yargs": "^14.2.0"
   },
   "devDependencies": {
+    "@callstack/eslint-config": "^11.0.0",
     "@types/getos": "^3.0.0",
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^26.0.23",
@@ -68,9 +56,9 @@
     "@types/yargs": "^13.0.3",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
-    "eslint": "^7.27.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-config-xo-typescript": "^0.41.1",
+    "eslint-plugin-jest": "^24.4.2",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^6.0.0",
     "jest": "^26.6.3",
@@ -78,7 +66,6 @@
     "prettier": "^2.3.0",
     "ts-jest": "^26.5.6",
     "ts-node": "^8.5.0",
-    "typescript": "^4.2.4",
-    "xo": "^0.40.1"
+    "typescript": "^4.2.4"
   }
 }
