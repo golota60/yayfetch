@@ -1,7 +1,7 @@
-import os from 'os';
-import sysinf from 'systeminformation';
-import {OSInfoInterface} from '../interfaces/systeminformation';
-import {errorMessage, bitstoMegabytes} from './helpers';
+import os from "os";
+import sysinf from "systeminformation";
+import { OSInfoInterface } from "../interfaces/systeminformation";
+import { errorMessage, bitstoMegabytes } from "./helpers";
 interface MemoryInfoInterface {
   free: string;
   used: string;
@@ -10,10 +10,10 @@ interface MemoryInfoInterface {
 
 export const getEndianness = (): string => {
   switch (os.endianness()) {
-    case 'LE':
-      return 'Little Endian';
-    case 'BE':
-      return 'Big Endian';
+    case "LE":
+      return "Little Endian";
+    case "BE":
+      return "Big Endian";
     default:
       return os.endianness();
   }
@@ -34,19 +34,19 @@ export const getDisplaysAndGraphicsCards =
       );
       const displays = gpu.displays
         .map((gpu: sysinf.Systeminformation.GraphicsDisplayData) =>
-          gpu.resolutionX & gpu.resolutionY ?
-            `${gpu.resolutionX}x${gpu.resolutionY}` :
-            null
+          gpu.resolutionX & gpu.resolutionY
+            ? `${gpu.resolutionX}x${gpu.resolutionY}`
+            : null
         )
-        .filter(element => element !== null) as string[];
+        .filter((element) => element !== null) as string[];
       return {
         gpuInfo,
-        displays
+        displays,
       };
     } catch {
       return {
         gpuInfo: [errorMessage],
-        displays: [errorMessage]
+        displays: [errorMessage],
       };
     }
   };
@@ -62,13 +62,13 @@ export const getMemoryInfo = async (): Promise<MemoryInfoInterface> => {
     return {
       free: free.toFixed(0),
       used: used.toFixed(0),
-      total: total.toFixed(0)
+      total: total.toFixed(0),
     };
   } catch {
     return {
       free: errorMessage,
-      used: '',
-      total: ''
+      used: "",
+      total: "",
     };
   }
 };
@@ -77,7 +77,7 @@ export const getOsInfo = async (): Promise<string> => {
   try {
     const osInfo: sysinf.Systeminformation.UserData[] = await sysinf.users();
 
-    return osInfo ? osInfo[0].user : '';
+    return osInfo ? osInfo[0].user : "";
   } catch {
     return errorMessage;
   }
@@ -87,12 +87,12 @@ export const getShellInfo = async (): Promise<string> => {
   try {
     return await sysinf.shell();
   } catch {
-    if (os.platform() === 'win32') {
+    if (os.platform() === "win32") {
       // Windows doesn't support .shell() feature
       try {
         const osInfo: sysinf.Systeminformation.UserData[] =
           await sysinf.users();
-        return osInfo ? osInfo[0].tty : '';
+        return osInfo ? osInfo[0].tty : "";
       } catch {
         return errorMessage;
       }
@@ -103,14 +103,14 @@ export const getShellInfo = async (): Promise<string> => {
 };
 
 export const getSysInfOsInfo = async (): Promise<
-OSInfoInterface | undefined
+  OSInfoInterface | undefined
 > => {
   try {
     const osInfo = await sysinf.osInfo();
     return {
       distro: osInfo.distro,
       hostname: osInfo.hostname,
-      display: `${osInfo.codename} ${osInfo.release} ${osInfo.build} ${osInfo.arch}`
+      display: `${osInfo.codename} ${osInfo.release} ${osInfo.build} ${osInfo.arch}`,
     };
   } catch (error: unknown) {
     console.error(error);
@@ -118,7 +118,7 @@ OSInfoInterface | undefined
 };
 
 export const getHWInfo = async (): Promise<
-sysinf.Systeminformation.SystemData | undefined
+  sysinf.Systeminformation.SystemData | undefined
 > => {
   try {
     const hwInfo = await sysinf.system();

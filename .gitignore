@@ -1,3 +1,4 @@
 node_modules/
 build/**
 yayfetch.js
+yarn-error.log
