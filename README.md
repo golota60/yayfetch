@@ -38,7 +38,7 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 `--rgb r,g,b` - specify RGB values in which data will be shown. Cannot be used with -c(--color) flag. Example `npx yayfetch --rgb 125,25,78`
 
-`--hide-logo` - prints data without ASCII art
+`--no-logo` - prints data without ASCII art
 
 `--custom-lines <{key: string; value: string;}>[]` - array of objects with {key, value} string pairs separated by spaces ex.
 `'{key: 'Funny:', value: 'joke'}' '{key: 'Even funnier:', value: 'joke'}' <...>`. This is being parsed using JSON.parse, so if you encounter any problem, make sure that string you provided can be parsed by it.
@@ -47,7 +47,26 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 `-h` or `--help` - shows available flags.
 
+`--config <path_to_file>` - specify a file path to a custom config. See ![here](#ExampleConfig)
+
 More features to come!
+
+
+## Example config
+
+You can specify options through a file and share them by using `--config <path_to_file>`. Config file should contain a JSON object with keys representing flags.
+
+Note that every flag with a prefix of `--no-` just negates the flag that is on by default. For example CLI flag `--no-colored-boxes` negates `colored-boxes` flag, which is `true` by default. This is important for creating a config, because if you want to invoke `--no-colored-boxes` through config, you would provide a `"colored-boxed": false` in JSON object
+
+Example config:
+```
+{
+	"color": "blue",
+	"colored-boxes": false,
+	"logo": false
+	"custom-lines": {key: "Funny", value: "joke"}
+}
+```
 
 ## It doesn't work!
 

@@ -3,11 +3,9 @@
 import os from "os";
 import yargs from "yargs";
 import inquirer from "inquirer";
-import { Systeminformation } from "systeminformation";
 import {
   DisplayAndGraphicsCard,
   MemoryInfoInterface,
-  OSInfoInterface,
 } from "./interfaces/systeminformation";
 import {
   uptimeInMinutes,
@@ -18,6 +16,7 @@ import {
   availableColors,
   PredefinedColors,
   getColoredBoxes,
+  handleReadFile,
 } from "./helpers/helpers";
 import {
   getEndianness,
@@ -75,8 +74,8 @@ async function returnPickedData(
   color: PredefinedColors | RGBColors
 ): Promise<string[]> {
   const allData: SystemInformation = await getSystemInformation();
-  const sysinfOsInfo = (await getSysInfOsInfo()) ?? ({} as OSInfoInterface);
-  const hwInfo = (await getHWInfo()) ?? ({} as Systeminformation.SystemData);
+  const sysinfOsInfo = await getSysInfOsInfo();
+  const hwInfo = await getHWInfo();
   const pickedVals = [
     `${returnColoredText(
       `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
@@ -97,9 +96,7 @@ async function returnPickedData(
   }
 
   if (valuesToDisplay.includes("Model")) {
-    pickedVals.push(
-      `${returnColoredText("Model:", color, true)} ${hwInfo.model}`
-    );
+    pickedVals.push(`${returnColoredText("Model:", color, true)} ${hwInfo}`);
   }
 
   if (valuesToDisplay.includes("Release")) {
@@ -169,27 +166,33 @@ async function returnPickedData(
   return pickedVals;
 }
 
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-implicit-any-catch */
-const _args = yargs
+yargs
   .command("$0", "", async () => {
     try {
-      if (yargs.argv.color && yargs.argv.rgb) {
+      const configFilePath = yargs.argv["config"] as string;
+      let configFile;
+      if (configFilePath)
+        configFile = (await handleReadFile(configFilePath)) || [];
+      const enhancedArgv = { ...yargs.argv, ...configFile };
+
+      if (enhancedArgv.color && enhancedArgv.rgb) {
         throw new Error(
           "--rgb and --color are mutually exclusive - please specify only one"
         );
       }
-
-      const predefinedColor = String(yargs.argv.c || yargs.argv.color);
-      const customColors = yargs.argv.rgb
-        ? parseRGBStringToNumber(String(yargs.argv.rgb))
+      const predefinedColor = String(enhancedArgv.c || enhancedArgv.color);
+      const customColors = enhancedArgv.rgb
+        ? parseRGBStringToNumber(String(enhancedArgv.rgb))
         : false;
-      const colorToUse = customColors || predefinedColor;
-      const hideLogoFlag = Boolean(yargs.argv["hide-logo"]);
-      const coloredBoxes = Boolean(yargs.argv["colored-boxes"]);
-      const customLines = yargs.argv["custom-lines"] as string[];
 
+      const colorToUse = customColors || predefinedColor;
+      const showLogo = Boolean(enhancedArgv["logo"]);
+      const coloredBoxes = Boolean(enhancedArgv["colored-boxes"]);
+      const customLines = enhancedArgv["custom-lines"] as string[];
+
+      /* Get device data */
       let infoToPrint: string[];
-      if (yargs.argv.p || yargs.argv.pick) {
+      if (enhancedArgv.p || enhancedArgv.pick) {
         const inquirerPrompt = await inquirer.prompt<{
           displayedValues: string[];
         }>([promptQuestions]);
@@ -204,10 +207,12 @@ const _args = yargs
         );
       }
 
+      /* Add custom lines if specified */
       if (customLines) {
-        const customLinesParsed = customLines.map((line) =>
-          JSON.parse(line)
-        ) as Array<{
+        console.log("cust", customLines);
+        const customLinesParsed = Array.from(customLines).map((line) => {
+          return JSON.parse(line);
+        }) as Array<{
           key: string;
           value: string;
         }>;
@@ -231,7 +236,7 @@ const _args = yargs
           logo: returnColoredText(yayfetchASCII, colorToUse),
           data: infoToPrint.join("\n"),
         },
-        hideLogoFlag
+        showLogo
       );
     } catch (error) {
       console.error(`‼️  ${error} ‼️`);
@@ -251,10 +256,10 @@ const _args = yargs
     choices: availableColors,
     type: "string",
   })
-  .option("hide-logo", {
+  .option("logo", {
     describe: "Hides the ASCII logo",
     type: "boolean",
-    default: false,
+    default: true,
   })
   .option("rgb", {
     describe: "Same as color, but you provide r,g,b values ex. 128,5,67",
@@ -269,8 +274,11 @@ const _args = yargs
     type: "boolean",
     default: true,
   })
+  .option("config", {
+    describe: "Specify a file path to a config file",
+    type: "string",
+  })
   .help()
   .version()
   .alias("help", "h")
   .example("npx yayfetch", "Returns information about your system").argv;
-/* eslint-enable @typescript-eslint/no-unused-vars, @typescript-eslint/no-implicit-any-catch */

@@ -43,7 +43,8 @@ export const getDisplaysAndGraphicsCards =
         gpuInfo,
         displays,
       };
-    } catch {
+    } catch (err) {
+      console.error(`Error when reading graphics info: ${err}`);
       return {
         gpuInfo: [errorMessage],
         displays: [errorMessage],
@@ -64,7 +65,8 @@ export const getMemoryInfo = async (): Promise<MemoryInfoInterface> => {
       used: used.toFixed(0),
       total: total.toFixed(0),
     };
-  } catch {
+  } catch (err) {
+    console.error(`Error when reading memory info: ${err}`);
     return {
       free: errorMessage,
       used: "",
@@ -86,25 +88,25 @@ export const getOsInfo = async (): Promise<string> => {
 export const getShellInfo = async (): Promise<string> => {
   try {
     return await sysinf.shell();
-  } catch {
+  } catch (shellErr) {
     if (os.platform() === "win32") {
       // Windows doesn't support .shell() feature
       try {
         const osInfo: sysinf.Systeminformation.UserData[] =
           await sysinf.users();
         return osInfo ? osInfo[0].tty : "";
-      } catch {
+      } catch (err) {
+        console.error(`Error when reading windows's terminal info: ${err}`);
         return errorMessage;
       }
     } else {
+      console.error(`Error when reading shell info: ${shellErr}`);
       return errorMessage;
     }
   }
 };
 
-export const getSysInfOsInfo = async (): Promise<
-  OSInfoInterface | undefined
-> => {
+export const getSysInfOsInfo = async (): Promise<OSInfoInterface> => {
   try {
     const osInfo = await sysinf.osInfo();
     return {
@@ -112,18 +114,22 @@ export const getSysInfOsInfo = async (): Promise<
       hostname: osInfo.hostname,
       display: `${osInfo.codename} ${osInfo.release} ${osInfo.build} ${osInfo.arch}`,
     };
-  } catch (error: unknown) {
-    console.error(error);
+  } catch (err) {
+    console.error(`Error when reading OS info: ${err}`);
+    return {
+      distro: errorMessage,
+      hostname: "",
+      display: "",
+    };
   }
 };
 
-export const getHWInfo = async (): Promise<
-  sysinf.Systeminformation.SystemData | undefined
-> => {
+export const getHWInfo = async (): Promise<string> => {
   try {
     const hwInfo = await sysinf.system();
-    return hwInfo;
-  } catch (error: unknown) {
-    console.error(error);
+    return hwInfo.model;
+  } catch (err) {
+    console.error(`Error when reading hardware info: ${err}`);
+    return errorMessage;
   }
 };
