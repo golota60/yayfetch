@@ -20,7 +20,7 @@ describe("yayfetch", () => {
   });
   it("prints custom lines", async () => {
     const output = await getYayfetchOutput(
-      `--custom-lines '{"key": "Funny", "value": "joke"}'`
+      `--custom-lines '{"Funny:": "joke"}'`
     );
     const baseFlagsEnhanced = [...baseFlags, "Funny"];
     baseFlagsEnhanced.forEach((val) => {

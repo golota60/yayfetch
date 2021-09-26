@@ -188,7 +188,7 @@ yargs
       const colorToUse = customColors || predefinedColor;
       const showLogo = Boolean(enhancedArgv["logo"]);
       const coloredBoxes = Boolean(enhancedArgv["colored-boxes"]);
-      const customLines = enhancedArgv["custom-lines"] as string[];
+      const customLines: string | object = enhancedArgv["custom-lines"];
 
       /* Get device data */
       let infoToPrint: string[];
@@ -209,18 +209,16 @@ yargs
 
       /* Add custom lines if specified */
       if (customLines) {
-        console.log("cust", customLines);
-        const customLinesParsed = Array.from(customLines).map((line) => {
-          return JSON.parse(line);
-        }) as Array<{
-          key: string;
-          value: string;
-        }>;
+        console.log(customLines);
+        const customLinesParsed =
+          typeof customLines === "object"
+            ? customLines
+            : JSON.parse(customLines);
         infoToPrint = [
           ...infoToPrint,
-          ...customLinesParsed.map((customLine) => {
-            return `${returnColoredText(customLine.key, colorToUse, true)} ${
-              customLine.value
+          ...Object.entries(customLinesParsed).map((customLine) => {
+            return `${returnColoredText(customLine[0], colorToUse, true)} ${
+              customLine[1]
             }`;
           }),
         ];
@@ -266,8 +264,8 @@ yargs
     type: "string",
   })
   .option("custom-lines", {
-    describe: "Array of lines you want to add(objects with key, value pairs)",
-    type: "array",
+    describe: "String object of key-value pairs to add",
+    type: "string",
   })
   .option("colored-boxes", {
     describe: "Hides colored boxes underneath the information",
