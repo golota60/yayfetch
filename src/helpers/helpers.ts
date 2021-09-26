@@ -1,4 +1,6 @@
 import os from "os";
+import { promises } from "fs";
+import { exit } from "process";
 import chalk from "chalk";
 import { RGBColors } from "../interfaces/general";
 
@@ -37,7 +39,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   });
   if (split.length !== 3) {
     throw new Error(
-      "Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, they need to be separated by comas and numbers must be between 0 and 255"
+      "Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, separated by comas, and numbers have to be between 0 and 255"
     );
   }
 
@@ -197,8 +199,10 @@ export const returnColoredText = (
 };
 
 export const printInColumns = (...cols: string[]): void => {
-  // Split every line by \n
+  // First element is the logo, second one is the data, each of which has lines separated by \n
+  // Splitting those creates a string[][] where the elements of nested arrays are lines
   const colsSplit = cols.map((element) => element.split("\n"));
+
   // Find the vertically longest argument
   // Length of which is going the be the iterator on how many times we have to print a line
   const verticallyLongestArg = colsSplit.reduce(
@@ -210,9 +214,7 @@ export const printInColumns = (...cols: string[]): void => {
   for (const [i] of [...new Array(verticallyLongestArg)].entries()) {
     let nextLine = "";
     for (const [i2] of [...new Array(argsNumber)].entries()) {
-      if (nextLine === "") {
-        colsSplit[i2];
-      }
+      if (!colsSplit[i2][i]) continue;
 
       nextLine += colsSplit[i2][i];
     }
@@ -226,9 +228,9 @@ export const printInColumns = (...cols: string[]): void => {
 
 export const printData = (
   { logo, data }: { logo: string; data: string },
-  hideLogo = false
+  showLogo = true
 ): void => {
-  if (hideLogo) {
+  if (!showLogo) {
     console.log(data);
   } else {
     printInColumns(logo, data);
@@ -281,14 +283,14 @@ export const getColoredBoxes = () => {
   )}`;
 };
 
-export const yayfetchASCII = `-/-\`            \`-//-\`            \`-/-    
+export const yayfetchASCII = `-/-\`             \`-//-\`            \`-/-   
 -////\`          .//////.          \`////- 
 \`/////\`       \`:////////:\`       \`/////\`  
  \`/////\`     ./////:://///.     \`/////\`   
   \`/////\`   -/////.  ./////-   \`/////\`    
    ./////--://///-    -/////:-://///.     
     ./////////////====:////////////.      
-     ./////////:=======://///////.        
+     ./////////:=======://////////.       
       .///////:\`        \`:///////.        
        .//////\`           ://///.         
         ./////\`          \`/////.          
@@ -298,3 +300,13 @@ export const yayfetchASCII = `-/-\`            \`-//-\`            \`-/-
             .////:    :////.              
              -////.  .////.               
               .:/.    .:\\.                `;
+
+export const handleReadFile = async (path: string): Promise<any> => {
+  try {
+    const file = await promises.readFile(path, "utf-8");
+    return JSON.parse(file);
+  } catch (err) {
+    console.error(`Error when reading file: ${err}`);
+    exit();
+  }
+};

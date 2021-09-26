@@ -1,0 +1,7 @@
+
+{
+	"color": "blue",
+	"colored-boxes": false,
+	"logo": false,
+	"custom-lines": {"Funny:": "joke", "exampleline:": "examplevalue"}
+}
