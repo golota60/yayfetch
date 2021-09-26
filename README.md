@@ -47,7 +47,7 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 `-h` or `--help` - shows available flags.
 
-`--config <path_to_file>` - specify a file path to a custom config. See ![here](# ExampleConfig)
+`--config <path_to_file>` - specify a file path to a custom config. See ![here](#example-config)
 
 More features to come!
 
