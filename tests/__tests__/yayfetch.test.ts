@@ -27,4 +27,20 @@ describe("yayfetch", () => {
       expect(output.stdout).toContain(val);
     });
   });
+  it("prints multiple custom lines", async() => {
+    const output = await getYayfetchOutput(
+      `--custom-lines '{"Funny:": "joke", "Funnier": "joke"}'`
+    );
+    const baseFlagsEnhanced = [...baseFlags, "Funny", "Funnier"];
+    baseFlagsEnhanced.forEach((val) => {
+      expect(output.stdout).toContain(val);
+    });
+  })
+  it('reads config from file', async () => {
+    const output = await getYayfetchOutput('--config tests/__tests__/testfile.json');
+    const baseFlagsEnhanced = [...baseFlags, "Funny:", "exampleline:"];
+    baseFlagsEnhanced.forEach((val) => {
+      expect(output.stdout).toContain(val);
+    });
+  })
 });

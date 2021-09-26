@@ -209,7 +209,6 @@ yargs
 
       /* Add custom lines if specified */
       if (customLines) {
-        console.log(customLines);
         const customLinesParsed =
           typeof customLines === "object"
             ? customLines
