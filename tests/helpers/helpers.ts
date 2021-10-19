@@ -1,4 +1,4 @@
-import {exec, ExecException} from 'child_process';
+import { exec, ExecException } from 'child_process';
 
 interface ExecAsPromiseInterface {
   err: ExecException | null;
@@ -9,11 +9,11 @@ interface ExecAsPromiseInterface {
 export async function execAsPromise(
   command: string
 ): Promise<ExecAsPromiseInterface> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     exec(
       command,
       (error: ExecException | null, stdout: string, stderr: string) => {
-        resolve({err: error, stdout, stderr});
+        resolve({ err: error, stdout, stderr });
       }
     );
   });
@@ -34,5 +34,5 @@ export const baseFlags = [
   'Display(s):',
   'Endianness:',
   'Memory:',
-  'Shell:'
+  'Shell:',
 ];

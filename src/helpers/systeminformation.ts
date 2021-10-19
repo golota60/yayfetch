@@ -1,7 +1,7 @@
-import os from "os";
-import sysinf from "systeminformation";
-import { OSInfoInterface } from "../interfaces/systeminformation";
-import { errorMessage, bitstoMegabytes } from "./helpers";
+import os from 'os';
+import sysinf from 'systeminformation';
+import { OSInfoInterface } from '../interfaces/systeminformation';
+import { errorMessage, bitstoMegabytes } from './helpers';
 interface MemoryInfoInterface {
   free: string;
   used: string;
@@ -10,10 +10,10 @@ interface MemoryInfoInterface {
 
 export const getEndianness = (): string => {
   switch (os.endianness()) {
-    case "LE":
-      return "Little Endian";
-    case "BE":
-      return "Big Endian";
+    case 'LE':
+      return 'Little Endian';
+    case 'BE':
+      return 'Big Endian';
     default:
       return os.endianness();
   }
@@ -69,8 +69,8 @@ export const getMemoryInfo = async (): Promise<MemoryInfoInterface> => {
     console.error(`Error when reading memory info: ${err}`);
     return {
       free: errorMessage,
-      used: "",
-      total: "",
+      used: '',
+      total: '',
     };
   }
 };
@@ -79,7 +79,7 @@ export const getOsInfo = async (): Promise<string> => {
   try {
     const osInfo: sysinf.Systeminformation.UserData[] = await sysinf.users();
 
-    return osInfo ? osInfo[0].user : "";
+    return osInfo ? osInfo[0].user : '';
   } catch {
     return errorMessage;
   }
@@ -89,12 +89,12 @@ export const getShellInfo = async (): Promise<string> => {
   try {
     return await sysinf.shell();
   } catch (shellErr) {
-    if (os.platform() === "win32") {
+    if (os.platform() === 'win32') {
       // Windows doesn't support .shell() feature
       try {
         const osInfo: sysinf.Systeminformation.UserData[] =
           await sysinf.users();
-        return osInfo ? osInfo[0].tty : "";
+        return osInfo ? osInfo[0].tty : '';
       } catch (err) {
         console.error(`Error when reading windows's terminal info: ${err}`);
         return errorMessage;
@@ -118,8 +118,8 @@ export const getSysInfOsInfo = async (): Promise<OSInfoInterface> => {
     console.error(`Error when reading OS info: ${err}`);
     return {
       distro: errorMessage,
-      hostname: "",
-      display: "",
+      hostname: '',
+      display: '',
     };
   }
 };

@@ -1,23 +1,23 @@
-import os from "os";
-import { promises } from "fs";
-import { exit } from "process";
-import chalk from "chalk";
-import { RGBColors } from "../interfaces/general";
+import os from 'os';
+import { promises } from 'fs';
+import { exit } from 'process';
+import chalk from 'chalk';
+import { RGBColors } from '../interfaces/general';
 
 export const errorMessage =
-  "Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more";
+  'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
 
 export const availableColors = [
-  "pink",
-  "orange",
-  "green",
-  "white",
-  "black",
-  "red",
-  "blue",
-  "yellow",
-  "violet",
-  "rainbow",
+  'pink',
+  'orange',
+  'green',
+  'white',
+  'black',
+  'red',
+  'blue',
+  'yellow',
+  'violet',
+  'rainbow',
 ];
 
 export type PredefinedColors = typeof availableColors[number];
@@ -26,7 +26,7 @@ export const bitstoMegabytes = (numberToConvert: number): number =>
   numberToConvert * 9.537 * 10 ** -7;
 
 export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
-  const split = rgbString.split(",");
+  const split = rgbString.split(',');
   const RGBAsNumericalArray = split.map((color: string) => {
     const colorNumber = Number(color);
     if (Number.isNaN(colorNumber) || colorNumber < 0 || colorNumber > 255) {
@@ -39,7 +39,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   });
   if (split.length !== 3) {
     throw new Error(
-      "Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, separated by comas, and numbers have to be between 0 and 255"
+      'Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, separated by comas, and numbers have to be between 0 and 255'
     );
   }
 
@@ -155,11 +155,11 @@ export const returnInRainbow = (text: string, bolded = false): string => {
     returnInPink,
   ];
   const coloredText = text
-    .split("")
+    .split('')
     .map((char, i) => {
       return functionArray[i % functionArray.length](char, bolded);
     })
-    .join("");
+    .join('');
   return coloredText;
 };
 
@@ -168,30 +168,30 @@ export const returnColoredText = (
   colorCode: PredefinedColors | RGBColors,
   bolded = false
 ): string => {
-  if (typeof colorCode === "object") {
+  if (typeof colorCode === 'object') {
     return chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
   }
 
   switch (colorCode) {
-    case "pink":
+    case 'pink':
       return returnInPink(text, bolded);
-    case "orange":
+    case 'orange':
       return returnInOrange(text, bolded);
-    case "blue":
+    case 'blue':
       return returnInBlue(text, bolded);
-    case "green":
+    case 'green':
       return returnInGreen(text, bolded);
-    case "white":
+    case 'white':
       return returnInWhite(text, bolded);
-    case "black":
+    case 'black':
       return returnInBlack(text, bolded);
-    case "red":
+    case 'red':
       return returnInRed(text, bolded);
-    case "yellow":
+    case 'yellow':
       return returnInYellow(text, bolded);
-    case "violet":
+    case 'violet':
       return returnInViolet(text, bolded);
-    case "rainbow":
+    case 'rainbow':
       return returnInRainbow(text, bolded);
     default:
       return returnInPink(text, bolded);
@@ -201,7 +201,7 @@ export const returnColoredText = (
 export const printInColumns = (...cols: string[]): void => {
   // First element is the logo, second one is the data, each of which has lines separated by \n
   // Splitting those creates a string[][] where the elements of nested arrays are lines
-  const colsSplit = cols.map((element) => element.split("\n"));
+  const colsSplit = cols.map((element) => element.split('\n'));
 
   // Find the vertically longest argument
   // Length of which is going the be the iterator on how many times we have to print a line
@@ -212,7 +212,7 @@ export const printInColumns = (...cols: string[]): void => {
   const argsNumber = cols.length;
   const mergedArgs = [] as string[];
   for (const [i] of [...new Array(verticallyLongestArg)].entries()) {
-    let nextLine = "";
+    let nextLine = '';
     for (const [i2] of [...new Array(argsNumber)].entries()) {
       if (!colsSplit[i2][i]) continue;
 
@@ -223,7 +223,7 @@ export const printInColumns = (...cols: string[]): void => {
   }
 
   // TODO: Improve the algorithm so that it auto adjusts the amount of spaces in every row
-  console.log(mergedArgs.join("\n"));
+  console.log(mergedArgs.join('\n'));
 };
 
 export const printData = (
@@ -238,48 +238,48 @@ export const printData = (
 };
 
 export const getColoredBoxes = () => {
-  return `${chalk.bgBlack("   ")}${chalk.bgRgb(
+  return `${chalk.bgBlack('   ')}${chalk.bgRgb(
     customColorCodes.burgundy.r,
     customColorCodes.burgundy.g,
     customColorCodes.burgundy.b
-  )("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRgb(
     customColorCodes.darkgreen.r,
     customColorCodes.darkgreen.g,
     customColorCodes.darkgreen.b
-  )("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRgb(
     customColorCodes.darkyellow.r,
     customColorCodes.darkyellow.g,
     customColorCodes.darkyellow.b
-  )("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRgb(
     customColorCodes.darkDeepBlue.r,
     customColorCodes.darkDeepBlue.g,
     customColorCodes.darkDeepBlue.b
-  )("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRgb(
     customColorCodes.darkViolet.r,
     customColorCodes.darkViolet.g,
     customColorCodes.darkViolet.b
-  )("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRgb(
     customColorCodes.darkCyan.r,
     customColorCodes.darkCyan.g,
     customColorCodes.darkCyan.b
-  )("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRgb(
     customColorCodes.lightgrey.r,
     customColorCodes.lightgrey.g,
     customColorCodes.lightgrey.b
-  )("   ")}\n${chalk.bgRgb(
+  )('   ')}\n${chalk.bgRgb(
     customColorCodes.darkgrey.r,
     customColorCodes.darkgrey.g,
     customColorCodes.darkgrey.b
-  )("   ")}${chalk.bgRed("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgRed('   ')}${chalk.bgRgb(
     customColorCodes.lightgreen.r,
     customColorCodes.lightgreen.g,
     customColorCodes.lightgreen.b
-  )("   ")}${chalk.bgYellow("   ")}${chalk.bgRgb(
+  )('   ')}${chalk.bgYellow('   ')}${chalk.bgRgb(
     customColorCodes.deepBlue.r,
     customColorCodes.deepBlue.g,
     customColorCodes.deepBlue.b
-  )("   ")}${chalk.bgMagenta("   ")}${chalk.bgCyanBright("   ")}${chalk.bgWhite(
-    "   "
+  )('   ')}${chalk.bgMagenta('   ')}${chalk.bgCyanBright('   ')}${chalk.bgWhite(
+    '   '
   )}`;
 };
 
@@ -303,7 +303,7 @@ export const yayfetchASCII = `-/-\`             \`-//-\`            \`-/-
 
 export const handleReadFile = async (path: string): Promise<any> => {
   try {
-    const file = await promises.readFile(path, "utf-8");
+    const file = await promises.readFile(path, 'utf-8');
     return JSON.parse(file);
   } catch (err) {
     console.error(`Error when reading file: ${err}`);

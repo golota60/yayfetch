@@ -1,3 +1,12 @@
 {
-  "extends": "@callstack/eslint-config/node"
+  "extends": "@callstack/eslint-config/node",
+  "rules": {
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "prettier/prettier": [
+      "error", {
+        "singleQuote": true,
+        "semi": true
+      }
+    ]
+  }
 }
