@@ -12,10 +12,8 @@ import {
   returnColoredText,
   parseRGBStringToNumber,
   printData,
-  PredefinedColors,
   getColoredBoxes,
   handleReadFile,
-  allColors,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -28,6 +26,7 @@ import {
 } from './helpers/systeminformation';
 import { RGBColors } from './interfaces/general';
 import { yayfetchASCII } from './helpers/static';
+import { PredefinedColors, allColors } from './helpers/colors';
 
 export const promptQuestionsChoices = [
   'OS',
