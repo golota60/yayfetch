@@ -1,26 +1,48 @@
 import os from 'os';
 import { promises } from 'fs';
 import { exit } from 'process';
-import chalk from 'chalk';
+import chalk, { Chalk, ColorSupport } from 'chalk';
 import { RGBColors } from '../interfaces/general';
 
 export const errorMessage =
   'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
 
-export const availableColors = [
-  'pink',
-  'orange',
-  'green',
-  'white',
+export const chalkColors = [
   'black',
   'red',
-  'blue',
+  'green',
   'yellow',
+  'blue',
+  'magenta',
+  'cyan',
+  'white',
+] as const;
+
+export const availableColors = [
+  ...chalkColors,
+  'pink',
+  'orange',
   'violet',
+] as const;
+
+export const allColors = [
+  ...availableColors,
   'rainbow',
-];
+  // 'randomrainbow',//implement later
+] as const;
+
+// Colors prepared for rainbow animation
+const rainbowColors = [
+  'red',
+  'orange',
+  'yellow',
+  'green',
+  'blue',
+  'violet',
+] as const;
 
 export type PredefinedColors = typeof availableColors[number];
+export type ColorCodes = typeof allColors[number];
 
 export const bitstoMegabytes = (numberToConvert: number): number =>
   numberToConvert * 9.537 * 10 ** -7;
@@ -69,133 +91,59 @@ const customColorCodes = {
 
 export const uptimeInMinutes = (): number => os.uptime() / 60;
 
-export const returnInPink = (text: string, bolded = false): string =>
-  bolded
-    ? chalk
-        .rgb(
-          customColorCodes.pink.r,
-          customColorCodes.pink.g,
-          customColorCodes.pink.b
-        )
-        .bold(text)
-    : chalk.rgb(
-        customColorCodes.pink.r,
-        customColorCodes.pink.g,
-        customColorCodes.pink.b
-      )(text);
+export const customColors = {
+  pink: chalk.rgb(
+    customColorCodes.pink.r,
+    customColorCodes.pink.g,
+    customColorCodes.pink.b
+  ),
+  orange: chalk.rgb(
+    customColorCodes.orange.r,
+    customColorCodes.orange.g,
+    customColorCodes.orange.b
+  ),
+  violet: chalk.rgb(
+    customColorCodes.violet.r,
+    customColorCodes.violet.g,
+    customColorCodes.violet.b
+  ),
+};
 
-export const returnInOrange = (text: string, bolded = false): string =>
-  bolded
-    ? chalk
-        .rgb(
-          customColorCodes.orange.r,
-          customColorCodes.orange.g,
-          customColorCodes.orange.b
-        )
-        .bold(text)
-    : chalk.rgb(
-        customColorCodes.orange.r,
-        customColorCodes.orange.g,
-        customColorCodes.orange.b
-      )(text);
-
-export const returnInGreen = (text: string, bolded = false): string =>
-  bolded ? chalk.green.bold(text) : chalk.green(text);
-
-export const returnInWhite = (text: string, bolded = false): string =>
-  bolded ? chalk.white.bold(text) : chalk.white(text);
-
-export const returnInBlack = (text: string, bolded = false): string =>
-  bolded ? chalk.black.bold(text) : chalk.black(text);
-
-export const returnInRed = (text: string, bolded = false): string =>
-  bolded ? chalk.red.bold(text) : chalk.red(text);
-
-export const returnInBlue = (text: string, bolded = false): string =>
-  bolded ? chalk.blue.bold(text) : chalk.blue(text);
-
-export const returnInYellow = (text: string, bolded = false): string =>
-  bolded
-    ? chalk
-        .rgb(
-          customColorCodes.yellow.r,
-          customColorCodes.yellow.g,
-          customColorCodes.yellow.b
-        )
-        .bold(text)
-    : chalk.rgb(
-        customColorCodes.yellow.r,
-        customColorCodes.yellow.g,
-        customColorCodes.yellow.b
-      )(text);
-
-export const returnInViolet = (text: string, bolded = false): string =>
-  bolded
-    ? chalk
-        .rgb(
-          customColorCodes.violet.r,
-          customColorCodes.violet.g,
-          customColorCodes.violet.b
-        )
-        .bold(text)
-    : chalk.rgb(
-        customColorCodes.violet.r,
-        customColorCodes.violet.g,
-        customColorCodes.violet.b
-      )(text);
-
-export const returnInRainbow = (text: string, bolded = false): string => {
-  const functionArray = [
-    returnInRed,
-    returnInOrange,
-    returnInYellow,
-    returnInGreen,
-    returnInBlue,
-    returnInViolet,
-    returnInPink,
-  ];
+export const returnInRainbow = (text: string, bold = false): string => {
+  const functionArray = rainbowColors.map((e) => getColoringFunc(e));
   const coloredText = text
     .split('')
     .map((char, i) => {
-      return functionArray[i % functionArray.length](char, bolded);
+      return bold
+        ? functionArray[i % functionArray.length].bold(char)
+        : functionArray[i % functionArray.length](char);
     })
     .join('');
   return coloredText;
 };
 
+const getColoringFunc = (
+  colorCode: PredefinedColors
+): Chalk & { supportsColor: ColorSupport } =>
+  (chalk as any)[colorCode] || (customColors as any)[colorCode];
+
 export const returnColoredText = (
   text: string,
-  colorCode: PredefinedColors | RGBColors,
-  bolded = false
-): string => {
+  colorCode: ColorCodes | RGBColors,
+  options = { bolded: false }
+) => {
+  const { bolded } = options;
   if (typeof colorCode === 'object') {
-    return chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
+    return bolded
+      ? chalk.rgb(colorCode.r, colorCode.g, colorCode.b).bold(text)
+      : chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
   }
-
-  switch (colorCode) {
-    case 'pink':
-      return returnInPink(text, bolded);
-    case 'orange':
-      return returnInOrange(text, bolded);
-    case 'blue':
-      return returnInBlue(text, bolded);
-    case 'green':
-      return returnInGreen(text, bolded);
-    case 'white':
-      return returnInWhite(text, bolded);
-    case 'black':
-      return returnInBlack(text, bolded);
-    case 'red':
-      return returnInRed(text, bolded);
-    case 'yellow':
-      return returnInYellow(text, bolded);
-    case 'violet':
-      return returnInViolet(text, bolded);
-    case 'rainbow':
-      return returnInRainbow(text, bolded);
-    default:
-      return returnInPink(text, bolded);
+  if (colorCode === 'rainbow') {
+    return bolded ? returnInRainbow(text, true) : returnInRainbow(text);
   }
+  return bolded
+    ? getColoringFunc(colorCode).bold(text)
+    : getColoringFunc(colorCode)(text);
 };
 
 export const printInColumns = (...cols: string[]): void => {
@@ -282,24 +230,6 @@ export const getColoredBoxes = () => {
     '   '
   )}`;
 };
-
-export const yayfetchASCII = `-/-\`             \`-//-\`            \`-/-   
--////\`          .//////.          \`////- 
-\`/////\`       \`:////////:\`       \`/////\`  
- \`/////\`     ./////:://///.     \`/////\`   
-  \`/////\`   -/////.  ./////-   \`/////\`    
-   ./////--://///-    -/////:-://///.     
-    ./////////////====:////////////.      
-     ./////////:=======://////////.       
-      .///////:\`        \`:///////.        
-       .//////\`           ://///.         
-        ./////\`          \`/////.          
-         .////:\`        \`:////.           
-          .////:\`      \`:////.            
-           .////:\`     :////.             
-            .////:    :////.              
-             -////.  .////.               
-              .:/.    .:\\.                `;
 
 export const handleReadFile = async (path: string): Promise<any> => {
   try {
