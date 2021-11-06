@@ -1,5 +1,5 @@
 import chalk, { Chalk, ColorSupport } from 'chalk';
-import { Options } from './helpers';
+import { getRandomArrayElement, Options } from './helpers';
 
 export const chalkColors = [
   'black',
@@ -90,9 +90,12 @@ export const returnInRainbow = (
   const coloredText = text
     .split('')
     .map((char, i) => {
+      const functionToApply = options?.random
+        ? getRandomArrayElement(functionArray)
+        : functionArray[i % functionArray.length];
       return options?.bolded
-        ? functionArray[i % functionArray.length].bold(char)
-        : functionArray[i % functionArray.length](char);
+        ? functionToApply.bold(char)
+        : functionToApply(char);
     })
     .join('');
   return coloredText;

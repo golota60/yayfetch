@@ -62,7 +62,7 @@ export const returnColoredText = (
   }
   if (colorCode === 'randomrainbow') {
     //todo: make it random
-    return returnInRainbow(text, { bolded: options?.bolded });
+    return returnInRainbow(text, { bolded: options?.bolded, random: true });
   }
   return options?.bolded
     ? getColoringFunc(colorCode).bold(text)
@@ -151,3 +151,6 @@ export const handleReadFile = async (path: string): Promise<any> => {
     exit();
   }
 };
+
+export const getRandomArrayElement = (arr: any[]) =>
+  arr[Math.floor(Math.random() * arr.length)];
