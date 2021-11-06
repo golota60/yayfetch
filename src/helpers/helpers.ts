@@ -164,20 +164,21 @@ const addSpacesToMatchLength = (string: string, lengthToMatch: number) => {
   return `${string}${new Array(lengthDiff).fill(' ').join('')}`;
 };
 
-/*
-  Ensures every line in is the same length,
-  Needs to be done so that every line wraps correctly
-*/
-export const normalizeASCII = (string: string) => {
+/**
+ * Normalize an ASCII by adding spaced at the end of each line to match the longest line.
+ */
+export const normalizeASCII = (string: string, lineOffset = 0) => {
   const asciiString = string.split('\n');
   const longestArgLength = asciiString.reduce((acc, curr) => {
     const length = curr.length;
     return length > acc ? length : acc;
   }, 0);
-  return asciiString.map((line) => {
-    if (line.length < longestArgLength) {
-      return addSpacesToMatchLength(line, longestArgLength);
-    }
-    return line;
-  });
+  return asciiString
+    .map((line) => {
+      if (line.length < longestArgLength + lineOffset) {
+        return addSpacesToMatchLength(line, longestArgLength + lineOffset);
+      }
+      return line;
+    })
+    .join('\n');
 };

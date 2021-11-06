@@ -14,6 +14,7 @@ import {
   getColoredBoxes,
   handleReadFile,
   printInColumns,
+  normalizeASCII,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -248,7 +249,7 @@ yargs
 
       if (showLogo) {
         printInColumns(
-          returnColoredText(yayfetchASCII, colorToUse),
+          returnColoredText(normalizeASCII(yayfetchASCII, 2), colorToUse),
           infoToPrint.join('\n')
         );
       } else {
