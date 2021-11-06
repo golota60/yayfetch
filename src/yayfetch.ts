@@ -26,7 +26,7 @@ import {
 } from './helpers/systeminformation';
 import { RGBColors } from './interfaces/general';
 import { yayfetchASCII } from './helpers/static';
-import { PredefinedColors, allColors } from './helpers/colors';
+import { allColors, ColorCodes } from './helpers/colors';
 
 export const promptQuestionsChoices = [
   'OS',
@@ -70,7 +70,7 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
 
 async function returnPickedData(
   valuesToDisplay: string[],
-  color: PredefinedColors | RGBColors
+  color: ColorCodes | RGBColors
 ): Promise<string[]> {
   const allData: SystemInformation = await getSystemInformation();
   const sysinfOsInfo = await getSysInfOsInfo();
@@ -202,9 +202,8 @@ yargs
 
       const colorToUse = (customColors || predefinedColor) as
         | RGBColors
-        | PredefinedColors;
+        | ColorCodes;
 
-      console.log('colortouse', colorToUse);
       const showLogo = Boolean(enhancedArgv['logo']);
       const coloredBoxes = Boolean(enhancedArgv['colored-boxes']);
       const customLines: string | object = enhancedArgv['custom-lines'];

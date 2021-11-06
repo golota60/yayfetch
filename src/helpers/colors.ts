@@ -1,4 +1,5 @@
 import chalk, { Chalk, ColorSupport } from 'chalk';
+import { Options } from './helpers';
 
 export const chalkColors = [
   'black',
@@ -21,7 +22,7 @@ export const availableColors = [
 export const allColors = [
   ...availableColors,
   'rainbow',
-  // 'randomrainbow',//implement later
+  'randomrainbow', //implement later
 ] as const;
 
 // Colors prepared for rainbow animation
@@ -77,12 +78,19 @@ export const getColoringFunc = (
 ): Chalk & { supportsColor: ColorSupport } =>
   (chalk as any)[colorCode] || (customColors as any)[colorCode];
 
-export const returnInRainbow = (text: string, bold = false): string => {
+interface RainbowOptions extends Options {
+  random?: boolean;
+}
+
+export const returnInRainbow = (
+  text: string,
+  options?: RainbowOptions
+): string => {
   const functionArray = rainbowColors.map((e) => getColoringFunc(e));
   const coloredText = text
     .split('')
     .map((char, i) => {
-      return bold
+      return options?.bolded
         ? functionArray[i % functionArray.length].bold(char)
         : functionArray[i % functionArray.length](char);
     })

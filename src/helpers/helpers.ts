@@ -10,6 +10,10 @@ import {
   returnInRainbow,
 } from './colors';
 
+export interface Options {
+  bolded?: boolean;
+}
+
 export const errorMessage =
   'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
 
@@ -46,18 +50,21 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
 export const returnColoredText = (
   text: string,
   colorCode: ColorCodes | RGBColors,
-  options = { bolded: false }
+  options?: Options
 ) => {
-  const { bolded } = options;
   if (typeof colorCode === 'object') {
-    return bolded
+    return options?.bolded
       ? chalk.rgb(colorCode.r, colorCode.g, colorCode.b).bold(text)
       : chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
   }
   if (colorCode === 'rainbow') {
-    return bolded ? returnInRainbow(text, true) : returnInRainbow(text);
+    return returnInRainbow(text, { bolded: options?.bolded });
   }
-  return bolded
+  if (colorCode === 'randomrainbow') {
+    //todo: make it random
+    return returnInRainbow(text, { bolded: options?.bolded });
+  }
+  return options?.bolded
     ? getColoringFunc(colorCode).bold(text)
     : getColoringFunc(colorCode)(text);
 };
