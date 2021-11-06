@@ -96,17 +96,6 @@ export const printInColumns = (...cols: string[]): void => {
   console.log(mergedArgs.join('\n'));
 };
 
-export const printData = (
-  { logo, data }: { logo: string; data: string },
-  showLogo = true
-): void => {
-  if (!showLogo) {
-    console.log(data);
-  } else {
-    printInColumns(logo, data);
-  }
-};
-
 export const getColoredBoxes = () => {
   return `${chalk.bgBlack('   ')}${chalk.bgRgb(
     customColorCodes.burgundy.r,

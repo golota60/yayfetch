@@ -11,9 +11,9 @@ import {
   uptimeInMinutes,
   returnColoredText,
   parseRGBStringToNumber,
-  printData,
   getColoredBoxes,
   handleReadFile,
+  printInColumns,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -246,13 +246,14 @@ yargs
         infoToPrint = [...infoToPrint, '', getColoredBoxes()];
       }
 
-      printData(
-        {
-          logo: returnColoredText(yayfetchASCII, colorToUse),
-          data: infoToPrint.join('\n'),
-        },
-        showLogo
-      );
+      if (showLogo) {
+        printInColumns(
+          returnColoredText(yayfetchASCII, colorToUse),
+          infoToPrint.join('\n')
+        );
+      } else {
+        console.log(infoToPrint.join('\n'));
+      }
     } catch (error) {
       console.error(`‼️  ${error} ‼️`);
     }
