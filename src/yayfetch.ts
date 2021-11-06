@@ -80,7 +80,7 @@ async function returnPickedData(
       `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
       color,
       { bolded: true }
-    )} \n -----------------------------`,
+    )} \n-----------------------------`,
   ];
   if (valuesToDisplay.includes('OS')) {
     pickedVals.push(

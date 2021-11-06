@@ -61,7 +61,6 @@ export const returnColoredText = (
     return returnInRainbow(text, { bolded: options?.bolded });
   }
   if (colorCode === 'randomrainbow') {
-    //todo: make it random
     return returnInRainbow(text, { bolded: options?.bolded, random: true });
   }
   return options?.bolded
@@ -69,6 +68,9 @@ export const returnColoredText = (
     : getColoringFunc(colorCode)(text);
 };
 
+/* 
+  In order for this function to work as intended, all the arguments must have the exact same horizontal length(except last one)
+*/
 export const printInColumns = (...cols: string[]): void => {
   // First element is the logo, second one is the data, each of which has lines separated by \n
   // Splitting those creates a string[][] where the elements of nested arrays are lines
