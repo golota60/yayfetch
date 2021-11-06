@@ -156,3 +156,28 @@ export const handleReadFile = async (path: string): Promise<any> => {
 
 export const getRandomArrayElement = (arr: any[]) =>
   arr[Math.floor(Math.random() * arr.length)];
+
+// ('asd',5) => 'asd  '
+const addSpacesToMatchLength = (string: string, lengthToMatch: number) => {
+  if (string.length >= lengthToMatch) return string;
+  const lengthDiff = lengthToMatch - string.length;
+  return `${string}${new Array(lengthDiff).fill(' ').join('')}`;
+};
+
+/*
+  Ensures every line in is the same length,
+  Needs to be done so that every line wraps correctly
+*/
+export const normalizeASCII = (string: string) => {
+  const asciiString = string.split('\n');
+  const longestArgLength = asciiString.reduce((acc, curr) => {
+    const length = curr.length;
+    return length > acc ? length : acc;
+  }, 0);
+  return asciiString.map((line) => {
+    if (line.length < longestArgLength) {
+      return addSpacesToMatchLength(line, longestArgLength);
+    }
+    return line;
+  });
+};

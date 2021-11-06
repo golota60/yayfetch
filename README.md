@@ -55,7 +55,33 @@ More features to come!
 
 Some more advanced features are almost impossible to implement through flags(to be quite honest, some are already pushing it e.g. `--custom-lines`).
 
-- Line Animations
+- Custom ASCII
+
+To customize the ASCII just define `"ascii"` line in the config. It can either be a string or an array, if you want to define multiple ASCIIs.
+
+```json
+{
+  "ascii": ["          .=     ,        =.
+  _  _   /'/    )\,/,/(_   \ \
+   `//-.|  (  ,\\)\//\)\/_  ) |
+   //___\   `\\\/\\/\/\\///'  /
+,-"~`-._ `"--'_   `"""`  _ \`'"~-,_
+\       `-.  '_`.      .'_` \ ,-"~`/
+ `.__.-'`/   (-\        /-) |-.__,'
+   ||   |     \O)  /^\ (O/  |
+   `\\  |         /   `\    /
+     \\  \       /      `\ /
+      `\\ `-.  /' .---.--.\
+        `\\/`~(, '()      ('
+         /(O) \\   _,.-.,_)
+        //  \\ `\'`      /
+  jgs  / |  ||   `""""~"`
+     /'  |__||
+           `o"]
+}
+```
+
+<!-- - Line Animations
 
 Each and every one of the lines you provide can be animated.
 
@@ -73,7 +99,7 @@ Each line can be of type of `"preserve"`(default), which will keep the original 
 {
   "line-animations": ["preserve", "rainbow", "pulse", "glitch", "radar"]
 }
-```
+``` -->
 
 ## Example config
 
@@ -82,6 +108,7 @@ You can specify options through a file and use them by using `--config <path_to_
 Note that every flag with a prefix of `--no-` just negates the flag that is on by default. For example CLI flag `--no-colored-boxes` negates `colored-boxes` flag, which is `true` by default. This is important for creating a config, because if you want to invoke `--no-colored-boxes` through config, you would provide a `"colored-boxes": false` in JSON object.
 
 Example config:
+
 ```
 {
 	"color": "blue",
