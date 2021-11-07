@@ -12,9 +12,10 @@ import {
   returnColoredText,
   parseRGBStringToNumber,
   getColoredBoxes,
-  handleReadFile,
+  handleReadJSON,
   printInColumns,
   normalizeASCII,
+  readTextFile,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -188,7 +189,7 @@ yargs
       const configFilePath = yargs.argv['config'] as string;
       let configFile;
       if (configFilePath)
-        configFile = (await handleReadFile(configFilePath)) || [];
+        configFile = (await handleReadJSON(configFilePath)) || [];
       const enhancedArgv = { ...yargs.argv, ...configFile };
 
       if (enhancedArgv.color && enhancedArgv.rgb) {
@@ -208,6 +209,14 @@ yargs
       const showLogo = Boolean(enhancedArgv['logo']);
       const coloredBoxes = Boolean(enhancedArgv['colored-boxes']);
       const customLines: string | object = enhancedArgv['custom-lines'];
+      const customASCIIs: string[] = enhancedArgv['ascii'];
+
+      let customASCIIsParsed;
+      if (customASCIIs) {
+        customASCIIsParsed = await Promise.all(
+          customASCIIs.map(async (e) => await readTextFile(e))
+        );
+      }
 
       /* Get device data */
       let infoToPrint: string[];
@@ -248,10 +257,10 @@ yargs
       }
 
       if (showLogo) {
-        printInColumns(
-          returnColoredText(normalizeASCII(yayfetchASCII, 2), colorToUse),
-          infoToPrint.join('\n')
+        const asciis = (customASCIIsParsed || [yayfetchASCII]).map((e) =>
+          returnColoredText(normalizeASCII(e, 2), colorToUse)
         );
+        printInColumns(...asciis, infoToPrint.join('\n'));
       } else {
         console.log(infoToPrint.join('\n'));
       }

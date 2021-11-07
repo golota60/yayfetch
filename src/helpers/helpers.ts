@@ -144,9 +144,12 @@ export const getColoredBoxes = () => {
   )}`;
 };
 
-export const handleReadFile = async (path: string): Promise<any> => {
+export const readTextFile = async (path: string) =>
+  await promises.readFile(path, 'utf-8');
+
+export const handleReadJSON = async (path: string): Promise<any> => {
   try {
-    const file = await promises.readFile(path, 'utf-8');
+    const file = await readTextFile(path);
     return JSON.parse(file);
   } catch (err) {
     console.error(`Error when reading file: ${err}`);
@@ -157,7 +160,9 @@ export const handleReadFile = async (path: string): Promise<any> => {
 export const getRandomArrayElement = (arr: any[]) =>
   arr[Math.floor(Math.random() * arr.length)];
 
-// ('asd',5) => 'asd  '
+/*
+  e.g. ('asd',5) => 'asd  '
+*/
 const addSpacesToMatchLength = (string: string, lengthToMatch: number) => {
   if (string.length >= lengthToMatch) return string;
   const lengthDiff = lengthToMatch - string.length;

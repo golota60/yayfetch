@@ -55,29 +55,13 @@ More features to come!
 
 Some more advanced features are almost impossible to implement through flags(to be quite honest, some are already pushing it e.g. `--custom-lines`).
 
-- Custom ASCII
+- Custom ASCIIs
 
-To customize the ASCII just define `"ascii"` line in the config. It can either be a string or an array, if you want to define multiple ASCIIs.
+To customize the ASCIIs just define `"ascii"` line in the config. It should be a `string` or an `array` with a path(s) to the ASCII.
 
 ```json
 {
-  "ascii": ["          .=     ,        =.
-  _  _   /'/    )\,/,/(_   \ \
-   `//-.|  (  ,\\)\//\)\/_  ) |
-   //___\   `\\\/\\/\/\\///'  /
-,-"~`-._ `"--'_   `"""`  _ \`'"~-,_
-\       `-.  '_`.      .'_` \ ,-"~`/
- `.__.-'`/   (-\        /-) |-.__,'
-   ||   |     \O)  /^\ (O/  |
-   `\\  |         /   `\    /
-     \\  \       /      `\ /
-      `\\ `-.  /' .---.--.\
-        `\\/`~(, '()      ('
-         /(O) \\   _,.-.,_)
-        //  \\ `\'`      /
-  jgs  / |  ||   `""""~"`
-     /'  |__||
-           `o"]
+  "ascii": ["./cowASCII.txt"] 
 }
 ```
 
