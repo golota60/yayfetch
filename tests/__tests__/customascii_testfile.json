@@ -1,0 +1,6 @@
+{
+  "color": "blue",
+  "colored-boxes": false,
+  "custom-lines": { "Funny:": "joke", "exampleline:": "examplevalue" },
+  "ascii": ["./tests/asciis/cowASCII.txt"]
+}

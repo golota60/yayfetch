@@ -51,6 +51,39 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 More features to come!
 
+### Config-specific features
+
+Some more advanced features are almost impossible to implement through flags(to be quite honest, some are already pushing it e.g. `--custom-lines`).
+
+- Custom ASCIIs
+
+To customize the ASCIIs just define `"ascii"` line in the config. It should be a `string` or an `array` with a path(s) to the ASCII.
+
+```json
+{
+  "ascii": ["./cowASCII.txt"] 
+}
+```
+
+<!-- - Line Animations
+
+Each and every one of the lines you provide can be animated.
+
+Since there can be a lot of different lines, you describe their behavior by providing `line-animations` entry in config file of array type which index represents its' position from top to bottom.
+
+Each line can be of type of `"preserve"`(default), which will keep the original behavior of the line. Other options are:
+`rainbow`,
+`pulse`,
+`glitch`,
+`radar`,
+`neon`,
+`karaoke`. You can see how each one looks [here](https://www.npmjs.com/package/chalk-animation) or you can see them in action [here](https://www.example.com).
+
+```json
+{
+  "line-animations": ["preserve", "rainbow", "pulse", "glitch", "radar"]
+}
+``` -->
 
 ## Example config
 
@@ -59,6 +92,7 @@ You can specify options through a file and use them by using `--config <path_to_
 Note that every flag with a prefix of `--no-` just negates the flag that is on by default. For example CLI flag `--no-colored-boxes` negates `colored-boxes` flag, which is `true` by default. This is important for creating a config, because if you want to invoke `--no-colored-boxes` through config, you would provide a `"colored-boxes": false` in JSON object.
 
 Example config:
+
 ```
 {
 	"color": "blue",
