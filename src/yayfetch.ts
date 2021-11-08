@@ -209,6 +209,9 @@ yargs
       const showLogo = Boolean(enhancedArgv['logo']);
       const coloredBoxes = Boolean(enhancedArgv['colored-boxes']);
       const customLines: string | object = enhancedArgv['custom-lines'];
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const animations: string[] = enhancedArgv['line-animations'];
+
       const customASCIIs: string[] = enhancedArgv['ascii'];
 
       let customASCIIsParsed;
