@@ -80,6 +80,8 @@ interface AnimationOptions {
 }
 ```
 
+**Note: Printing to stdout is not performant, so it may not work well with less performant console environments**
+
 Example:
 
 ```json

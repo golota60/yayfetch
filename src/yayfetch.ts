@@ -16,6 +16,7 @@ import {
   printInColumns,
   normalizeASCII,
   readTextFile,
+  mergeColumns,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -73,21 +74,25 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
 
 async function returnPickedData(
   valuesToDisplay: string[],
-  color: ColorCodes | RGBColors
+  color: ColorCodes | RGBColors | undefined
 ): Promise<string[]> {
   const allData: SystemInformation = await getSystemInformation();
   const sysinfOsInfo = await getSysInfOsInfo();
   const hwInfo = await getHWInfo();
   const pickedVals = [
-    `${returnColoredText(
-      `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
-      color,
-      { bolded: true }
-    )} \n-----------------------------`,
+    `${
+      color
+        ? returnColoredText(
+            `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
+            color,
+            { bolded: true }
+          )
+        : `${allData.osInfo.username}@${sysinfOsInfo.hostname}`
+    } \n-----------------------------`,
   ];
   if (valuesToDisplay.includes('OS')) {
     pickedVals.push(
-      `${returnColoredText('OS:', color, { bolded: true })} ${
+      `${color ? returnColoredText('OS:', color, { bolded: true }) : 'OS:'} ${
         sysinfOsInfo.display
       }`
     );
@@ -95,45 +100,59 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Type')) {
     pickedVals.push(
-      `${returnColoredText('Type:', color, { bolded: true })} ${
-        sysinfOsInfo.distro
-      }`
+      `${
+        color ? returnColoredText('Type:', color, { bolded: true }) : 'Type:'
+      } ${sysinfOsInfo.distro}`
     );
   }
 
   if (valuesToDisplay.includes('Model')) {
     pickedVals.push(
-      `${returnColoredText('Model:', color, { bolded: true })} ${hwInfo}`
+      `${
+        color ? returnColoredText('Model:', color, { bolded: true }) : 'Model:'
+      } ${hwInfo}`
     );
   }
 
   if (valuesToDisplay.includes('Release')) {
     pickedVals.push(
-      `${returnColoredText('Release:', color, {
-        bolded: true,
-      })} ${os.release()}`
+      `${
+        color
+          ? returnColoredText('Release:', color, {
+              bolded: true,
+            })
+          : 'Release:'
+      } ${os.release()}`
     );
   }
 
   if (valuesToDisplay.includes('Architecture')) {
     pickedVals.push(
-      `${returnColoredText('Architecture:', color, {
-        bolded: true,
-      })} ${os.arch()}`
+      `${
+        color
+          ? returnColoredText('Architecture:', color, {
+              bolded: true,
+            })
+          : 'Architecture'
+      } ${os.arch()}`
     );
   }
 
   if (valuesToDisplay.includes('Uptime')) {
     pickedVals.push(
-      `${returnColoredText('Uptime:', color, {
-        bolded: true,
-      })} ${uptimeInMinutes().toFixed(0)} min`
+      `${
+        color
+          ? returnColoredText('Uptime:', color, {
+              bolded: true,
+            })
+          : 'Uptime'
+      } ${uptimeInMinutes().toFixed(0)} min`
     );
   }
 
   if (valuesToDisplay.includes('CPUs')) {
     pickedVals.push(
-      `${returnColoredText('CPU:', color, { bolded: true })} ${
+      `${color ? returnColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
         os.cpus()[0].model
       }`
     );
@@ -141,33 +160,41 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('GPUs')) {
     pickedVals.push(
-      `${returnColoredText('GPU(s):', color, { bolded: true })} ${
-        allData.graphicsInfo.gpuInfo
-      }`
+      `${
+        color ? returnColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
+      } ${allData.graphicsInfo.gpuInfo}`
     );
   }
 
   if (valuesToDisplay.includes('Displays')) {
     pickedVals.push(
-      `${returnColoredText('Display(s):', color, { bolded: true })} ${
-        allData.graphicsInfo.displays
-      }`
+      `${
+        color
+          ? returnColoredText('Display(s):', color, { bolded: true })
+          : 'Display(s):'
+      } ${allData.graphicsInfo.displays}`
     );
   }
 
   if (valuesToDisplay.includes('Endianness')) {
     pickedVals.push(
-      `${returnColoredText('Endianness:', color, {
-        bolded: true,
-      })} ${getEndianness()}`
+      `${
+        color
+          ? returnColoredText('Endianness:', color, {
+              bolded: true,
+            })
+          : 'Endianness:'
+      } ${getEndianness()}`
     );
   }
 
   if (valuesToDisplay.includes('Memory')) {
     pickedVals.push(
-      `${returnColoredText('Memory:', color, { bolded: true })} ${
-        allData.memoryInfo.free
-      }/${allData.memoryInfo.used}/${
+      `${
+        color
+          ? returnColoredText('Memory:', color, { bolded: true })
+          : 'Memory:'
+      } ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
         allData.memoryInfo.total
       } MiB (Free/Used/Total)`
     );
@@ -175,9 +202,9 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Shell')) {
     pickedVals.push(
-      `${returnColoredText('Shell:', color, { bolded: true })} ${
-        allData.shellInfo
-      }`
+      `${
+        color ? returnColoredText('Shell:', color, { bolded: true }) : 'Shell:'
+      } ${allData.shellInfo}`
     );
   }
 
@@ -229,12 +256,12 @@ yargs
         }>([promptQuestions]);
         infoToPrint = await returnPickedData(
           inquirerPrompt.displayedValues,
-          colorToUse
+          animations ? undefined : colorToUse
         );
       } else {
         infoToPrint = await returnPickedData(
           promptQuestionsChoices,
-          colorToUse
+          animations ? undefined : colorToUse
         );
       }
 
@@ -247,14 +274,19 @@ yargs
         infoToPrint = [
           ...infoToPrint,
           ...Object.entries(customLinesParsed).map((customLine) => {
-            return `${returnColoredText(customLine[0], colorToUse, {
-              bolded: true,
-            })} ${customLine[1]}`;
+            return `${
+              animations
+                ? customLine[0]
+                : returnColoredText(customLine[0], colorToUse, {
+                    bolded: true,
+                  })
+            } ${customLine[1]}`;
           }),
         ];
       }
 
-      if (coloredBoxes) {
+      if (coloredBoxes && !animations) {
+        console.warn('Colored boxes will not show when using animations');
         /* Empty string to ensure space between boxes */
         infoToPrint = [...infoToPrint, '', getColoredBoxes()];
       }
@@ -267,7 +299,9 @@ yargs
       const joinedInfo = infoToPrint.join('\n');
 
       if (animations) {
-        [...asciis].map((e) => startAnimation(e, animations));
+        // Merge columns into one column for animations
+        const mergedArgs = mergeColumns(...[...asciis, joinedInfo]).join('\n');
+        startAnimation(mergedArgs, animations);
       } else {
         printInColumns(
           ...asciis.map((e) => returnColoredText(e, colorToUse)),

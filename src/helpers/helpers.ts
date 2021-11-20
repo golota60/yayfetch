@@ -77,10 +77,7 @@ export const returnColoredText = (
     : getColoringFunc(colorCode)(text);
 };
 
-/* 
-  In order for this function to work as intended, all the arguments must have the exact same horizontal length(except last one)
-*/
-export const printInColumns = (...cols: string[]): void => {
+export const mergeColumns = (...cols: string[]) => {
   // First element is the logo, second one is the data, each of which has lines separated by \n
   // Splitting those creates a string[][] where the elements of nested arrays are lines
   const colsSplit = cols.map((element) => element.split('\n'));
@@ -103,7 +100,14 @@ export const printInColumns = (...cols: string[]): void => {
 
     mergedArgs.push(nextLine);
   }
+  return mergedArgs;
+};
 
+/* 
+  In order for this function to work as intended, all the arguments must have the exact same horizontal length(except last one)
+*/
+export const printInColumns = (...cols: string[]): void => {
+  const mergedArgs = mergeColumns(...cols);
   console.log(mergedArgs.join('\n'));
 };
 
