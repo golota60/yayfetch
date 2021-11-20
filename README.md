@@ -25,14 +25,13 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 ## Usage
 
-
 `npx yayfetch@latest` - returns info about your system(`@latest` should be added, cause sometimes npx can display a cached version)
 
-*or* install it globally:
+_or_ install it globally:
 
 `npm install -g yayfetch` and then just call `yayfetch`
 
-### Flag-defined features
+## Flag-defined features
 
 `-p` or `--pick` - first asks you what information you want to display, then displays it
 
@@ -52,11 +51,11 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 `--config <path_to_file>` - specify a file path to a custom config. See [here](#example-config)
 
-### Config-specific features
+## Config-specific features
 
 Some more advanced features are almost impossible to implement through flags(to be quite honest, some are already pushing it e.g. `--custom-lines`).
 
-- Custom ASCIIs
+- ### Custom ASCIIs
 
 To customize the ASCIIs just define `"ascii"` line in the config. It should be an `Array<string>` with path(s) to the ASCII(s).
 
@@ -68,7 +67,34 @@ Example:
 }
 ```
 
-- Line Animations
+- ### Custom images
+
+You can also defined iamges instead of ASCIIs, by defining `images` field. Note that this flag is mutually exclusive with `ascii` flag.
+Uses [terminal-image](https://github.com/sindresorhus/terminal-image) underneath, so refer to it when specifying `options`.
+
+```ts
+interface ImageOptions {
+  path: string;
+  options?: {
+    width?: string | number | undefined;
+    height?: string | number | undefined;
+    preserveAspectRatio?: boolean | undefined;
+  };
+}
+```
+
+Example:
+
+```json
+{
+  "image": {
+    "path": "./path/to/file.img",
+    "options": { "preserveAspectRatio": false }
+  }
+}
+```
+
+- ### Line Animations
 
 Output can be animated by `line-animations` flag in the config file. It should be an `AnimationOptions` object.
 
