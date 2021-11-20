@@ -57,33 +57,38 @@ Some more advanced features are almost impossible to implement through flags(to 
 
 - Custom ASCIIs
 
-To customize the ASCIIs just define `"ascii"` line in the config. It should be a `string` or an `array` with a path(s) to the ASCII.
+To customize the ASCIIs just define `"ascii"` line in the config. It should be an `Array<string>` with path(s) to the ASCII(s).
+
+Example:
 
 ```json
 {
-  "ascii": ["./cowASCII.txt"] 
+  "ascii": ["./path/to/file.txt", "./path/to/2nd/file.txt"]
 }
 ```
 
-<!-- - Line Animations
+- Line Animations
 
-Each and every one of the lines you provide can be animated.
+Output can be animated by `line-animations` flag in the config file. It should be an `AnimationOptions` object.
 
-Since there can be a lot of different lines, you describe their behavior by providing `line-animations` entry in config file of array type which index represents its' position from top to bottom.
+```ts
+type Animations = 'colors' | 'flowing-rainbow';
+interface AnimationOptions {
+  types: Array<Animations>; // Animations - applied per column basis
+  msFrequency: number; // How fast should the animation be
+}
+```
 
-Each line can be of type of `"preserve"`(default), which will keep the original behavior of the line. Other options are:
-`rainbow`,
-`pulse`,
-`glitch`,
-`radar`,
-`neon`,
-`karaoke`. You can see how each one looks [here](https://www.npmjs.com/package/chalk-animation) or you can see them in action [here](https://www.example.com).
+Example:
 
 ```json
 {
-  "line-animations": ["preserve", "rainbow", "pulse", "glitch", "radar"]
+  "line-animations": {
+    "types": ["rainbow", "pink"],
+    "msFrequency": 150
+  }
 }
-``` -->
+```
 
 ## Example config
 
