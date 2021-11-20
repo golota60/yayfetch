@@ -3,6 +3,7 @@
 import os from 'os';
 import yargs from 'yargs';
 import inquirer from 'inquirer';
+import terminalImage from 'terminal-image';
 import {
   DisplayAndGraphicsCard,
   MemoryInfoInterface,
@@ -237,6 +238,16 @@ yargs
       const customLines: string | object = enhancedArgv['custom-lines'];
       const animations: AnimationOptions = enhancedArgv['line-animations'];
 
+      interface ImageOptions {
+        path: string;
+        options?: {
+          width?: string | number | undefined;
+          height?: string | number | undefined;
+          preserveAspectRatio?: boolean | undefined;
+        };
+      }
+      const imageObj: ImageOptions = enhancedArgv['image'];
+
       const customASCIIs: string[] = enhancedArgv['ascii'];
 
       let customASCIIsParsed;
@@ -244,6 +255,11 @@ yargs
         customASCIIsParsed = await Promise.all(
           customASCIIs.map(async (e) => await readTextFile(e))
         );
+      }
+
+      let image;
+      if (imageObj) {
+        image = await terminalImage.file(imageObj.path, imageObj.options);
       }
 
       /* Get device data */
@@ -284,16 +300,23 @@ yargs
       }
 
       if (coloredBoxes && !animations) {
-        console.warn('Colored boxes will not show when using animations');
-        /* Empty string to ensure space between boxes */
+        /* Empty string to ensure space between text and boxes */
         infoToPrint = [...infoToPrint, '', getColoredBoxes()];
       }
 
-      const asciis = showLogo
-        ? (customASCIIsParsed || [yayfetchASCII]).map((e) =>
-            normalizeASCII(e, 2)
-          )
-        : [];
+      const asciis =
+        (image && [
+          image
+            .split('\n')
+            .map((e) => `${e.trim()}  `)
+            .join('\n')
+            .replace(/^\s*$(?:\r\n?|\n)/gm, ''),
+        ]) ||
+        (showLogo
+          ? (customASCIIsParsed || [yayfetchASCII]).map((e) =>
+              normalizeASCII(e, 2)
+            )
+          : []);
       const joinedInfo = infoToPrint.join('\n');
 
       if (animations) {
