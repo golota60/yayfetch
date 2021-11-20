@@ -29,6 +29,7 @@ import {
 import { RGBColors } from './interfaces/general';
 import { yayfetchASCII } from './helpers/static';
 import { allColors, ColorCodes } from './helpers/colors';
+import { AnimationOptions, startAnimation } from './helpers/animations';
 
 export const promptQuestionsChoices = [
   'OS',
@@ -209,8 +210,7 @@ yargs
       const showLogo = Boolean(enhancedArgv['logo']);
       const coloredBoxes = Boolean(enhancedArgv['colored-boxes']);
       const customLines: string | object = enhancedArgv['custom-lines'];
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const animations: string[] = enhancedArgv['line-animations'];
+      const animations: AnimationOptions = enhancedArgv['line-animations'];
 
       const customASCIIs: string[] = enhancedArgv['ascii'];
 
@@ -259,16 +259,23 @@ yargs
         infoToPrint = [...infoToPrint, '', getColoredBoxes()];
       }
 
-      if (showLogo) {
-        const asciis = (customASCIIsParsed || [yayfetchASCII]).map((e) =>
-          returnColoredText(normalizeASCII(e, 2), colorToUse)
-        );
-        printInColumns(...asciis, infoToPrint.join('\n'));
+      const asciis = showLogo
+        ? (customASCIIsParsed || [yayfetchASCII]).map((e) =>
+            normalizeASCII(e, 2)
+          )
+        : [];
+      const joinedInfo = infoToPrint.join('\n');
+
+      if (animations) {
+        [...asciis].map((e) => startAnimation(e, animations));
       } else {
-        console.log(infoToPrint.join('\n'));
+        printInColumns(
+          ...asciis.map((e) => returnColoredText(e, colorToUse)),
+          joinedInfo
+        );
       }
     } catch (error) {
-      console.error(`‼️  ${error} ‼️`);
+      console.error(`‼️ ${error} ‼️`);
     }
   })
   .scriptName('')

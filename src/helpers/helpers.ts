@@ -4,16 +4,18 @@ import { exit } from 'process';
 import chalk from 'chalk';
 import { RGBColors } from '../interfaces/general';
 import {
+  availableColors,
   ColorCodes,
   customColorCodes,
   getColoringFunc,
-  returnInRainbow,
+  getColoredLetters,
 } from './colors';
 
 export interface Options {
   bolded?: boolean;
 }
 
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export const errorMessage =
   'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
 
@@ -58,10 +60,17 @@ export const returnColoredText = (
       : chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
   }
   if (colorCode === 'rainbow') {
-    return returnInRainbow(text, { bolded: options?.bolded });
+    return getColoredLetters(text, {
+      bolded: options?.bolded,
+      colorPalette: availableColors,
+    });
   }
   if (colorCode === 'randomrainbow') {
-    return returnInRainbow(text, { bolded: options?.bolded, random: true });
+    return getColoredLetters(text, {
+      bolded: options?.bolded,
+      random: true,
+      colorPalette: availableColors,
+    });
   }
   return options?.bolded
     ? getColoringFunc(colorCode).bold(text)

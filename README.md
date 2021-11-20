@@ -25,11 +25,14 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 ## Usage
 
-**Note: It is NOT reccomended to install the package globally, because it is subject to often changes**
 
 `npx yayfetch@latest` - returns info about your system(`@latest` should be added, cause sometimes npx can display a cached version)
 
-### Flags
+*or* install it globally:
+
+`npm install -g yayfetch` and then just call `yayfetch`
+
+### Flag-defined features
 
 `-p` or `--pick` - first asks you what information you want to display, then displays it
 
@@ -48,8 +51,6 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 `-h` or `--help` - shows available flags.
 
 `--config <path_to_file>` - specify a file path to a custom config. See [here](#example-config)
-
-More features to come!
 
 ### Config-specific features
 
@@ -74,7 +75,7 @@ Output can be animated by `line-animations` flag in the config file. It should b
 ```ts
 type Animations = 'colors' | 'flowing-rainbow';
 interface AnimationOptions {
-  types: Array<Animations>; // Animations - applied per column basis
+  type: Animations; // Animations - applied per column basis
   msFrequency: number; // How fast should the animation be
 }
 ```
@@ -84,7 +85,7 @@ Example:
 ```json
 {
   "line-animations": {
-    "types": ["rainbow", "pink"],
+    "type": "flowing-rainbow",
     "msFrequency": 150
   }
 }

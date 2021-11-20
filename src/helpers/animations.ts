@@ -1,27 +1,53 @@
 import logUpdate from 'log-update';
+import { getColoredLetters, rainbowColors } from './colors';
 
 const DEFAULT_FREQUENCY = 150;
-
-export const calculateFrames = (
-  string: string,
-  type: Animation
-): Array<string> => {
-  switch (type) {
-    case 'colors':
-      return [''];
-  }
-  return [''];
-};
-
 type Animation = 'colors' | 'flowing-rainbow';
-export interface AnimationOptions {
-  msFrequency?: number;
-  type: Array<Animation>;
+
+interface AnimationObject {
+  col: string;
+  animation?: Animation;
 }
 
-export const startAnimation = (string: string, options: AnimationOptions) => {
+const animations = {
+  colors: (col: string) => {
+    return col;
+  },
+  'flowing-rainbow': (col: string) => {
+    return rainbowColors.map((e, i) =>
+      getColoredLetters(col, {
+        indexOffset: i,
+        colorPalette: rainbowColors,
+      })
+    );
+  },
+};
+
+// Creates column-animation binded objects
+export const parseAnimations = (
+  cols: Array<string>,
+  colors: Array<Animation>
+): Array<AnimationObject> =>
+  cols.map((col, i) => ({ col, animation: colors[i] || undefined }));
+
+// Create animation for a given column
+export const getAnimationFrames = (
+  col: string,
+  type?: Animation
+): Array<string> | string => {
+  return type ? animations[type](col) : col;
+};
+
+export interface AnimationOptions {
+  msFrequency?: number;
+  type: Animation;
+}
+
+export const startAnimation = (col: string, options: AnimationOptions) => {
   let index = 0;
-  const frames = ''; //calculateFrames(string, options.type);
+
+  // get an array of frames for column
+  const frames = getAnimationFrames(col, options.type);
   return setInterval(() => {
     const frame = frames[(index = ++index % frames.length)];
     logUpdate(frame);
