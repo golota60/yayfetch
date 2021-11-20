@@ -9,7 +9,7 @@ import {
 } from './interfaces/systeminformation';
 import {
   uptimeInMinutes,
-  returnColoredText,
+  getColoredText,
   parseRGBStringToNumber,
   getColoredBoxes,
   handleReadJSON,
@@ -82,7 +82,7 @@ async function returnPickedData(
   const pickedVals = [
     `${
       color
-        ? returnColoredText(
+        ? getColoredText(
             `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
             color,
             { bolded: true }
@@ -92,7 +92,7 @@ async function returnPickedData(
   ];
   if (valuesToDisplay.includes('OS')) {
     pickedVals.push(
-      `${color ? returnColoredText('OS:', color, { bolded: true }) : 'OS:'} ${
+      `${color ? getColoredText('OS:', color, { bolded: true }) : 'OS:'} ${
         sysinfOsInfo.display
       }`
     );
@@ -100,16 +100,16 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Type')) {
     pickedVals.push(
-      `${
-        color ? returnColoredText('Type:', color, { bolded: true }) : 'Type:'
-      } ${sysinfOsInfo.distro}`
+      `${color ? getColoredText('Type:', color, { bolded: true }) : 'Type:'} ${
+        sysinfOsInfo.distro
+      }`
     );
   }
 
   if (valuesToDisplay.includes('Model')) {
     pickedVals.push(
       `${
-        color ? returnColoredText('Model:', color, { bolded: true }) : 'Model:'
+        color ? getColoredText('Model:', color, { bolded: true }) : 'Model:'
       } ${hwInfo}`
     );
   }
@@ -118,7 +118,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color
-          ? returnColoredText('Release:', color, {
+          ? getColoredText('Release:', color, {
               bolded: true,
             })
           : 'Release:'
@@ -130,7 +130,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color
-          ? returnColoredText('Architecture:', color, {
+          ? getColoredText('Architecture:', color, {
               bolded: true,
             })
           : 'Architecture'
@@ -142,7 +142,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color
-          ? returnColoredText('Uptime:', color, {
+          ? getColoredText('Uptime:', color, {
               bolded: true,
             })
           : 'Uptime'
@@ -152,7 +152,7 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('CPUs')) {
     pickedVals.push(
-      `${color ? returnColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
+      `${color ? getColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
         os.cpus()[0].model
       }`
     );
@@ -161,7 +161,7 @@ async function returnPickedData(
   if (valuesToDisplay.includes('GPUs')) {
     pickedVals.push(
       `${
-        color ? returnColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
+        color ? getColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
       } ${allData.graphicsInfo.gpuInfo}`
     );
   }
@@ -170,7 +170,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color
-          ? returnColoredText('Display(s):', color, { bolded: true })
+          ? getColoredText('Display(s):', color, { bolded: true })
           : 'Display(s):'
       } ${allData.graphicsInfo.displays}`
     );
@@ -180,7 +180,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color
-          ? returnColoredText('Endianness:', color, {
+          ? getColoredText('Endianness:', color, {
               bolded: true,
             })
           : 'Endianness:'
@@ -191,9 +191,7 @@ async function returnPickedData(
   if (valuesToDisplay.includes('Memory')) {
     pickedVals.push(
       `${
-        color
-          ? returnColoredText('Memory:', color, { bolded: true })
-          : 'Memory:'
+        color ? getColoredText('Memory:', color, { bolded: true }) : 'Memory:'
       } ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
         allData.memoryInfo.total
       } MiB (Free/Used/Total)`
@@ -203,7 +201,7 @@ async function returnPickedData(
   if (valuesToDisplay.includes('Shell')) {
     pickedVals.push(
       `${
-        color ? returnColoredText('Shell:', color, { bolded: true }) : 'Shell:'
+        color ? getColoredText('Shell:', color, { bolded: true }) : 'Shell:'
       } ${allData.shellInfo}`
     );
   }
@@ -277,7 +275,7 @@ yargs
             return `${
               animations
                 ? customLine[0]
-                : returnColoredText(customLine[0], colorToUse, {
+                : getColoredText(customLine[0], colorToUse, {
                     bolded: true,
                   })
             } ${customLine[1]}`;
@@ -304,7 +302,7 @@ yargs
         startAnimation(mergedArgs, animations);
       } else {
         printInColumns(
-          ...asciis.map((e) => returnColoredText(e, colorToUse)),
+          ...asciis.map((e) => getColoredText(e, colorToUse)),
           joinedInfo
         );
       }

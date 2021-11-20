@@ -1,5 +1,6 @@
 import logUpdate from 'log-update';
-import { getColoredLetters, rainbowColors } from './colors';
+import { availableColors, getColoredLetters, rainbowColors } from './colors';
+import { getColoredText } from './helpers';
 
 const DEFAULT_FREQUENCY = 150;
 type Animation = 'colors' | 'flowing-rainbow';
@@ -11,7 +12,9 @@ interface AnimationObject {
 
 const animations = {
   colors: (col: string) => {
-    return col;
+    return availableColors
+      .filter((e) => e !== 'black')
+      .map((e) => getColoredText(col, e));
   },
   'flowing-rainbow': (col: string) => {
     return rainbowColors.map((e, i) =>

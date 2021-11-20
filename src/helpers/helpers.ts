@@ -49,7 +49,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   };
 };
 
-export const returnColoredText = (
+export const getColoredText = (
   text: string,
   colorCode: ColorCodes | RGBColors,
   options?: Options
