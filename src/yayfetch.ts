@@ -9,13 +9,14 @@ import {
 } from './interfaces/systeminformation';
 import {
   uptimeInMinutes,
-  returnColoredText,
+  getColoredText,
   parseRGBStringToNumber,
   getColoredBoxes,
   handleReadJSON,
   printInColumns,
   normalizeASCII,
   readTextFile,
+  mergeColumns,
 } from './helpers/helpers';
 import {
   getEndianness,
@@ -29,6 +30,7 @@ import {
 import { RGBColors } from './interfaces/general';
 import { yayfetchASCII } from './helpers/static';
 import { allColors, ColorCodes } from './helpers/colors';
+import { AnimationOptions, startAnimation } from './helpers/animations';
 
 export const promptQuestionsChoices = [
   'OS',
@@ -72,21 +74,25 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
 
 async function returnPickedData(
   valuesToDisplay: string[],
-  color: ColorCodes | RGBColors
+  color: ColorCodes | RGBColors | undefined
 ): Promise<string[]> {
   const allData: SystemInformation = await getSystemInformation();
   const sysinfOsInfo = await getSysInfOsInfo();
   const hwInfo = await getHWInfo();
   const pickedVals = [
-    `${returnColoredText(
-      `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
-      color,
-      { bolded: true }
-    )} \n-----------------------------`,
+    `${
+      color
+        ? getColoredText(
+            `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
+            color,
+            { bolded: true }
+          )
+        : `${allData.osInfo.username}@${sysinfOsInfo.hostname}`
+    } \n-----------------------------`,
   ];
   if (valuesToDisplay.includes('OS')) {
     pickedVals.push(
-      `${returnColoredText('OS:', color, { bolded: true })} ${
+      `${color ? getColoredText('OS:', color, { bolded: true }) : 'OS:'} ${
         sysinfOsInfo.display
       }`
     );
@@ -94,7 +100,7 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Type')) {
     pickedVals.push(
-      `${returnColoredText('Type:', color, { bolded: true })} ${
+      `${color ? getColoredText('Type:', color, { bolded: true }) : 'Type:'} ${
         sysinfOsInfo.distro
       }`
     );
@@ -102,37 +108,51 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Model')) {
     pickedVals.push(
-      `${returnColoredText('Model:', color, { bolded: true })} ${hwInfo}`
+      `${
+        color ? getColoredText('Model:', color, { bolded: true }) : 'Model:'
+      } ${hwInfo}`
     );
   }
 
   if (valuesToDisplay.includes('Release')) {
     pickedVals.push(
-      `${returnColoredText('Release:', color, {
-        bolded: true,
-      })} ${os.release()}`
+      `${
+        color
+          ? getColoredText('Release:', color, {
+              bolded: true,
+            })
+          : 'Release:'
+      } ${os.release()}`
     );
   }
 
   if (valuesToDisplay.includes('Architecture')) {
     pickedVals.push(
-      `${returnColoredText('Architecture:', color, {
-        bolded: true,
-      })} ${os.arch()}`
+      `${
+        color
+          ? getColoredText('Architecture:', color, {
+              bolded: true,
+            })
+          : 'Architecture'
+      } ${os.arch()}`
     );
   }
 
   if (valuesToDisplay.includes('Uptime')) {
     pickedVals.push(
-      `${returnColoredText('Uptime:', color, {
-        bolded: true,
-      })} ${uptimeInMinutes().toFixed(0)} min`
+      `${
+        color
+          ? getColoredText('Uptime:', color, {
+              bolded: true,
+            })
+          : 'Uptime'
+      } ${uptimeInMinutes().toFixed(0)} min`
     );
   }
 
   if (valuesToDisplay.includes('CPUs')) {
     pickedVals.push(
-      `${returnColoredText('CPU:', color, { bolded: true })} ${
+      `${color ? getColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
         os.cpus()[0].model
       }`
     );
@@ -140,33 +160,39 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('GPUs')) {
     pickedVals.push(
-      `${returnColoredText('GPU(s):', color, { bolded: true })} ${
-        allData.graphicsInfo.gpuInfo
-      }`
+      `${
+        color ? getColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
+      } ${allData.graphicsInfo.gpuInfo}`
     );
   }
 
   if (valuesToDisplay.includes('Displays')) {
     pickedVals.push(
-      `${returnColoredText('Display(s):', color, { bolded: true })} ${
-        allData.graphicsInfo.displays
-      }`
+      `${
+        color
+          ? getColoredText('Display(s):', color, { bolded: true })
+          : 'Display(s):'
+      } ${allData.graphicsInfo.displays}`
     );
   }
 
   if (valuesToDisplay.includes('Endianness')) {
     pickedVals.push(
-      `${returnColoredText('Endianness:', color, {
-        bolded: true,
-      })} ${getEndianness()}`
+      `${
+        color
+          ? getColoredText('Endianness:', color, {
+              bolded: true,
+            })
+          : 'Endianness:'
+      } ${getEndianness()}`
     );
   }
 
   if (valuesToDisplay.includes('Memory')) {
     pickedVals.push(
-      `${returnColoredText('Memory:', color, { bolded: true })} ${
-        allData.memoryInfo.free
-      }/${allData.memoryInfo.used}/${
+      `${
+        color ? getColoredText('Memory:', color, { bolded: true }) : 'Memory:'
+      } ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
         allData.memoryInfo.total
       } MiB (Free/Used/Total)`
     );
@@ -174,9 +200,9 @@ async function returnPickedData(
 
   if (valuesToDisplay.includes('Shell')) {
     pickedVals.push(
-      `${returnColoredText('Shell:', color, { bolded: true })} ${
-        allData.shellInfo
-      }`
+      `${
+        color ? getColoredText('Shell:', color, { bolded: true }) : 'Shell:'
+      } ${allData.shellInfo}`
     );
   }
 
@@ -209,6 +235,8 @@ yargs
       const showLogo = Boolean(enhancedArgv['logo']);
       const coloredBoxes = Boolean(enhancedArgv['colored-boxes']);
       const customLines: string | object = enhancedArgv['custom-lines'];
+      const animations: AnimationOptions = enhancedArgv['line-animations'];
+
       const customASCIIs: string[] = enhancedArgv['ascii'];
 
       let customASCIIsParsed;
@@ -226,12 +254,12 @@ yargs
         }>([promptQuestions]);
         infoToPrint = await returnPickedData(
           inquirerPrompt.displayedValues,
-          colorToUse
+          animations ? undefined : colorToUse
         );
       } else {
         infoToPrint = await returnPickedData(
           promptQuestionsChoices,
-          colorToUse
+          animations ? undefined : colorToUse
         );
       }
 
@@ -244,28 +272,42 @@ yargs
         infoToPrint = [
           ...infoToPrint,
           ...Object.entries(customLinesParsed).map((customLine) => {
-            return `${returnColoredText(customLine[0], colorToUse, {
-              bolded: true,
-            })} ${customLine[1]}`;
+            return `${
+              animations
+                ? customLine[0]
+                : getColoredText(customLine[0], colorToUse, {
+                    bolded: true,
+                  })
+            } ${customLine[1]}`;
           }),
         ];
       }
 
-      if (coloredBoxes) {
+      if (coloredBoxes && !animations) {
+        console.warn('Colored boxes will not show when using animations');
         /* Empty string to ensure space between boxes */
         infoToPrint = [...infoToPrint, '', getColoredBoxes()];
       }
 
-      if (showLogo) {
-        const asciis = (customASCIIsParsed || [yayfetchASCII]).map((e) =>
-          returnColoredText(normalizeASCII(e, 2), colorToUse)
-        );
-        printInColumns(...asciis, infoToPrint.join('\n'));
+      const asciis = showLogo
+        ? (customASCIIsParsed || [yayfetchASCII]).map((e) =>
+            normalizeASCII(e, 2)
+          )
+        : [];
+      const joinedInfo = infoToPrint.join('\n');
+
+      if (animations) {
+        // Merge columns into one column for animations
+        const mergedArgs = mergeColumns(...[...asciis, joinedInfo]).join('\n');
+        startAnimation(mergedArgs, animations);
       } else {
-        console.log(infoToPrint.join('\n'));
+        printInColumns(
+          ...asciis.map((e) => getColoredText(e, colorToUse)),
+          joinedInfo
+        );
       }
     } catch (error) {
-      console.error(`‼️  ${error} ‼️`);
+      console.error(`‼️ ${error} ‼️`);
     }
   })
   .scriptName('')

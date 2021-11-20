@@ -4,16 +4,18 @@ import { exit } from 'process';
 import chalk from 'chalk';
 import { RGBColors } from '../interfaces/general';
 import {
+  availableColors,
   ColorCodes,
   customColorCodes,
   getColoringFunc,
-  returnInRainbow,
+  getColoredLetters,
 } from './colors';
 
 export interface Options {
   bolded?: boolean;
 }
 
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export const errorMessage =
   'Error - check https://www.npmjs.com/package/yayfetch or https://github.com/golota60/yayfetch for more';
 
@@ -47,7 +49,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   };
 };
 
-export const returnColoredText = (
+export const getColoredText = (
   text: string,
   colorCode: ColorCodes | RGBColors,
   options?: Options
@@ -58,20 +60,24 @@ export const returnColoredText = (
       : chalk.rgb(colorCode.r, colorCode.g, colorCode.b)(text);
   }
   if (colorCode === 'rainbow') {
-    return returnInRainbow(text, { bolded: options?.bolded });
+    return getColoredLetters(text, {
+      bolded: options?.bolded,
+      colorPalette: availableColors,
+    });
   }
   if (colorCode === 'randomrainbow') {
-    return returnInRainbow(text, { bolded: options?.bolded, random: true });
+    return getColoredLetters(text, {
+      bolded: options?.bolded,
+      random: true,
+      colorPalette: availableColors,
+    });
   }
   return options?.bolded
     ? getColoringFunc(colorCode).bold(text)
     : getColoringFunc(colorCode)(text);
 };
 
-/* 
-  In order for this function to work as intended, all the arguments must have the exact same horizontal length(except last one)
-*/
-export const printInColumns = (...cols: string[]): void => {
+export const mergeColumns = (...cols: string[]) => {
   // First element is the logo, second one is the data, each of which has lines separated by \n
   // Splitting those creates a string[][] where the elements of nested arrays are lines
   const colsSplit = cols.map((element) => element.split('\n'));
@@ -94,7 +100,14 @@ export const printInColumns = (...cols: string[]): void => {
 
     mergedArgs.push(nextLine);
   }
+  return mergedArgs;
+};
 
+/* 
+  In order for this function to work as intended, all the arguments must have the exact same horizontal length(except last one)
+*/
+export const printInColumns = (...cols: string[]): void => {
+  const mergedArgs = mergeColumns(...cols);
   console.log(mergedArgs.join('\n'));
 };
 
