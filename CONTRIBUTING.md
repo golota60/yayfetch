@@ -16,3 +16,11 @@ We're using yarn instead of npm, so make sure you've got it installed.
 | `yarn run lint`  | Lint staged code                   |
 | `yarn run jest ` | Test your code with jest           |
 | `yarn run build` | Build the app                      |
+
+# Releasing
+
+To release:
+
+1. Checkout a new branch `git checkout -b chore/release`
+2. Run `yarn release`, `yarn push --tags` and then `yarn publish`
+3. Merge the release branch
