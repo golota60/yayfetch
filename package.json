@@ -1,6 +1,6 @@
 {
   "name": "yayfetch",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A Multi-platform screenfetch",
   "main": "./lib/yayfetch.js",
   "author": "Szymon Wiszczuk",
