@@ -44,7 +44,7 @@
     "*": "yarn test"
   },
   "bin": {
-    "yayfetch": "./yayfetch.js"
+    "yayfetch": "./libyayfetch.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",
