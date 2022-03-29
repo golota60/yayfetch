@@ -34,8 +34,7 @@
     "jest": "jest tests",
     "test": "yarn start && yarn lint && yarn jest",
     "prepare": "husky install",
-    "prepublishOnly": "yarn && yarn build",
-    "release": "standard-version"
+    "prepublishOnly": "standard-version && git push --tags && yarn && yarn build"
   },
   "hooks": {
     "pre-commit": "lint-staged"

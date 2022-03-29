@@ -22,5 +22,5 @@ We're using yarn instead of npm, so make sure you've got it installed.
 To release:
 
 1. Checkout a new branch `git checkout -b chore/release`
-2. Run `yarn release`, `git push --tags` and then `yarn publish`
+2. Run `yarn publish`. Push changes.
 3. Merge the release branch
