@@ -2,5 +2,4 @@ node_modules/
 build
 lib
 .yalc
-yayfetch.js
 yarn-error.log

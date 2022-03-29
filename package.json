@@ -2,7 +2,7 @@
   "name": "yayfetch",
   "version": "2.0.2",
   "description": "A Multi-platform screenfetch",
-  "main": "yayfetch.js",
+  "main": "./lib/yayfetch.js",
   "author": "Szymon Wiszczuk",
   "license": "MIT",
   "keywords": [
