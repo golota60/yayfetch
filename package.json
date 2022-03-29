@@ -28,7 +28,7 @@
   },
   "scripts": {
     "build": "rimraf lib && tsc",
-    "start": "yarn build && node ./build/yayfetch.js",
+    "start": "yarn build && node ./lib/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./build",
     "lint": "yarn eslint --ext '.js,.ts' ./src --fix",
     "jest": "jest tests",
