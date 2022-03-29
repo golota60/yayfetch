@@ -1,6 +1,6 @@
 {
   "name": "yayfetch",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A Multi-platform screenfetch",
   "main": "./lib/yayfetch.js",
   "author": "Szymon Wiszczuk",
@@ -34,7 +34,8 @@
     "jest": "jest tests",
     "test": "yarn start && yarn lint && yarn jest",
     "prepare": "husky install",
-    "prepublishOnly": "standard-version && git push --tags && yarn && yarn build"
+    "prepublishOnly": "git push --tags && yarn && yarn build",
+    "release": "standard-version"
   },
   "hooks": {
     "pre-commit": "lint-staged"
@@ -43,7 +44,7 @@
     "*": "yarn test"
   },
   "bin": {
-    "yayfetch": "./libyayfetch.js"
+    "yayfetch": "./lib/yayfetch.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",
