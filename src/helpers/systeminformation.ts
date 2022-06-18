@@ -30,7 +30,8 @@ export const getDisplaysAndGraphicsCards =
       const gpu = await sysinf.graphics();
 
       const gpuInfo = gpu.controllers.map(
-        (gpu: sysinf.Systeminformation.GraphicsControllerData) => gpu.model
+        (gpu: sysinf.Systeminformation.GraphicsControllerData) =>
+          gpu?.model || ''
       );
       const displays = gpu.displays
         .map((gpu: sysinf.Systeminformation.GraphicsDisplayData) =>
@@ -127,7 +128,7 @@ export const getSysInfOsInfo = async (): Promise<OSInfoInterface> => {
 export const getHWInfo = async (): Promise<string> => {
   try {
     const hwInfo = await sysinf.system();
-    return hwInfo.model;
+    return hwInfo?.model || '';
   } catch (err) {
     console.error(`Error when reading hardware info: ${err}`);
     return errorMessage;
