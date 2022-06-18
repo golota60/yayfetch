@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.6](https://github.com/golota60/yayfetch/compare/v2.0.5...v2.0.6) (2022-06-18)
+
+
+### Bug Fixes
+
+* improve undefined handling ([#83](https://github.com/golota60/yayfetch/issues/83)) ([f567131](https://github.com/golota60/yayfetch/commit/f56713152e8adadbed770ce34d4a641a19715b6c))
+
 ### [2.0.5](https://github.com/golota60/yayfetch/compare/v2.0.4...v2.0.5) (2022-03-29)
 
 ### [2.0.3](https://github.com/golota60/yayfetch/compare/v2.0.2...v2.0.3) (2022-03-29)
