@@ -154,7 +154,7 @@ async function returnPickedData(
   if (valuesToDisplay.includes('CPUs')) {
     pickedVals.push(
       `${color ? getColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
-        os.cpus()[0].model
+        os.cpus()?.[0]?.model || ''
       }`
     );
   }
@@ -163,7 +163,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color ? getColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
-      } ${allData.graphicsInfo.gpuInfo}`
+      } ${allData?.graphicsInfo?.gpuInfo}`
     );
   }
 
@@ -173,7 +173,7 @@ async function returnPickedData(
         color
           ? getColoredText('Display(s):', color, { bolded: true })
           : 'Display(s):'
-      } ${allData.graphicsInfo.displays}`
+      } ${allData?.graphicsInfo?.displays}`
     );
   }
 
@@ -278,6 +278,8 @@ yargs
           animations ? undefined : colorToUse
         );
       }
+
+      infoToPrint = infoToPrint.filter((e) => e);
 
       /* Add custom lines if specified */
       if (customLines) {
