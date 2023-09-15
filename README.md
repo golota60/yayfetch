@@ -25,11 +25,16 @@ Yayfetch is a tool similar to screenfetch, it just displays info about your comp
 
 ## Usage
 
-`npx yayfetch@latest` - returns info about your system(`@latest` should be added, cause sometimes npx can display a cached version)
+Yayfetch works both with `npx` and `bunx`
+
+- npm - `npx yayfetch`
+
+- bun -`bunx yayfetch`
+
 
 _or_ install it globally:
 
-`npm install -g yayfetch` and then just call `yayfetch`
+`bun install --global yayfetch`/`npm install -g yayfetch` and then just call `yayfetch`!
 
 ## Flag-defined features
 
