@@ -20,7 +20,8 @@ export async function execAsPromise(
 }
 
 export const getYayfetchOutput = async (flags = '') =>
-  execAsPromise(`node ./lib/yayfetch.js ${flags}`);
+  // For testing, use the CJS version
+  execAsPromise(`node ./dist/yayfetch.js ${flags}`);
 
 export const baseFlags = [
   'OS:',

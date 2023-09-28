@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./lib",
-    "moduleResolution": "node"
+    "moduleResolution": "NodeNext"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "build/**/*"]
+  "exclude": ["node_modules"]
 }

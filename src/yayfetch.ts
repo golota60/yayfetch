@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import os from 'os';
-import yargs from 'yargs';
+import yargs from 'yargs/yargs';
 import inquirer from 'inquirer';
 import terminalImage from 'terminal-image';
 import {
@@ -75,7 +75,7 @@ const getSystemInformation = async (): Promise<SystemInformation> => ({
 
 async function returnPickedData(
   valuesToDisplay: string[],
-  color: ColorCodes | RGBColors | undefined
+  color: ColorCodes | RGBColors | undefined,
 ): Promise<string[]> {
   const allData: SystemInformation = await getSystemInformation();
   const sysinfOsInfo = await getSysInfOsInfo();
@@ -86,7 +86,7 @@ async function returnPickedData(
         ? getColoredText(
             `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
             color,
-            { bolded: true }
+            { bolded: true },
           )
         : `${allData.osInfo.username}@${sysinfOsInfo.hostname}`
     } \n-----------------------------`,
@@ -95,7 +95,7 @@ async function returnPickedData(
     pickedVals.push(
       `${color ? getColoredText('OS:', color, { bolded: true }) : 'OS:'} ${
         sysinfOsInfo.display
-      }`
+      }`,
     );
   }
 
@@ -103,7 +103,7 @@ async function returnPickedData(
     pickedVals.push(
       `${color ? getColoredText('Type:', color, { bolded: true }) : 'Type:'} ${
         sysinfOsInfo.distro
-      }`
+      }`,
     );
   }
 
@@ -111,7 +111,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color ? getColoredText('Model:', color, { bolded: true }) : 'Model:'
-      } ${hwInfo}`
+      } ${hwInfo}`,
     );
   }
 
@@ -123,7 +123,7 @@ async function returnPickedData(
               bolded: true,
             })
           : 'Release:'
-      } ${os.release()}`
+      } ${os.release()}`,
     );
   }
 
@@ -135,7 +135,7 @@ async function returnPickedData(
               bolded: true,
             })
           : 'Architecture'
-      } ${os.arch()}`
+      } ${os.arch()}`,
     );
   }
 
@@ -147,7 +147,7 @@ async function returnPickedData(
               bolded: true,
             })
           : 'Uptime'
-      } ${uptimeInMinutes().toFixed(0)} min`
+      } ${uptimeInMinutes().toFixed(0)} min`,
     );
   }
 
@@ -155,7 +155,7 @@ async function returnPickedData(
     pickedVals.push(
       `${color ? getColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
         os.cpus()?.[0]?.model || ''
-      }`
+      }`,
     );
   }
 
@@ -163,7 +163,7 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color ? getColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
-      } ${allData?.graphicsInfo?.gpuInfo}`
+      } ${allData?.graphicsInfo?.gpuInfo}`,
     );
   }
 
@@ -173,7 +173,7 @@ async function returnPickedData(
         color
           ? getColoredText('Display(s):', color, { bolded: true })
           : 'Display(s):'
-      } ${allData?.graphicsInfo?.displays}`
+      } ${allData?.graphicsInfo?.displays}`,
     );
   }
 
@@ -185,7 +185,7 @@ async function returnPickedData(
               bolded: true,
             })
           : 'Endianness:'
-      } ${getEndianness()}`
+      } ${getEndianness()}`,
     );
   }
 
@@ -195,7 +195,7 @@ async function returnPickedData(
         color ? getColoredText('Memory:', color, { bolded: true }) : 'Memory:'
       } ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
         allData.memoryInfo.total
-      } MiB (Free/Used/Total)`
+      } MiB (Free/Used/Total)`,
     );
   }
 
@@ -203,25 +203,29 @@ async function returnPickedData(
     pickedVals.push(
       `${
         color ? getColoredText('Shell:', color, { bolded: true }) : 'Shell:'
-      } ${allData.shellInfo}`
+      } ${allData.shellInfo}`,
     );
   }
 
   return pickedVals;
 }
 
-yargs
-  .command('$0', '', async () => {
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+yargs(process.argv.slice(2))
+  .command('$0', '', async (argvU) => {
     try {
-      const configFilePath = yargs.argv['config'] as string;
+      const argv = argvU.argv as Record<string, string>;
+      const configFilePath = argv['config'] as string;
       let configFile;
-      if (configFilePath)
+      if (configFilePath) {
         configFile = (await handleReadJSON(configFilePath)) || [];
-      const enhancedArgv = { ...yargs.argv, ...configFile };
+      }
+
+      const enhancedArgv = { ...argv, ...configFile };
 
       if (enhancedArgv.color && enhancedArgv.rgb) {
         throw new Error(
-          '--rgb and --color are mutually exclusive - please specify only one'
+          '--rgb and --color are mutually exclusive - please specify only one',
         );
       }
       const predefinedColor = String(enhancedArgv.c || enhancedArgv.color);
@@ -253,7 +257,7 @@ yargs
       let customASCIIsParsed;
       if (customASCIIs) {
         customASCIIsParsed = await Promise.all(
-          customASCIIs.map(async (e) => await readTextFile(e))
+          customASCIIs.map(async (e) => await readTextFile(e)),
         );
       }
 
@@ -270,12 +274,12 @@ yargs
         }>([promptQuestions]);
         infoToPrint = await returnPickedData(
           inquirerPrompt.displayedValues,
-          animations ? undefined : colorToUse
+          animations ? undefined : colorToUse,
         );
       } else {
         infoToPrint = await returnPickedData(
           promptQuestionsChoices,
-          animations ? undefined : colorToUse
+          animations ? undefined : colorToUse,
         );
       }
 
@@ -316,7 +320,7 @@ yargs
         ]) ||
         (showLogo
           ? (customASCIIsParsed || [yayfetchASCII]).map((e) =>
-              normalizeASCII(e, 2)
+              normalizeASCII(e, 2),
             )
           : []);
       const joinedInfo = infoToPrint.join('\n');
@@ -328,7 +332,7 @@ yargs
       } else {
         printInColumns(
           ...asciis.map((e) => getColoredText(e, colorToUse)),
-          joinedInfo
+          joinedInfo,
         );
       }
     } catch (error) {
