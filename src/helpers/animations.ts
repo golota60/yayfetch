@@ -21,7 +21,7 @@ const animations = {
       getColoredLetters(col, {
         indexOffset: i,
         colorPalette: rainbowColors,
-      })
+      }),
     );
   },
 };
@@ -29,14 +29,14 @@ const animations = {
 // Creates column-animation binded objects
 export const parseAnimations = (
   cols: Array<string>,
-  colors: Array<Animation>
+  colors: Array<Animation>,
 ): Array<AnimationObject> =>
   cols.map((col, i) => ({ col, animation: colors[i] || undefined }));
 
 // Create animation for a given column
 export const getAnimationFrames = (
   col: string,
-  type?: Animation
+  type?: Animation,
 ): Array<string> | string => {
   return type ? animations[type](col) : col;
 };

@@ -30,7 +30,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
     const colorNumber = Number(color);
     if (Number.isNaN(colorNumber) || colorNumber < 0 || colorNumber > 255) {
       throw new Error(
-        "One of the numbers wasn't provided in correct format(has to be a number between 0 and 255)"
+        "One of the numbers wasn't provided in correct format(has to be a number between 0 and 255)",
       );
     }
 
@@ -38,7 +38,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
   });
   if (split.length !== 3) {
     throw new Error(
-      'Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, separated by comas, and numbers have to be between 0 and 255'
+      'Specified RGB color was provided in incorrect form. Please remember that there has to be exactly 3 colors, separated by comas, and numbers have to be between 0 and 255',
     );
   }
 
@@ -52,7 +52,7 @@ export const parseRGBStringToNumber = (rgbString: string): RGBColors => {
 export const getColoredText = (
   text: string,
   colorCode: ColorCodes | RGBColors,
-  options?: Options
+  options?: Options,
 ) => {
   if (typeof colorCode === 'object') {
     return options?.bolded
@@ -86,7 +86,7 @@ export const mergeColumns = (...cols: string[]) => {
   // Length of which is going the be the iterator on how many times we have to print a line
   const verticallyLongestArg = colsSplit.reduce(
     (acc, value) => (value.length > acc ? value.length : acc),
-    0
+    0,
   );
   const argsNumber = cols.length;
   const mergedArgs = [] as string[];
@@ -115,45 +115,45 @@ export const getColoredBoxes = () => {
   return `${chalk.bgBlack('   ')}${chalk.bgRgb(
     customColorCodes.burgundy.r,
     customColorCodes.burgundy.g,
-    customColorCodes.burgundy.b
+    customColorCodes.burgundy.b,
   )('   ')}${chalk.bgRgb(
     customColorCodes.darkgreen.r,
     customColorCodes.darkgreen.g,
-    customColorCodes.darkgreen.b
+    customColorCodes.darkgreen.b,
   )('   ')}${chalk.bgRgb(
     customColorCodes.darkyellow.r,
     customColorCodes.darkyellow.g,
-    customColorCodes.darkyellow.b
+    customColorCodes.darkyellow.b,
   )('   ')}${chalk.bgRgb(
     customColorCodes.darkDeepBlue.r,
     customColorCodes.darkDeepBlue.g,
-    customColorCodes.darkDeepBlue.b
+    customColorCodes.darkDeepBlue.b,
   )('   ')}${chalk.bgRgb(
     customColorCodes.darkViolet.r,
     customColorCodes.darkViolet.g,
-    customColorCodes.darkViolet.b
+    customColorCodes.darkViolet.b,
   )('   ')}${chalk.bgRgb(
     customColorCodes.darkCyan.r,
     customColorCodes.darkCyan.g,
-    customColorCodes.darkCyan.b
+    customColorCodes.darkCyan.b,
   )('   ')}${chalk.bgRgb(
     customColorCodes.lightgrey.r,
     customColorCodes.lightgrey.g,
-    customColorCodes.lightgrey.b
+    customColorCodes.lightgrey.b,
   )('   ')}\n${chalk.bgRgb(
     customColorCodes.darkgrey.r,
     customColorCodes.darkgrey.g,
-    customColorCodes.darkgrey.b
+    customColorCodes.darkgrey.b,
   )('   ')}${chalk.bgRed('   ')}${chalk.bgRgb(
     customColorCodes.lightgreen.r,
     customColorCodes.lightgreen.g,
-    customColorCodes.lightgreen.b
+    customColorCodes.lightgreen.b,
   )('   ')}${chalk.bgYellow('   ')}${chalk.bgRgb(
     customColorCodes.deepBlue.r,
     customColorCodes.deepBlue.g,
-    customColorCodes.deepBlue.b
+    customColorCodes.deepBlue.b,
   )('   ')}${chalk.bgMagenta('   ')}${chalk.bgCyanBright('   ')}${chalk.bgWhite(
-    '   '
+    '   ',
   )}`;
 };
 

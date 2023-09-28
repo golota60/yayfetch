@@ -13,9 +13,9 @@ We're using yarn instead of npm, so make sure you've got it installed.
 
 | script           | description                        |
 | ---------------- | :--------------------------------- |
-| `yarn run lint`  | Lint staged code                   |
-| `yarn run jest ` | Test your code with jest           |
-| `yarn run build` | Build the app                      |
+| `yarn lint`  | Lint staged code                   |
+| `yarn test ` | Test your code with jest           |
+| `yarn build` | Build the app                      |
 
 # Releasing
 
