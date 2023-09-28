@@ -33,8 +33,7 @@
     "start": "yarn build && node ./dist/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./dist",
     "lint": "yarn eslint --ext '.js,.ts' ./src --fix",
-    "jest": "jest tests",
-    "test": "yarn start && yarn lint && yarn jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest tests",
     "prepare": "husky install",
     "prepublishOnly": "git push --tags && yarn && yarn build",
     "release": "standard-version"
