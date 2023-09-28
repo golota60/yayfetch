@@ -4,12 +4,12 @@
  
   working_directory: ~/repo
   docker:
-    - image: cimg/node:14.17.0
+    - image: cimg/node:18.18.0
     
  jobs:
    build:
      docker:
-       - image: cimg/node:14.17.0
+       - image: cimg/node:18.18.0
      steps:
        - checkout
        - run: yarn

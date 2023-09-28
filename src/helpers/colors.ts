@@ -35,9 +35,9 @@ export const rainbowColors = [
   'violet',
 ] as const;
 
-export type PredefinedColors = typeof availableColors[number];
-export type ColorCodes = typeof allColors[number];
-export type RainbowColors = typeof rainbowColors[number];
+export type PredefinedColors = (typeof availableColors)[number];
+export type ColorCodes = (typeof allColors)[number];
+export type RainbowColors = (typeof rainbowColors)[number];
 
 export const customColorCodes = {
   pink: { r: 255, g: 102, b: 147 },
@@ -60,22 +60,22 @@ export const customColors = {
   pink: chalk.rgb(
     customColorCodes.pink.r,
     customColorCodes.pink.g,
-    customColorCodes.pink.b
+    customColorCodes.pink.b,
   ),
   orange: chalk.rgb(
     customColorCodes.orange.r,
     customColorCodes.orange.g,
-    customColorCodes.orange.b
+    customColorCodes.orange.b,
   ),
   violet: chalk.rgb(
     customColorCodes.violet.r,
     customColorCodes.violet.g,
-    customColorCodes.violet.b
+    customColorCodes.violet.b,
   ),
 };
 
 export const getColoringFunc = (
-  colorCode: PredefinedColors
+  colorCode: PredefinedColors,
 ): Chalk & { supportsColor: ColorSupport } =>
   (chalk as any)[colorCode] || (customColors as any)[colorCode];
 
@@ -89,7 +89,7 @@ interface RainbowOptions extends Options {
 // Return individually colored letter with the given color palette
 export const getColoredLetters = (
   text: string,
-  options: RainbowOptions
+  options: RainbowOptions,
 ): string => {
   const functionArray = options.colorPalette.map((e) => getColoringFunc(e));
   const coloredText = text

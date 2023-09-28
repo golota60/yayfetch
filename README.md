@@ -143,7 +143,7 @@ Example config:
 
 ## It doesn't work!
 
-If it doesn't work for you make sure that you have the newest node(it's developed using node 14.17.0, although it should work with everything >=8.6)
+If it doesn't work for you make sure that you have the newest node(it's developed using node 18.18.0).
 
 If you came here because of the `'Error - check https://www.npmjs.com/package/yayfetch for more'` error, then most likely the software just can't detect the information. Why? Because of the system you use. It may not work when:
 

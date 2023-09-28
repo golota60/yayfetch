@@ -31,13 +31,13 @@ export const getDisplaysAndGraphicsCards =
 
       const gpuInfo = gpu.controllers.map(
         (gpu: sysinf.Systeminformation.GraphicsControllerData) =>
-          gpu?.model || ''
+          gpu?.model || '',
       );
       const displays = gpu.displays
         .map((gpu: sysinf.Systeminformation.GraphicsDisplayData) =>
           gpu.resolutionX & gpu.resolutionY
             ? `${gpu.resolutionX}x${gpu.resolutionY}`
-            : null
+            : null,
         )
         .filter((element) => element !== null) as string[];
       return {
