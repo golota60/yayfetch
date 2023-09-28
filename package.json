@@ -29,7 +29,7 @@
     "url": "https://github.com/golota60/yayfetch"
   },
   "scripts": {
-    "build": "rimraf lib && tsup",
+    "build": "rimraf dist && tsup",
     "start": "yarn build && node ./dist/yayfetch.js",
     "clean": "rm -rf node_modules && rm -rf ./dist",
     "lint": "yarn eslint --ext '.js,.ts' ./src --fix",
