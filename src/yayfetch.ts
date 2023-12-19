@@ -7,7 +7,7 @@ import terminalImage from 'terminal-image';
 import {
   DisplayAndGraphicsCard,
   MemoryInfoInterface,
-} from './interfaces/systeminformation';
+} from './interfaces/systeminformation.js';
 import {
   uptimeInMinutes,
   getColoredText,
@@ -18,7 +18,7 @@ import {
   normalizeASCII,
   readTextFile,
   mergeColumns,
-} from './helpers/helpers';
+} from './helpers/helpers.js';
 import {
   getEndianness,
   getDisplaysAndGraphicsCards,
@@ -27,11 +27,11 @@ import {
   getShellInfo,
   getSysInfOsInfo,
   getHWInfo,
-} from './helpers/systeminformation';
-import { RGBColors } from './interfaces/general';
-import { yayfetchASCII } from './helpers/static';
-import { allColors, ColorCodes } from './helpers/colors';
-import { AnimationOptions, startAnimation } from './helpers/animations';
+} from './helpers/systeminformation.js';
+import { RGBColors } from './interfaces/general.js';
+import { yayfetchASCII } from './helpers/static.js';
+import { allColors, ColorCodes } from './helpers/colors.js';
+import { AnimationOptions, startAnimation } from './helpers/animations.js';
 
 export const promptQuestionsChoices = [
   'OS',
@@ -81,128 +81,114 @@ async function returnPickedData(
   const sysinfOsInfo = await getSysInfOsInfo();
   const hwInfo = await getHWInfo();
   const pickedVals = [
-    `${
-      color
-        ? getColoredText(
-            `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
-            color,
-            { bolded: true },
-          )
-        : `${allData.osInfo.username}@${sysinfOsInfo.hostname}`
+    `${color
+      ? getColoredText(
+        `${allData.osInfo.username}@${sysinfOsInfo.hostname}`,
+        color,
+        { bolded: true },
+      )
+      : `${allData.osInfo.username}@${sysinfOsInfo.hostname}`
     } \n-----------------------------`,
   ];
   if (valuesToDisplay.includes('OS')) {
     pickedVals.push(
-      `${color ? getColoredText('OS:', color, { bolded: true }) : 'OS:'} ${
-        sysinfOsInfo.display
+      `${color ? getColoredText('OS:', color, { bolded: true }) : 'OS:'} ${sysinfOsInfo.display
       }`,
     );
   }
 
   if (valuesToDisplay.includes('Type')) {
     pickedVals.push(
-      `${color ? getColoredText('Type:', color, { bolded: true }) : 'Type:'} ${
-        sysinfOsInfo.distro
+      `${color ? getColoredText('Type:', color, { bolded: true }) : 'Type:'} ${sysinfOsInfo.distro
       }`,
     );
   }
 
   if (valuesToDisplay.includes('Model')) {
     pickedVals.push(
-      `${
-        color ? getColoredText('Model:', color, { bolded: true }) : 'Model:'
+      `${color ? getColoredText('Model:', color, { bolded: true }) : 'Model:'
       } ${hwInfo}`,
     );
   }
 
   if (valuesToDisplay.includes('Release')) {
     pickedVals.push(
-      `${
-        color
-          ? getColoredText('Release:', color, {
-              bolded: true,
-            })
-          : 'Release:'
+      `${color
+        ? getColoredText('Release:', color, {
+          bolded: true,
+        })
+        : 'Release:'
       } ${os.release()}`,
     );
   }
 
   if (valuesToDisplay.includes('Architecture')) {
     pickedVals.push(
-      `${
-        color
-          ? getColoredText('Architecture:', color, {
-              bolded: true,
-            })
-          : 'Architecture'
+      `${color
+        ? getColoredText('Architecture:', color, {
+          bolded: true,
+        })
+        : 'Architecture'
       } ${os.arch()}`,
     );
   }
 
   if (valuesToDisplay.includes('Uptime')) {
     pickedVals.push(
-      `${
-        color
-          ? getColoredText('Uptime:', color, {
-              bolded: true,
-            })
-          : 'Uptime'
+      `${color
+        ? getColoredText('Uptime:', color, {
+          bolded: true,
+        })
+        : 'Uptime'
       } ${uptimeInMinutes().toFixed(0)} min`,
     );
   }
 
   if (valuesToDisplay.includes('CPUs')) {
     pickedVals.push(
-      `${color ? getColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${
-        os.cpus()?.[0]?.model || ''
+      `${color ? getColoredText('CPU:', color, { bolded: true }) : 'CPU:'} ${os.cpus()?.[0]?.model || ''
       }`,
     );
   }
 
   if (valuesToDisplay.includes('GPUs')) {
     pickedVals.push(
-      `${
-        color ? getColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
+      `${color ? getColoredText('GPU(s):', color, { bolded: true }) : 'GPU(s)'
       } ${allData?.graphicsInfo?.gpuInfo}`,
     );
   }
 
   if (valuesToDisplay.includes('Displays')) {
     pickedVals.push(
-      `${
-        color
-          ? getColoredText('Display(s):', color, { bolded: true })
-          : 'Display(s):'
+      `${color
+        ? getColoredText('Display(s):', color, { bolded: true })
+        : 'Display(s):'
       } ${allData?.graphicsInfo?.displays}`,
     );
   }
 
   if (valuesToDisplay.includes('Endianness')) {
     pickedVals.push(
-      `${
-        color
-          ? getColoredText('Endianness:', color, {
-              bolded: true,
-            })
-          : 'Endianness:'
+      `${color
+        ? getColoredText('Endianness:', color, {
+          bolded: true,
+        })
+        : 'Endianness:'
       } ${getEndianness()}`,
     );
   }
 
   if (valuesToDisplay.includes('Memory')) {
     pickedVals.push(
-      `${
-        color ? getColoredText('Memory:', color, { bolded: true }) : 'Memory:'
-      } ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${
-        allData.memoryInfo.total
+      `${color ? getColoredText('Memory:', color, { bolded: true }) : 'Memory:'
+      } ${allData.memoryInfo.free}/${allData.memoryInfo.used}/${allData.memoryInfo.total
       } MiB (Free/Used/Total)`,
     );
   }
 
   if (valuesToDisplay.includes('Shell')) {
     pickedVals.push(
-      `${
-        color ? getColoredText('Shell:', color, { bolded: true }) : 'Shell:'
+      `${color ? getColoredText('Shell:', color, { bolded: true }) : 'Shell:'
       } ${allData.shellInfo}`,
     );
   }
@@ -294,13 +280,12 @@ yargs(process.argv.slice(2))
         infoToPrint = [
           ...infoToPrint,
           ...Object.entries(customLinesParsed).map((customLine) => {
-            return `${
-              animations
+            return `${animations
                 ? customLine[0]
                 : getColoredText(customLine[0], colorToUse, {
-                    bolded: true,
-                  })
-            } ${customLine[1]}`;
+                  bolded: true,
+                })
+              } ${customLine[1]}`;
           }),
         ];
       }
@@ -320,8 +305,8 @@ yargs(process.argv.slice(2))
         ]) ||
         (showLogo
           ? (customASCIIsParsed || [yayfetchASCII]).map((e) =>
-              normalizeASCII(e, 2),
-            )
+            normalizeASCII(e, 2),
+          )
           : []);
       const joinedInfo = infoToPrint.join('\n');
 

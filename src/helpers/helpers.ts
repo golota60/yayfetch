@@ -2,14 +2,14 @@ import os from 'os';
 import { promises } from 'fs';
 import { exit } from 'process';
 import chalk from 'chalk';
-import { RGBColors } from '../interfaces/general';
+import { RGBColors } from '../interfaces/general.js';
 import {
   availableColors,
   ColorCodes,
   customColorCodes,
   getColoringFunc,
   getColoredLetters,
-} from './colors';
+} from './colors.js';
 
 export interface Options {
   bolded?: boolean;
