@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/golota60/yayfetch/compare/v2.0.6...v2.1.0) (2023-12-19)
+
+
+### Features
+
+* switch to ES modules ([#90](https://github.com/golota60/yayfetch/issues/90)) ([9d7c648](https://github.com/golota60/yayfetch/commit/9d7c648d45cddf4e2d480f8ec8576202a2810799))
+
+
+### Bug Fixes
+
+* do not ship sourcemap ([396223a](https://github.com/golota60/yayfetch/commit/396223aa477bee81605429abd5a3d0231383bf61))
+
 ### [2.0.6](https://github.com/golota60/yayfetch/compare/v2.0.5...v2.0.6) (2022-06-18)
 
 

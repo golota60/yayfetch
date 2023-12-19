@@ -1,6 +1,6 @@
 {
   "name": "yayfetch",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "A Multi-platform screenfetch/neofetch",
   "main": "./dist/yayfetch.js",
   "module": "./dist/yayfetch.js",
@@ -17,7 +17,8 @@
     "systeminformation"
   ],
   "files": [
-    "dist"
+    "dist",
+    "package.json"
   ],
   "publishConfig": {
     "access": "public",
