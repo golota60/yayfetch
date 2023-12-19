@@ -12,8 +12,8 @@
        - image: cimg/node:18.18.0
      steps:
        - checkout
-       - run: yarn
-       - run: yarn start
-       - run: yarn lint
-       - run: yarn test
+       - run: pnpm i
+       - run: pnpm start
+       - run: pnpm lint
+       - run: pnpm test
        - run: echo "Build Successful"

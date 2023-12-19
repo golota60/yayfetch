@@ -7,7 +7,7 @@ import terminalImage from 'terminal-image';
 import {
   DisplayAndGraphicsCard,
   MemoryInfoInterface,
-} from './interfaces/systeminformation';
+} from './interfaces/systeminformation.js';
 import {
   uptimeInMinutes,
   getColoredText,
@@ -18,7 +18,7 @@ import {
   normalizeASCII,
   readTextFile,
   mergeColumns,
-} from './helpers/helpers';
+} from './helpers/helpers.js';
 import {
   getEndianness,
   getDisplaysAndGraphicsCards,
@@ -27,11 +27,11 @@ import {
   getShellInfo,
   getSysInfOsInfo,
   getHWInfo,
-} from './helpers/systeminformation';
-import { RGBColors } from './interfaces/general';
-import { yayfetchASCII } from './helpers/static';
-import { allColors, ColorCodes } from './helpers/colors';
-import { AnimationOptions, startAnimation } from './helpers/animations';
+} from './helpers/systeminformation.js';
+import { RGBColors } from './interfaces/general.js';
+import { yayfetchASCII } from './helpers/static.js';
+import { allColors, ColorCodes } from './helpers/colors.js';
+import { AnimationOptions, startAnimation } from './helpers/animations.js';
 
 export const promptQuestionsChoices = [
   'OS',

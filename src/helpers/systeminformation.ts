@@ -1,7 +1,7 @@
 import os from 'os';
 import sysinf from 'systeminformation';
-import { OSInfoInterface } from '../interfaces/systeminformation';
-import { errorMessage, bitstoMegabytes } from './helpers';
+import { OSInfoInterface } from '../interfaces/systeminformation.js';
+import { errorMessage, bitstoMegabytes } from './helpers.js';
 interface MemoryInfoInterface {
   free: string;
   used: string;
@@ -35,7 +35,7 @@ export const getDisplaysAndGraphicsCards =
       );
       const displays = gpu.displays
         .map((gpu: sysinf.Systeminformation.GraphicsDisplayData) =>
-          gpu.resolutionX & gpu.resolutionY
+          gpu?.resolutionX && gpu?.resolutionY
             ? `${gpu.resolutionX}x${gpu.resolutionY}`
             : null,
         )

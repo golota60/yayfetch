@@ -1,6 +1,6 @@
 import logUpdate from 'log-update';
-import { availableColors, getColoredLetters, rainbowColors } from './colors';
-import { getColoredText } from './helpers';
+import { availableColors, getColoredLetters, rainbowColors } from './colors.js';
+import { getColoredText } from './helpers.js';
 
 const DEFAULT_FREQUENCY = 150;
 type Animation = 'colors' | 'flowing-rainbow';

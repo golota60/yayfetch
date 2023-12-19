@@ -1,5 +1,5 @@
-import chalk, { Chalk, ColorSupport } from 'chalk';
-import { getRandomArrayElement, Options } from './helpers';
+import chalk, { ChalkInstance, ColorSupport } from 'chalk';
+import { getRandomArrayElement, Options } from './helpers.js';
 
 export const chalkColors = [
   'black',
@@ -76,7 +76,7 @@ export const customColors = {
 
 export const getColoringFunc = (
   colorCode: PredefinedColors,
-): Chalk & { supportsColor: ColorSupport } =>
+): ChalkInstance & { supportsColor: ColorSupport } =>
   (chalk as any)[colorCode] || (customColors as any)[colorCode];
 
 interface RainbowOptions extends Options {
