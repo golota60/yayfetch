@@ -1,14 +1,29 @@
 {
-  "extends": ["@callstack/eslint-config/node", "prettier"],
-  "plugins": ["prettier"],
+  "extends": [
+    "plugin:require-extensions/recommended",
+    "@callstack/eslint-config/node",
+    "prettier"
+  ],
+  "plugins": [
+    "require-extensions",
+    "prettier"
+  ],
   "rules": {
-    "quotes": [2, "single", { "avoidEscape": true }],
+    "quotes": [
+      2,
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
     "prettier/prettier": [
       "error",
       {
         "singleQuote": true,
         "semi": true
       }
-    ]
-  }
+    ],
+    // FIXME: ESLint keeps screaming about .js extension imports. This should be solvable by using a custom resolver
+    "import/no-unresolved": 0
+  },
 }

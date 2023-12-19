@@ -98,8 +98,8 @@ export const getColoredLetters = (
       const functionToApply = options.random
         ? getRandomArrayElement(functionArray)
         : functionArray[
-        (i + (options?.indexOffset || 0)) % functionArray.length
-        ];
+            (i + (options?.indexOffset || 0)) % functionArray.length
+          ];
       return options.bolded
         ? functionToApply.bold(char)
         : functionToApply(char);
