@@ -20,6 +20,10 @@
     "dist",
     "package.json"
   ],
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
   "homepage": "https://github.com/golota60/yayfetch#readme",
   "repository": {
     "type": "git",
