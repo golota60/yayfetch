@@ -5,7 +5,7 @@ export default defineConfig({
   entry: ['src/yayfetch.ts'],
   format: ['esm'],
   splitting: false,
-  sourcemap: true,
+  sourcemap: false,
   clean: true,
   cjsInterop: true,
   minify: true,
